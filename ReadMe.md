@@ -7,7 +7,11 @@
 
 ## Thành viên nhóm
 | Họ và tên             | MSSV         | Vai trò
-| Trần Nguyễn Quốc Hùng | 068206007286 |
+| Trần Nguyễn Quốc Hùng | 068206007286 | TCP Core — TcpListener, TcpClient, async, room management, message routing
+| Nguyễn Thị Ngọc Tuyến	| 089306015808 | Toàn bộ WinForms UI — Server form + Client form + Login form
+| Lê Thành Đạt          | 056206008999 | Message Model + JSON Protocol — class Message, serialize/deserialize
+| Hoàng Vĩnh Phúc       | 079206047689 | Báo cáo DOCX + code phần logging — ghi log ra file .txt
+| Phan Quang Huy        | 051206013587 | Slide PPTX + code phần settings — lưu/đọc config (IP, port, username)
 
 ## Mô tả
 Ứng dụng chat real-time sử dụng giao thức TCP, hỗ trợ nhiều người dùng cùng lúc, phân chia theo phòng chat. Gia diện desktop xây dựng bằng WinForms trên nền tảng .NET 8.

@@ -9,10 +9,10 @@
 | Họ và tên             | MSSV         | GitHub             | Vai trò                      |
 |-----------------------|--------------|--------------------|------------------------------|
 | Trần Nguyễn Quốc Hùng | 068206007286 | @qhung-13          | TCP Core                     |
-| Nguyễn Thị Ngọc Tuyến | 089306015808 | @github_id         | WinForms UI                  |
+| Nguyễn Thị Ngọc Tuyến | 089306015808 | @ntuyen-26         | WinForms UI                  |
 | Lê Thành Đạt          | 056206008999 | @thanhdathi        | Message Model + JSON         |
-| Hoàng Vĩnh Phúc       | 079206047689 | @github_id         | Logging + Báo cáo            |
-| Phan Quang Huy        | 051206013587 | @github_id         | Settings + Slide             |
+| Hoàng Vĩnh Phúc       | 079206047689 | @vinhphuc1607      | Logging + Báo cáo            |
+| Phan Quang Huy        | 051206013587 | @Huycris206        | Settings + Slide             |
 | Hà Vũ Như Ngọc        | 079306006753 | @ngochvn6753-stack | Emoji/Notification + Báo cáo |
 
 ## Proposal

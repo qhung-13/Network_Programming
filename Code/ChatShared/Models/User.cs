@@ -7,4 +7,9 @@ public class User
     public string CurrentRoom { get; set; } = "";
 
     public bool IsOnline { get; set; } = false;
+    public Datetime JoinedAt { get; set; } = DateTime.Now;
+    public User()
+    {
+
+    }
 }

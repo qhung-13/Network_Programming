@@ -23,7 +23,6 @@ namespace ChatClient.Forms
             lblAvatar = new Label();
             splitRight = new SplitContainer();
             rtbChat = new RichTextBox();
-            pnlEmoji = new Panel();
             pnlInput = new Panel();
             txtMessage = new TextBox();
             btnSend = new Button();
@@ -85,12 +84,12 @@ namespace ChatClient.Forms
             btnCreateRoom.Name = "btnCreateRoom";
             btnCreateRoom.Size = new Size(209, 36);
             btnCreateRoom.TabIndex = 1;
-            btnCreateRoom.Text = "+ Tao phong moi\n";
+            btnCreateRoom.Text = "+ T?o phòng m?i";
             btnCreateRoom.UseVisualStyleBackColor = true;
             // 
             // pnlUser
             // 
-            pnlUser.BackColor = Color.FromArgb(192, 192, 255);
+            pnlUser.BackColor = Color.Blue;
             pnlUser.Controls.Add(lblUsername);
             pnlUser.Controls.Add(lblAvatar);
             pnlUser.Dock = DockStyle.Top;
@@ -103,15 +102,17 @@ namespace ChatClient.Forms
             // lblUsername
             // 
             lblUsername.AutoSize = true;
+            lblUsername.ForeColor = Color.White;
             lblUsername.Location = new Point(58, 18);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(109, 25);
+            lblUsername.Size = new Size(106, 25);
             lblUsername.TabIndex = 1;
-            lblUsername.Text = "Quoc Hung";
+            lblUsername.Text = "Qu?c Hùng";
             // 
             // lblAvatar
             // 
             lblAvatar.AutoSize = true;
+            lblAvatar.ForeColor = Color.White;
             lblAvatar.Location = new Point(12, 18);
             lblAvatar.Name = "lblAvatar";
             lblAvatar.Size = new Size(40, 25);
@@ -128,7 +129,6 @@ namespace ChatClient.Forms
             // splitRight.Panel1
             // 
             splitRight.Panel1.Controls.Add(rtbChat);
-            splitRight.Panel1.Controls.Add(pnlEmoji);
             splitRight.Panel1.Controls.Add(pnlInput);
             splitRight.Panel1.Paint += splitContainer1_Panel1_Paint;
             // 
@@ -152,18 +152,10 @@ namespace ChatClient.Forms
             rtbChat.Name = "rtbChat";
             rtbChat.ReadOnly = true;
             rtbChat.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtbChat.Size = new Size(356, 347);
+            rtbChat.Size = new Size(356, 383);
             rtbChat.TabIndex = 2;
             rtbChat.Text = "";
             rtbChat.TextChanged += rtbChat_TextChanged;
-            // 
-            // pnlEmoji
-            // 
-            pnlEmoji.Dock = DockStyle.Bottom;
-            pnlEmoji.Location = new Point(0, 347);
-            pnlEmoji.Name = "pnlEmoji";
-            pnlEmoji.Size = new Size(356, 36);
-            pnlEmoji.TabIndex = 1;
             // 
             // pnlInput
             // 
@@ -196,7 +188,7 @@ namespace ChatClient.Forms
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(80, 35);
             btnSend.TabIndex = 0;
-            btnSend.Text = "Gui";
+            btnSend.Text = "G?i";
             btnSend.UseVisualStyleBackColor = true;
             // 
             // lbUsers
@@ -209,10 +201,11 @@ namespace ChatClient.Forms
             lbUsers.Size = new Size(200, 359);
             lbUsers.TabIndex = 2;
             lbUsers.DrawItem += lbUsers_DrawItem;
+            lbUsers.SelectedIndexChanged += lbUsers_SelectedIndexChanged;
             // 
             // btnLeave
             // 
-            btnLeave.BackColor = Color.FromArgb(128, 128, 255);
+            btnLeave.BackColor = Color.Blue;
             btnLeave.Dock = DockStyle.Bottom;
             btnLeave.FlatStyle = FlatStyle.Flat;
             btnLeave.ForeColor = Color.White;
@@ -220,19 +213,19 @@ namespace ChatClient.Forms
             btnLeave.Name = "btnLeave";
             btnLeave.Size = new Size(200, 34);
             btnLeave.TabIndex = 1;
-            btnLeave.Text = "Roi phong";
+            btnLeave.Text = "R?i phòng";
             btnLeave.UseVisualStyleBackColor = false;
             // 
             // lblTHANHVIEN
             // 
             lblTHANHVIEN.AutoSize = true;
             lblTHANHVIEN.Dock = DockStyle.Top;
-            lblTHANHVIEN.ForeColor = Color.FromArgb(128, 128, 255);
+            lblTHANHVIEN.ForeColor = Color.Black;
             lblTHANHVIEN.Location = new Point(0, 0);
             lblTHANHVIEN.Name = "lblTHANHVIEN";
-            lblTHANHVIEN.Size = new Size(125, 25);
+            lblTHANHVIEN.Size = new Size(109, 25);
             lblTHANHVIEN.TabIndex = 0;
-            lblTHANHVIEN.Text = "THANH VIEN";
+            lblTHANHVIEN.Text = "Thành Viên";
             lblTHANHVIEN.Click += label1_Click;
             // 
             // ChatForm
@@ -270,7 +263,6 @@ namespace ChatClient.Forms
         private TextBox txtMessage;
         private Button btnSend;
         private RichTextBox rtbChat;
-        private Panel pnlEmoji;
         private Label lblTHANHVIEN;
         private ListBox lbUsers;
         private Button btnLeave;

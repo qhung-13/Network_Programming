@@ -106,5 +106,10 @@ namespace ChatClient.Forms
         {
 
         }
+
+        private void lbUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

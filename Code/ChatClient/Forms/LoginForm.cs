@@ -11,13 +11,7 @@ namespace ChatClient.Forms
             InitializeComponent();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            panel1.Visible = false;
-            panel2.Visible = true;
-            btnSignUp.BackColor = Color.FromArgb(107, 79, 189);
-            btnLogin.BackColor = Color.FromArgb(30, 28, 55);
-        }
+
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -54,13 +48,7 @@ namespace ChatClient.Forms
 
         }
 
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            panel1.Visible = true;
-            panel2.Visible = false;
-            btnLogin.BackColor = Color.FromArgb(107, 79, 189);
-            btnSignUp.BackColor = Color.FromArgb(30, 28, 55);
-        }
+
 
         private void label7_Click(object sender, EventArgs e)
         {
@@ -87,15 +75,24 @@ namespace ChatClient.Forms
 
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
-            panel1.Visible = true;
-            panel2.Visible = false;
-            btnLogin.BackColor = Color.FromArgb(107, 79, 189);
-            btnSignUp.BackColor = Color.FromArgb(30, 28, 55);
-        }
+
 
         private void lblChatApp_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
         {
 
         }

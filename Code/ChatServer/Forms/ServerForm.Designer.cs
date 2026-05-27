@@ -36,7 +36,7 @@
             // 
             // tblToolbar
             // 
-            tblToolbar.BackColor = Color.Gainsboro;
+            tblToolbar.BackColor = Color.WhiteSmoke;
             tblToolbar.ColumnCount = 4;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
@@ -57,25 +57,23 @@
             // 
             // btnStart
             // 
-            btnStart.BackColor = Color.Aquamarine;
+            btnStart.BackColor = Color.Blue;
             btnStart.Dock = DockStyle.Left;
-            btnStart.FlatAppearance.BorderColor = Color.Lime;
-            btnStart.FlatStyle = FlatStyle.Flat;
-            btnStart.ForeColor = Color.Green;
+            btnStart.FlatAppearance.BorderColor = Color.Black;
+            btnStart.ForeColor = Color.White;
             btnStart.Location = new Point(3, 3);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(112, 39);
-            btnStart.TabIndex = 0;
+            btnStart.TabIndex = 1;
             btnStart.Text = "▶ Start";
             btnStart.UseVisualStyleBackColor = false;
             // 
             // btnStop
             // 
-            btnStop.BackColor = Color.FromArgb(255, 192, 192);
+            btnStop.BackColor = Color.Blue;
             btnStop.Dock = DockStyle.Left;
-            btnStop.FlatAppearance.BorderColor = Color.Red;
-            btnStop.FlatStyle = FlatStyle.Flat;
-            btnStop.ForeColor = Color.Red;
+            btnStop.FlatAppearance.BorderColor = Color.Blue;
+            btnStop.ForeColor = Color.White;
             btnStop.Location = new Point(144, 3);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(112, 39);
@@ -98,12 +96,13 @@
             // btnClearLog
             // 
             btnClearLog.Dock = DockStyle.Left;
+            btnClearLog.FlatAppearance.BorderColor = Color.Black;
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
             btnClearLog.Location = new Point(297, 3);
             btnClearLog.Name = "btnClearLog";
             btnClearLog.Size = new Size(156, 39);
             btnClearLog.TabIndex = 3;
-            btnClearLog.Text = "🗑Delete Log";
+            btnClearLog.Text = "🗑 Xóa Log";
             btnClearLog.UseVisualStyleBackColor = true;
             // 
             // rtbLog
@@ -123,7 +122,7 @@
             // 
             // tblStats
             // 
-            tblStats.BackColor = Color.LightGray;
+            tblStats.BackColor = Color.WhiteSmoke;
             tblStats.ColumnCount = 4;
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.46154F));
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.53846F));
@@ -164,7 +163,7 @@
             lblRooms.Name = "lblRooms";
             lblRooms.Size = new Size(195, 55);
             lblRooms.TabIndex = 1;
-            lblRooms.Text = "Room: 0";
+            lblRooms.Text = "Phòng: 0";
             lblRooms.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblMessages
@@ -176,7 +175,7 @@
             lblMessages.Name = "lblMessages";
             lblMessages.Size = new Size(196, 55);
             lblMessages.TabIndex = 2;
-            lblMessages.Text = "Mesange: 0";
+            lblMessages.Text = "Tin nhắn: 0";
             lblMessages.TextAlign = ContentAlignment.MiddleCenter;
             lblMessages.Click += lblMessages_Click;
             // 
@@ -194,7 +193,7 @@
             // 
             // pnlClients
             // 
-            pnlClients.BackColor = Color.Gray;
+            pnlClients.BackColor = Color.Blue;
             pnlClients.Controls.Add(flpClients);
             pnlClients.Controls.Add(lblClientCount);
             pnlClients.Dock = DockStyle.Right;
@@ -206,7 +205,7 @@
             // flpClients
             // 
             flpClients.AutoScroll = true;
-            flpClients.BackColor = Color.DimGray;
+            flpClients.BackColor = Color.Blue;
             flpClients.Dock = DockStyle.Fill;
             flpClients.FlowDirection = FlowDirection.TopDown;
             flpClients.ForeColor = Color.White;

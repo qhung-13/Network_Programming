@@ -13,7 +13,7 @@ namespace ChatClient.Forms
             base.Dispose(disposing);
         }
 
-        private void InitializeComponent()
+        private void InitializeComponent()      
         {
             pnlLeft = new Panel();
             panel3 = new Panel();

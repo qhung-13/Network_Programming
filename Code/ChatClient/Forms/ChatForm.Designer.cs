@@ -15,256 +15,389 @@ namespace ChatClient.Forms
 
         private void InitializeComponent()
         {
-            splitMain = new SplitContainer();
-            lbRooms = new ListBox();
-            btnCreateRoom = new Button();
-            pnlUser = new Panel();
-            lblUsername = new Label();
-            lblAvatar = new Label();
-            splitRight = new SplitContainer();
-            rtbChat = new RichTextBox();
-            pnlInput = new Panel();
-            txtMessage = new TextBox();
+            pnlLeft = new Panel();
+            panel3 = new Panel();
+            panel8 = new Panel();
+            lblstudy = new Label();
+            panel7 = new Panel();
+            label2 = new Label();
+            panel6 = new Panel();
+            lblrandom = new Label();
+            lblChatRoom = new Label();
+            panel5 = new Panel();
+            lblgeneral = new Label();
+            btnCreateNewRoom = new Button();
+            panel4 = new Panel();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            lblOnline = new Label();
+            panel2 = new Panel();
+            lblChamXanh = new Label();
+            lblNameOnline = new Label();
+            lblQH = new Label();
+            panel12 = new Panel();
             btnSend = new Button();
-            lbUsers = new ListBox();
-            btnLeave = new Button();
-            lblTHANHVIEN = new Label();
-            ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
-            splitMain.Panel1.SuspendLayout();
-            splitMain.Panel2.SuspendLayout();
-            splitMain.SuspendLayout();
-            pnlUser.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitRight).BeginInit();
-            splitRight.Panel1.SuspendLayout();
-            splitRight.Panel2.SuspendLayout();
-            splitRight.SuspendLayout();
-            pnlInput.SuspendLayout();
+            textBox1 = new TextBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            panel1 = new Panel();
+            btnSettings = new Button();
+            lblSLOnline = new Label();
+            label1 = new Label();
+            pnlLeft.SuspendLayout();
+            panel3.SuspendLayout();
+            panel8.SuspendLayout();
+            panel7.SuspendLayout();
+            panel6.SuspendLayout();
+            panel5.SuspendLayout();
+            panel4.SuspendLayout();
+            panel2.SuspendLayout();
+            panel12.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // splitMain
+            // pnlLeft
             // 
-            splitMain.Dock = DockStyle.Fill;
-            splitMain.Location = new Point(0, 0);
-            splitMain.Name = "splitMain";
+            pnlLeft.Controls.Add(panel3);
+            pnlLeft.Controls.Add(btnCreateNewRoom);
+            pnlLeft.Controls.Add(panel4);
+            pnlLeft.Controls.Add(panel2);
+            pnlLeft.Dock = DockStyle.Left;
+            pnlLeft.Location = new Point(0, 0);
+            pnlLeft.Name = "pnlLeft";
+            pnlLeft.Size = new Size(244, 422);
+            pnlLeft.TabIndex = 0;
             // 
-            // splitMain.Panel1
+            // panel3
             // 
-            splitMain.Panel1.Controls.Add(lbRooms);
-            splitMain.Panel1.Controls.Add(btnCreateRoom);
-            splitMain.Panel1.Controls.Add(pnlUser);
-            splitMain.Panel1.Paint += splitContainer1_Panel1_Paint_1;
-            splitMain.Panel1MinSize = 180;
+            panel3.BackColor = SystemColors.HotTrack;
+            panel3.Controls.Add(panel8);
+            panel3.Controls.Add(panel7);
+            panel3.Controls.Add(panel6);
+            panel3.Controls.Add(lblChatRoom);
+            panel3.Controls.Add(panel5);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(0, 48);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(244, 166);
+            panel3.TabIndex = 6;
             // 
-            // splitMain.Panel2
+            // panel8
             // 
-            splitMain.Panel2.Controls.Add(splitRight);
-            splitMain.Panel2MinSize = 400;
-            splitMain.Size = new Size(773, 418);
-            splitMain.SplitterDistance = 209;
-            splitMain.TabIndex = 0;
+            panel8.Controls.Add(lblstudy);
+            panel8.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel8.Location = new Point(6, 131);
+            panel8.Name = "panel8";
+            panel8.Size = new Size(232, 29);
+            panel8.TabIndex = 4;
             // 
-            // lbRooms
+            // lblstudy
             // 
-            lbRooms.BorderStyle = BorderStyle.None;
-            lbRooms.Dock = DockStyle.Fill;
-            lbRooms.DrawMode = DrawMode.OwnerDrawFixed;
-            lbRooms.FormattingEnabled = true;
-            lbRooms.ItemHeight = 40;
-            lbRooms.Location = new Point(0, 56);
-            lbRooms.Name = "lbRooms";
-            lbRooms.Size = new Size(209, 326);
-            lbRooms.TabIndex = 2;
+            lblstudy.AutoSize = true;
+            lblstudy.Dock = DockStyle.Left;
+            lblstudy.Location = new Point(0, 0);
+            lblstudy.Name = "lblstudy";
+            lblstudy.Size = new Size(72, 25);
+            lblstudy.TabIndex = 0;
+            lblstudy.Text = "# study";
             // 
-            // btnCreateRoom
+            // panel7
             // 
-            btnCreateRoom.Dock = DockStyle.Bottom;
-            btnCreateRoom.FlatAppearance.BorderSize = 0;
-            btnCreateRoom.FlatStyle = FlatStyle.Flat;
-            btnCreateRoom.Location = new Point(0, 382);
-            btnCreateRoom.Name = "btnCreateRoom";
-            btnCreateRoom.Size = new Size(209, 36);
-            btnCreateRoom.TabIndex = 1;
-            btnCreateRoom.Text = "+ T?o phòng m?i";
-            btnCreateRoom.UseVisualStyleBackColor = true;
+            panel7.Controls.Add(label2);
+            panel7.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel7.Location = new Point(6, 96);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(232, 29);
+            panel7.TabIndex = 3;
             // 
-            // pnlUser
+            // label2
             // 
-            pnlUser.BackColor = Color.Blue;
-            pnlUser.Controls.Add(lblUsername);
-            pnlUser.Controls.Add(lblAvatar);
-            pnlUser.Dock = DockStyle.Top;
-            pnlUser.Location = new Point(0, 0);
-            pnlUser.Name = "pnlUser";
-            pnlUser.Size = new Size(209, 56);
-            pnlUser.TabIndex = 0;
-            pnlUser.Paint += pnlUser_Paint;
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Left;
+            label2.Location = new Point(0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(89, 25);
+            label2.TabIndex = 0;
+            label2.Text = "# gaming";
             // 
-            // lblUsername
+            // panel6
             // 
-            lblUsername.AutoSize = true;
-            lblUsername.ForeColor = Color.White;
-            lblUsername.Location = new Point(58, 18);
-            lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(106, 25);
-            lblUsername.TabIndex = 1;
-            lblUsername.Text = "Qu?c Hùng";
+            panel6.Controls.Add(lblrandom);
+            panel6.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel6.Location = new Point(6, 61);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(232, 29);
+            panel6.TabIndex = 2;
             // 
-            // lblAvatar
+            // lblrandom
             // 
-            lblAvatar.AutoSize = true;
-            lblAvatar.ForeColor = Color.White;
-            lblAvatar.Location = new Point(12, 18);
-            lblAvatar.Name = "lblAvatar";
-            lblAvatar.Size = new Size(40, 25);
-            lblAvatar.TabIndex = 0;
-            lblAvatar.Text = "QH";
-            lblAvatar.TextAlign = ContentAlignment.MiddleCenter;
+            lblrandom.AutoSize = true;
+            lblrandom.Dock = DockStyle.Left;
+            lblrandom.Location = new Point(0, 0);
+            lblrandom.Name = "lblrandom";
+            lblrandom.Size = new Size(91, 25);
+            lblrandom.TabIndex = 0;
+            lblrandom.Text = "# random";
             // 
-            // splitRight
+            // lblChatRoom
             // 
-            splitRight.Dock = DockStyle.Fill;
-            splitRight.Location = new Point(0, 0);
-            splitRight.Name = "splitRight";
+            lblChatRoom.AutoSize = true;
+            lblChatRoom.Dock = DockStyle.Top;
+            lblChatRoom.Location = new Point(0, 0);
+            lblChatRoom.Name = "lblChatRoom";
+            lblChatRoom.Size = new Size(106, 25);
+            lblChatRoom.TabIndex = 1;
+            lblChatRoom.Text = "Chat Room";
+            lblChatRoom.Click += lblChatRoom_Click;
             // 
-            // splitRight.Panel1
+            // panel5
             // 
-            splitRight.Panel1.Controls.Add(rtbChat);
-            splitRight.Panel1.Controls.Add(pnlInput);
-            splitRight.Panel1.Paint += splitContainer1_Panel1_Paint;
+            panel5.Controls.Add(lblgeneral);
+            panel5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            panel5.Location = new Point(9, 26);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(232, 29);
+            panel5.TabIndex = 0;
+            panel5.Paint += panel5_Paint;
             // 
-            // splitRight.Panel2
+            // lblgeneral
             // 
-            splitRight.Panel2.Controls.Add(lbUsers);
-            splitRight.Panel2.Controls.Add(btnLeave);
-            splitRight.Panel2.Controls.Add(lblTHANHVIEN);
-            splitRight.Panel2.Paint += splitContainer1_Panel2_Paint;
-            splitRight.Panel2MinSize = 180;
-            splitRight.Size = new Size(560, 418);
-            splitRight.SplitterDistance = 356;
-            splitRight.TabIndex = 0;
+            lblgeneral.AutoSize = true;
+            lblgeneral.Dock = DockStyle.Left;
+            lblgeneral.Location = new Point(0, 0);
+            lblgeneral.Name = "lblgeneral";
+            lblgeneral.Size = new Size(86, 25);
+            lblgeneral.TabIndex = 0;
+            lblgeneral.Text = "# general";
             // 
-            // rtbChat
+            // btnCreateNewRoom
             // 
-            rtbChat.BorderStyle = BorderStyle.None;
-            rtbChat.Dock = DockStyle.Fill;
-            rtbChat.ForeColor = Color.Black;
-            rtbChat.Location = new Point(0, 0);
-            rtbChat.Name = "rtbChat";
-            rtbChat.ReadOnly = true;
-            rtbChat.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtbChat.Size = new Size(356, 383);
-            rtbChat.TabIndex = 2;
-            rtbChat.Text = "";
-            rtbChat.TextChanged += rtbChat_TextChanged;
+            btnCreateNewRoom.BackColor = Color.DodgerBlue;
+            btnCreateNewRoom.Dock = DockStyle.Bottom;
+            btnCreateNewRoom.FlatStyle = FlatStyle.Flat;
+            btnCreateNewRoom.Location = new Point(0, 214);
+            btnCreateNewRoom.Name = "btnCreateNewRoom";
+            btnCreateNewRoom.Size = new Size(244, 45);
+            btnCreateNewRoom.TabIndex = 5;
+            btnCreateNewRoom.Text = "Create New Room";
+            btnCreateNewRoom.UseVisualStyleBackColor = false;
+            btnCreateNewRoom.Click += btnCreateNewRoom_Click_1;
             // 
-            // pnlInput
+            // panel4
             // 
-            pnlInput.Controls.Add(txtMessage);
-            pnlInput.Controls.Add(btnSend);
-            pnlInput.Dock = DockStyle.Bottom;
-            pnlInput.Location = new Point(0, 383);
-            pnlInput.Name = "pnlInput";
-            pnlInput.Size = new Size(356, 35);
-            pnlInput.TabIndex = 0;
-            pnlInput.Paint += pnlInput_Paint;
+            panel4.BackColor = SystemColors.HotTrack;
+            panel4.Controls.Add(flowLayoutPanel2);
+            panel4.Controls.Add(lblOnline);
+            panel4.Dock = DockStyle.Bottom;
+            panel4.Location = new Point(0, 259);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(244, 163);
+            panel4.TabIndex = 3;
             // 
-            // txtMessage
+            // flowLayoutPanel2
             // 
-            txtMessage.BorderStyle = BorderStyle.FixedSingle;
-            txtMessage.Dock = DockStyle.Fill;
-            txtMessage.ForeColor = Color.Gray;
-            txtMessage.Location = new Point(0, 0);
-            txtMessage.Name = "txtMessage";
-            txtMessage.Size = new Size(276, 31);
-            txtMessage.TabIndex = 1;
+            flowLayoutPanel2.Dock = DockStyle.Fill;
+            flowLayoutPanel2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            flowLayoutPanel2.Location = new Point(0, 25);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(244, 138);
+            flowLayoutPanel2.TabIndex = 1;
+            // 
+            // lblOnline
+            // 
+            lblOnline.AutoSize = true;
+            lblOnline.Dock = DockStyle.Top;
+            lblOnline.Location = new Point(0, 0);
+            lblOnline.Name = "lblOnline";
+            lblOnline.Size = new Size(68, 25);
+            lblOnline.TabIndex = 0;
+            lblOnline.Text = "Online";
+            // 
+            // panel2
+            // 
+            panel2.BackColor = Color.Blue;
+            panel2.Controls.Add(lblChamXanh);
+            panel2.Controls.Add(lblNameOnline);
+            panel2.Controls.Add(lblQH);
+            panel2.Dock = DockStyle.Top;
+            panel2.Location = new Point(0, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(244, 48);
+            panel2.TabIndex = 0;
+            // 
+            // lblChamXanh
+            // 
+            lblChamXanh.AutoSize = true;
+            lblChamXanh.BackColor = Color.Blue;
+            lblChamXanh.Font = new Font("Segoe UI", 4F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblChamXanh.ForeColor = Color.Lime;
+            lblChamXanh.Location = new Point(214, 20);
+            lblChamXanh.Name = "lblChamXanh";
+            lblChamXanh.Size = new Size(17, 11);
+            lblChamXanh.TabIndex = 2;
+            lblChamXanh.Text = "\U0001f7e2";
+            // 
+            // lblNameOnline
+            // 
+            lblNameOnline.AutoSize = true;
+            lblNameOnline.Location = new Point(58, 9);
+            lblNameOnline.Name = "lblNameOnline";
+            lblNameOnline.Size = new Size(109, 25);
+            lblNameOnline.TabIndex = 1;
+            lblNameOnline.Text = "Quoc Hung";
+            lblNameOnline.Click += lblNameOnline_Click;
+            // 
+            // lblQH
+            // 
+            lblQH.AutoSize = true;
+            lblQH.BackColor = Color.DodgerBlue;
+            lblQH.Location = new Point(12, 9);
+            lblQH.Name = "lblQH";
+            lblQH.Size = new Size(40, 25);
+            lblQH.TabIndex = 0;
+            lblQH.Text = "QH";
+            // 
+            // panel12
+            // 
+            panel12.BackColor = Color.DodgerBlue;
+            panel12.Controls.Add(btnSend);
+            panel12.Controls.Add(textBox1);
+            panel12.Dock = DockStyle.Bottom;
+            panel12.Location = new Point(244, 372);
+            panel12.Name = "panel12";
+            panel12.Size = new Size(596, 50);
+            panel12.TabIndex = 1;
             // 
             // btnSend
             // 
-            btnSend.Dock = DockStyle.Right;
-            btnSend.FlatAppearance.BorderSize = 0;
             btnSend.FlatStyle = FlatStyle.Flat;
-            btnSend.ForeColor = Color.Blue;
-            btnSend.Location = new Point(276, 0);
+            btnSend.ForeColor = Color.White;
+            btnSend.Location = new Point(463, 7);
             btnSend.Name = "btnSend";
-            btnSend.Size = new Size(80, 35);
-            btnSend.TabIndex = 0;
-            btnSend.Text = "G?i";
+            btnSend.Size = new Size(112, 34);
+            btnSend.TabIndex = 2;
+            btnSend.Text = " Send";
             btnSend.UseVisualStyleBackColor = true;
             // 
-            // lbUsers
+            // textBox1
             // 
-            lbUsers.BorderStyle = BorderStyle.None;
-            lbUsers.Dock = DockStyle.Fill;
-            lbUsers.FormattingEnabled = true;
-            lbUsers.Location = new Point(0, 25);
-            lbUsers.Name = "lbUsers";
-            lbUsers.Size = new Size(200, 359);
-            lbUsers.TabIndex = 2;
-            lbUsers.DrawItem += lbUsers_DrawItem;
-            lbUsers.SelectedIndexChanged += lbUsers_SelectedIndexChanged;
+            textBox1.Location = new Point(18, 7);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(431, 31);
+            textBox1.TabIndex = 0;
             // 
-            // btnLeave
+            // flowLayoutPanel1
             // 
-            btnLeave.BackColor = Color.Blue;
-            btnLeave.Dock = DockStyle.Bottom;
-            btnLeave.FlatStyle = FlatStyle.Flat;
-            btnLeave.ForeColor = Color.White;
-            btnLeave.Location = new Point(0, 384);
-            btnLeave.Name = "btnLeave";
-            btnLeave.Size = new Size(200, 34);
-            btnLeave.TabIndex = 1;
-            btnLeave.Text = "R?i phòng";
-            btnLeave.UseVisualStyleBackColor = false;
+            flowLayoutPanel1.Location = new Point(244, 38);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(596, 334);
+            flowLayoutPanel1.TabIndex = 2;
+            flowLayoutPanel1.Paint += flowLayoutPanel1_Paint;
             // 
-            // lblTHANHVIEN
+            // panel1
             // 
-            lblTHANHVIEN.AutoSize = true;
-            lblTHANHVIEN.Dock = DockStyle.Top;
-            lblTHANHVIEN.ForeColor = Color.Black;
-            lblTHANHVIEN.Location = new Point(0, 0);
-            lblTHANHVIEN.Name = "lblTHANHVIEN";
-            lblTHANHVIEN.Size = new Size(109, 25);
-            lblTHANHVIEN.TabIndex = 0;
-            lblTHANHVIEN.Text = "Thành Viên";
-            lblTHANHVIEN.Click += label1_Click;
+            panel1.BorderStyle = BorderStyle.FixedSingle;
+            panel1.Controls.Add(btnSettings);
+            panel1.Controls.Add(lblSLOnline);
+            panel1.Controls.Add(label1);
+            panel1.Dock = DockStyle.Top;
+            panel1.Location = new Point(244, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(596, 42);
+            panel1.TabIndex = 3;
+            // 
+            // btnSettings
+            // 
+            btnSettings.BackColor = Color.Transparent;
+            btnSettings.FlatStyle = FlatStyle.Flat;
+            btnSettings.ForeColor = Color.DimGray;
+            btnSettings.Location = new Point(495, 3);
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(98, 34);
+            btnSettings.TabIndex = 2;
+            btnSettings.Text = "Settings";
+            btnSettings.UseVisualStyleBackColor = false;
+            // 
+            // lblSLOnline
+            // 
+            lblSLOnline.AutoSize = true;
+            lblSLOnline.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSLOnline.ForeColor = Color.DimGray;
+            lblSLOnline.Location = new Point(108, 10);
+            lblSLOnline.Name = "lblSLOnline";
+            lblSLOnline.Size = new Size(133, 25);
+            lblSLOnline.TabIndex = 1;
+            lblSLOnline.Text = "- 4 users online";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.ForeColor = Color.Gray;
+            label1.Location = new Point(28, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(86, 25);
+            label1.TabIndex = 0;
+            label1.Text = "# general";
             // 
             // ChatForm
             // 
-            ClientSize = new Size(773, 418);
-            Controls.Add(splitMain);
+            ClientSize = new Size(840, 422);
+            Controls.Add(panel1);
+            Controls.Add(flowLayoutPanel1);
+            Controls.Add(panel12);
+            Controls.Add(pnlLeft);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            ForeColor = SystemColors.ButtonHighlight;
             Name = "ChatForm";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "ChatApp — Quoc Hung";
+            Text = "ChatApp ";
             Load += ChatForm_Load;
-            splitMain.Panel1.ResumeLayout(false);
-            splitMain.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
-            splitMain.ResumeLayout(false);
-            pnlUser.ResumeLayout(false);
-            pnlUser.PerformLayout();
-            splitRight.Panel1.ResumeLayout(false);
-            splitRight.Panel2.ResumeLayout(false);
-            splitRight.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)splitRight).EndInit();
-            splitRight.ResumeLayout(false);
-            pnlInput.ResumeLayout(false);
-            pnlInput.PerformLayout();
+            pnlLeft.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel8.ResumeLayout(false);
+            panel8.PerformLayout();
+            panel7.ResumeLayout(false);
+            panel7.PerformLayout();
+            panel6.ResumeLayout(false);
+            panel6.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
+            panel4.ResumeLayout(false);
+            panel4.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            panel12.ResumeLayout(false);
+            panel12.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
         }
-        private SplitContainer splitMain;
-        private SplitContainer splitRight;
-        private Panel pnlUser;
-        private Label lblAvatar;
-        private Label lblUsername;
-        private Button btnCreateRoom;
-        private ListBox lbRooms;
-        private Panel pnlInput;
-        private TextBox txtMessage;
+        private Panel pnlLeft;
+        private Panel panel2;
+        private Label lblQH;
+        private Label lblChamXanh;
+        private Label lblNameOnline;
+        private Panel panel4;
+        private Panel panel12;
+        private TextBox textBox1;
         private Button btnSend;
-        private RichTextBox rtbChat;
-        private Label lblTHANHVIEN;
-        private ListBox lbUsers;
-        private Button btnLeave;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private Label lblOnline;
+        private Button btnCreateNewRoom;
+        private Panel panel1;
+        private Panel panel3;
+        private Label lblChatRoom;
+        private Panel panel5;
+        private Panel panel7;
+        private Label label2;
+        private Panel panel6;
+        private Label lblrandom;
+        private Label lblgeneral;
+        private Panel panel8;
+        private Label lblstudy;
+        private Label label1;
+        private Label lblSLOnline;
+        private Button btnSettings;
     }
 }

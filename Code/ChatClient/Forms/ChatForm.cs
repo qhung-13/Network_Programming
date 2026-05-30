@@ -49,21 +49,14 @@ namespace ChatClient.Forms
         private void ChatForm_Load(object sender, EventArgs e)
         {
             // Data mau phong chat
-            lbRooms.Items.Add("general");
-            lbRooms.Items.Add("random");
-            lbRooms.Items.Add("gaming");
-            lbRooms.Items.Add("study");
 
-            // SplitContainer size
-            splitMain.SplitterDistance = 220;
         }
 
         private void lbUsers_DrawItem(object sender, DrawItemEventArgs e)
         {
             if (e.Index < 0) return;
 
-            var name = lbUsers.Items[e.Index]?.ToString() ?? "";
-            var isSelf = name.Contains("(ban)");
+
 
             // Nền
             e.Graphics.FillRectangle(
@@ -83,19 +76,9 @@ namespace ChatClient.Forms
             e.Graphics.FillEllipse(new SolidBrush(avatarColor), avatarRect);
 
             // Chữ tắt trong avatar
-            var initials = name.Length >= 2 ? name[..2].ToUpper() : name.ToUpper();
-            using var initFont = new Font("Segoe UI", 8f, FontStyle.Bold);
-            var initSize = e.Graphics.MeasureString(initials, initFont);
-            e.Graphics.DrawString(initials, initFont, Brushes.White,
-                avatarRect.X + (avatarRect.Width - initSize.Width) / 2,
-                avatarRect.Y + (avatarRect.Height - initSize.Height) / 2);
+
 
             // Tên
-            using var nameFont = new Font("Segoe UI", 9.5f,
-                isSelf ? FontStyle.Bold : FontStyle.Regular);
-            e.Graphics.DrawString(name, nameFont,
-                new SolidBrush(Color.White),
-                e.Bounds.X + 42, e.Bounds.Y + 9);
 
             // Chấm xanh online
             e.Graphics.FillEllipse(Brushes.LimeGreen,
@@ -108,6 +91,56 @@ namespace ChatClient.Forms
         }
 
         private void lbUsers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblNameOnline_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel9_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnCreateNewRoom_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnCreateNewRoom_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblChatRoom_Click(object sender, EventArgs e)
         {
 
         }

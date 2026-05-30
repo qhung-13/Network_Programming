@@ -40,8 +40,8 @@
             tblToolbar.ColumnCount = 4;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 339F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 144F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 182F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 325F));
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
             tblToolbar.Controls.Add(lblStatus, 3, 0);
@@ -57,10 +57,11 @@
             // 
             // btnStart
             // 
-            btnStart.BackColor = Color.Blue;
+            btnStart.BackColor = SystemColors.Window;
             btnStart.Dock = DockStyle.Left;
             btnStart.FlatAppearance.BorderColor = Color.Black;
-            btnStart.ForeColor = Color.White;
+            btnStart.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnStart.ForeColor = Color.Blue;
             btnStart.Location = new Point(3, 3);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(112, 39);
@@ -70,25 +71,26 @@
             // 
             // btnStop
             // 
-            btnStop.BackColor = Color.Blue;
+            btnStop.BackColor = SystemColors.Window;
             btnStop.Dock = DockStyle.Left;
             btnStop.FlatAppearance.BorderColor = Color.Blue;
-            btnStop.ForeColor = Color.White;
-            btnStop.Location = new Point(144, 3);
+            btnStop.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnStop.ForeColor = Color.Blue;
+            btnStop.Location = new Point(132, 3);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(112, 39);
             btnStop.TabIndex = 1;
-            btnStop.Text = "□ Stop";
+            btnStop.Text = "■ Stop";
             btnStop.UseVisualStyleBackColor = false;
             // 
             // lblStatus
             // 
             lblStatus.AutoSize = true;
             lblStatus.Dock = DockStyle.Fill;
-            lblStatus.ForeColor = Color.LightCoral;
-            lblStatus.Location = new Point(636, 0);
+            lblStatus.ForeColor = Color.LimeGreen;
+            lblStatus.Location = new Point(455, 0);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(139, 45);
+            lblStatus.Size = new Size(320, 45);
             lblStatus.TabIndex = 2;
             lblStatus.Text = "● Offline";
             lblStatus.TextAlign = ContentAlignment.MiddleRight;
@@ -97,12 +99,13 @@
             // 
             btnClearLog.Dock = DockStyle.Left;
             btnClearLog.FlatAppearance.BorderColor = Color.Black;
+            btnClearLog.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
-            btnClearLog.Location = new Point(297, 3);
+            btnClearLog.Location = new Point(273, 3);
             btnClearLog.Name = "btnClearLog";
             btnClearLog.Size = new Size(156, 39);
             btnClearLog.TabIndex = 3;
-            btnClearLog.Text = "🗑 Xóa Log";
+            btnClearLog.Text = "🗑 Delete Log";
             btnClearLog.UseVisualStyleBackColor = true;
             // 
             // rtbLog
@@ -110,7 +113,7 @@
             rtbLog.BackColor = Color.White;
             rtbLog.Dock = DockStyle.Left;
             rtbLog.Font = new Font("Consolas", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            rtbLog.ForeColor = Color.White;
+            rtbLog.ForeColor = Color.Black;
             rtbLog.Location = new Point(0, 45);
             rtbLog.Name = "rtbLog";
             rtbLog.ReadOnly = true;
@@ -163,7 +166,7 @@
             lblRooms.Name = "lblRooms";
             lblRooms.Size = new Size(195, 55);
             lblRooms.TabIndex = 1;
-            lblRooms.Text = "Phòng: 0";
+            lblRooms.Text = "Room: 0";
             lblRooms.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblMessages
@@ -175,7 +178,7 @@
             lblMessages.Name = "lblMessages";
             lblMessages.Size = new Size(196, 55);
             lblMessages.TabIndex = 2;
-            lblMessages.Text = "Tin nhắn: 0";
+            lblMessages.Text = "Message: 0";
             lblMessages.TextAlign = ContentAlignment.MiddleCenter;
             lblMessages.Click += lblMessages_Click;
             // 

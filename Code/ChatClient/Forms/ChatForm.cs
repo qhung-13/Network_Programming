@@ -106,15 +106,5 @@ namespace ChatClient.Forms
         {
 
         }
-
-        private void btnLeave_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnCreateRoom_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

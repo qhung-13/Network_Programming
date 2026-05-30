@@ -2,8 +2,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Concurrent;
 using ChatShared.Models;
-using ChatServer.Managers; 
-using ChatShared.Protocol
+using ChatServer.Managers;
+using ChatShared.Protocol;
 using Message = ChatShared.Models.Message;
 
 namespace ChatServer.Core;

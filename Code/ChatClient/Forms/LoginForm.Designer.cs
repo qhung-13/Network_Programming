@@ -18,18 +18,16 @@ namespace ChatClient.Forms
             pnlLeft = new Panel();
             lblKetnoi = new Label();
             lblChatApp = new Label();
-            panel1 = new Panel();
-            btnKetNoi1 = new Button();
-            textBox3 = new TextBox();
-            label5 = new Label();
-            textBox2 = new TextBox();
-            label6 = new Label();
-            label4 = new Label();
+            lblStartChatting = new Label();
+            lblDisplayName = new Label();
+            lblServerAddress = new Label();
+            lblPort = new Label();
+            lblContact = new Label();
             textBox1 = new TextBox();
-            label3 = new Label();
-            label1 = new Label();
+            textBox2 = new TextBox();
+            textBox3 = new TextBox();
+            btnConnect = new Button();
             pnlLeft.SuspendLayout();
-            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // pnlLeft
@@ -40,165 +38,151 @@ namespace ChatClient.Forms
             pnlLeft.Dock = DockStyle.Left;
             pnlLeft.Location = new Point(0, 0);
             pnlLeft.Name = "pnlLeft";
-            pnlLeft.Size = new Size(230, 444);
+            pnlLeft.Size = new Size(230, 445);
             pnlLeft.TabIndex = 0;
             // 
             // lblKetnoi
             // 
+            lblKetnoi.Anchor = AnchorStyles.None;
             lblKetnoi.Font = new Font("Segoe UI Light", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblKetnoi.ForeColor = Color.White;
-            lblKetnoi.Location = new Point(12, 207);
+            lblKetnoi.Location = new Point(12, 218);
             lblKetnoi.Name = "lblKetnoi";
             lblKetnoi.Size = new Size(200, 57);
             lblKetnoi.TabIndex = 2;
-            lblKetnoi.Text = "K?t n?i và trò chuy?n cùng m?i ng??i\r\n\r\n";
+            lblKetnoi.Text = "Chat and Connect with Everyone";
             lblKetnoi.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblChatApp
             // 
+            lblChatApp.Anchor = AnchorStyles.None;
             lblChatApp.AutoSize = true;
-            lblChatApp.Font = new Font("Segoe UI Symbol", 16F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblChatApp.Font = new Font("Segoe UI Symbol", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblChatApp.ForeColor = Color.White;
-            lblChatApp.Location = new Point(35, 157);
+            lblChatApp.Location = new Point(28, 170);
             lblChatApp.Name = "lblChatApp";
-            lblChatApp.Size = new Size(151, 45);
+            lblChatApp.Size = new Size(164, 48);
             lblChatApp.TabIndex = 1;
             lblChatApp.Text = "ChatApp";
             lblChatApp.Click += lblChatApp_Click;
             // 
-            // panel1
+            // lblStartChatting
             // 
-            panel1.BorderStyle = BorderStyle.Fixed3D;
-            panel1.Controls.Add(btnKetNoi1);
-            panel1.Controls.Add(textBox3);
-            panel1.Controls.Add(label5);
-            panel1.Controls.Add(textBox2);
-            panel1.Controls.Add(label6);
-            panel1.Controls.Add(label4);
-            panel1.Controls.Add(textBox1);
-            panel1.Controls.Add(label3);
-            panel1.Controls.Add(label1);
-            panel1.Location = new Point(276, 12);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(460, 410);
-            panel1.TabIndex = 2;
-            panel1.Paint += panel1_Paint;
+            lblStartChatting.AutoSize = true;
+            lblStartChatting.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStartChatting.ForeColor = Color.Blue;
+            lblStartChatting.Location = new Point(285, 23);
+            lblStartChatting.Name = "lblStartChatting";
+            lblStartChatting.Size = new Size(202, 38);
+            lblStartChatting.TabIndex = 1;
+            lblStartChatting.Text = "Start Chatting";
+            lblStartChatting.Click += lblStartChatting_Click;
             // 
-            // btnKetNoi1
+            // lblDisplayName
             // 
-            btnKetNoi1.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnKetNoi1.ForeColor = Color.Navy;
-            btnKetNoi1.Location = new Point(117, 337);
-            btnKetNoi1.Name = "btnKetNoi1";
-            btnKetNoi1.Size = new Size(191, 34);
-            btnKetNoi1.TabIndex = 11;
-            btnKetNoi1.Text = "K?t n?i";
-            btnKetNoi1.UseVisualStyleBackColor = true;
-            btnKetNoi1.Click += button1_Click;
+            lblDisplayName.AutoSize = true;
+            lblDisplayName.Location = new Point(285, 85);
+            lblDisplayName.Name = "lblDisplayName";
+            lblDisplayName.Size = new Size(122, 25);
+            lblDisplayName.TabIndex = 2;
+            lblDisplayName.Text = "Display Name";
             // 
-            // textBox3
+            // lblServerAddress
             // 
-            textBox3.Location = new Point(3, 270);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(454, 31);
-            textBox3.TabIndex = 10;
+            lblServerAddress.AutoSize = true;
+            lblServerAddress.Location = new Point(285, 156);
+            lblServerAddress.Name = "lblServerAddress";
+            lblServerAddress.Size = new Size(161, 25);
+            lblServerAddress.TabIndex = 3;
+            lblServerAddress.Text = "Server Address (IP)";
             // 
-            // label5
+            // lblPort
             // 
-            label5.AutoSize = true;
-            label5.ForeColor = SystemColors.ControlDark;
-            label5.Location = new Point(13, 242);
-            label5.Name = "label5";
-            label5.Size = new Size(44, 25);
-            label5.TabIndex = 9;
-            label5.Text = "Port";
-            label5.Click += label5_Click;
+            lblPort.AutoSize = true;
+            lblPort.Location = new Point(285, 234);
+            lblPort.Name = "lblPort";
+            lblPort.Size = new Size(44, 25);
+            lblPort.TabIndex = 4;
+            lblPort.Text = "Port";
+            lblPort.Click += lblPort_Click;
             // 
-            // textBox2
+            // lblContact
             // 
-            textBox2.Location = new Point(3, 189);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(454, 31);
-            textBox2.TabIndex = 8;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.ForeColor = SystemColors.ButtonShadow;
-            label6.Location = new Point(35, 374);
-            label6.Name = "label6";
-            label6.Size = new Size(370, 25);
-            label6.TabIndex = 7;
-            label6.Text = "B?n ch?a có server? Hãy liên h? ng??i qu?n tr?\r\n";
-            label6.Click += label6_Click;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.ForeColor = SystemColors.ButtonShadow;
-            label4.Location = new Point(3, 161);
-            label4.Name = "label4";
-            label4.Size = new Size(150, 25);
-            label4.TabIndex = 4;
-            label4.Text = "??a ch? server (IP)";
-            label4.Click += label4_Click;
+            lblContact.AutoSize = true;
+            lblContact.Location = new Point(323, 386);
+            lblContact.Name = "lblContact";
+            lblContact.Size = new Size(423, 25);
+            lblContact.TabIndex = 5;
+            lblContact.Text = "Don’t have a server yet? Contact your administrator.";
+            lblContact.Click += lblContact_Click;
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(3, 102);
+            textBox1.Location = new Point(285, 113);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(454, 31);
-            textBox1.TabIndex = 3;
-            textBox1.TextChanged += textBox1_TextChanged;
+            textBox1.Size = new Size(501, 31);
+            textBox1.TabIndex = 6;
             // 
-            // label3
+            // textBox2
             // 
-            label3.AutoSize = true;
-            label3.ForeColor = SystemColors.ControlDark;
-            label3.Location = new Point(3, 74);
-            label3.Name = "label3";
-            label3.Size = new Size(104, 25);
-            label3.TabIndex = 2;
-            label3.Text = "Tên hi?n th?";
-            label3.Click += label3_Click;
+            textBox2.Location = new Point(285, 187);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(501, 31);
+            textBox2.TabIndex = 7;
+            textBox2.TextChanged += textBox2_TextChanged;
             // 
-            // label1
+            // textBox3
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(3, 29);
-            label1.Name = "label1";
-            label1.Size = new Size(200, 30);
-            label1.TabIndex = 0;
-            label1.Text = "B?t ??u trò chuy?n";
-            label1.Click += label1_Click;
+            textBox3.Location = new Point(285, 262);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(501, 31);
+            textBox3.TabIndex = 8;
+            // 
+            // btnConnect
+            // 
+            btnConnect.FlatStyle = FlatStyle.Flat;
+            btnConnect.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnConnect.ForeColor = Color.Blue;
+            btnConnect.Location = new Point(464, 336);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(140, 36);
+            btnConnect.TabIndex = 9;
+            btnConnect.Text = "Connect";
+            btnConnect.UseVisualStyleBackColor = true;
             // 
             // LoginForm
             // 
-            ClientSize = new Size(778, 444);
-            Controls.Add(panel1);
+            ClientSize = new Size(842, 445);
+            Controls.Add(btnConnect);
+            Controls.Add(textBox3);
+            Controls.Add(textBox2);
+            Controls.Add(textBox1);
+            Controls.Add(lblContact);
+            Controls.Add(lblPort);
+            Controls.Add(lblServerAddress);
+            Controls.Add(lblDisplayName);
+            Controls.Add(lblStartChatting);
             Controls.Add(pnlLeft);
             MinimizeBox = false;
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
+            Load += LoginForm_Load;
             pnlLeft.ResumeLayout(false);
             pnlLeft.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
         private Panel pnlLeft;
         private Label lblChatApp;
         private Label lblKetnoi;
-        private Panel panel1;
-        private Label label1;
-        private Label label3;
-        private Label label4;
+        private Label lblStartChatting;
+        private Label lblDisplayName;
+        private Label lblServerAddress;
+        private Label lblPort;
+        private Label lblContact;
         private TextBox textBox1;
         private TextBox textBox2;
-        private Label label6;
-        private Button btnKetNoi1;
         private TextBox textBox3;
-        private Label label5;
+        private Button btnConnect;
     }
 }

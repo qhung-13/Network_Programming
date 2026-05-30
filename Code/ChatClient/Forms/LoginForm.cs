@@ -96,5 +96,40 @@ namespace ChatClient.Forms
         {
 
         }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblUsername_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void lblStartChatting_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblPort_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblContact_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

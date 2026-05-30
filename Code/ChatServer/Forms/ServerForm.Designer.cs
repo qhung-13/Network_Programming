@@ -40,19 +40,20 @@
             tblToolbar.ColumnCount = 4;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 339F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 144F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 237F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 102F));
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
             tblToolbar.Controls.Add(lblStatus, 3, 0);
             tblToolbar.Controls.Add(btnClearLog, 2, 0);
             tblToolbar.Dock = DockStyle.Top;
             tblToolbar.Location = new Point(0, 0);
+            tblToolbar.Margin = new Padding(2, 2, 2, 2);
             tblToolbar.Name = "tblToolbar";
             tblToolbar.RowCount = 1;
             tblToolbar.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblToolbar.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblToolbar.Size = new Size(778, 45);
+            tblToolbar.Size = new Size(545, 27);
             tblToolbar.TabIndex = 0;
             // 
             // btnStart
@@ -62,9 +63,10 @@
             btnStart.FlatAppearance.BorderColor = Color.Lime;
             btnStart.FlatStyle = FlatStyle.Flat;
             btnStart.ForeColor = Color.Green;
-            btnStart.Location = new Point(3, 3);
+            btnStart.Location = new Point(2, 2);
+            btnStart.Margin = new Padding(2, 2, 2, 2);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(112, 39);
+            btnStart.Size = new Size(78, 23);
             btnStart.TabIndex = 0;
             btnStart.Text = "▶ Start";
             btnStart.UseVisualStyleBackColor = false;
@@ -76,9 +78,10 @@
             btnStop.FlatAppearance.BorderColor = Color.Red;
             btnStop.FlatStyle = FlatStyle.Flat;
             btnStop.ForeColor = Color.Red;
-            btnStop.Location = new Point(144, 3);
+            btnStop.Location = new Point(100, 2);
+            btnStop.Margin = new Padding(2, 2, 2, 2);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(112, 39);
+            btnStop.Size = new Size(78, 23);
             btnStop.TabIndex = 1;
             btnStop.Text = "□ Stop";
             btnStop.UseVisualStyleBackColor = false;
@@ -88,9 +91,10 @@
             lblStatus.AutoSize = true;
             lblStatus.Dock = DockStyle.Fill;
             lblStatus.ForeColor = Color.LightCoral;
-            lblStatus.Location = new Point(636, 0);
+            lblStatus.Location = new Point(444, 0);
+            lblStatus.Margin = new Padding(2, 0, 2, 0);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(139, 45);
+            lblStatus.Size = new Size(99, 27);
             lblStatus.TabIndex = 2;
             lblStatus.Text = "● Offline";
             lblStatus.TextAlign = ContentAlignment.MiddleRight;
@@ -99,9 +103,10 @@
             // 
             btnClearLog.Dock = DockStyle.Left;
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
-            btnClearLog.Location = new Point(297, 3);
+            btnClearLog.Location = new Point(207, 2);
+            btnClearLog.Margin = new Padding(2, 2, 2, 2);
             btnClearLog.Name = "btnClearLog";
-            btnClearLog.Size = new Size(156, 39);
+            btnClearLog.Size = new Size(109, 23);
             btnClearLog.TabIndex = 3;
             btnClearLog.Text = "🗑Delete Log";
             btnClearLog.UseVisualStyleBackColor = true;
@@ -112,11 +117,12 @@
             rtbLog.Dock = DockStyle.Left;
             rtbLog.Font = new Font("Consolas", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             rtbLog.ForeColor = Color.White;
-            rtbLog.Location = new Point(0, 45);
+            rtbLog.Location = new Point(0, 27);
+            rtbLog.Margin = new Padding(2, 2, 2, 2);
             rtbLog.Name = "rtbLog";
             rtbLog.ReadOnly = true;
             rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtbLog.Size = new Size(561, 412);
+            rtbLog.Size = new Size(394, 247);
             rtbLog.TabIndex = 2;
             rtbLog.Text = "";
             rtbLog.TextChanged += rtbLog_TextChanged;
@@ -127,20 +133,21 @@
             tblStats.ColumnCount = 4;
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 48.46154F));
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.53846F));
-            tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 202F));
-            tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 185F));
+            tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 141F));
+            tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130F));
             tblStats.Controls.Add(lblClients, 0, 0);
             tblStats.Controls.Add(lblRooms, 1, 0);
             tblStats.Controls.Add(lblMessages, 2, 0);
             tblStats.Controls.Add(lblUptime, 3, 0);
             tblStats.Dock = DockStyle.Bottom;
             tblStats.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
-            tblStats.Location = new Point(0, 457);
+            tblStats.Location = new Point(0, 274);
+            tblStats.Margin = new Padding(2, 2, 2, 2);
             tblStats.Name = "tblStats";
             tblStats.RowCount = 1;
             tblStats.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblStats.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblStats.Size = new Size(778, 55);
+            tblStats.Size = new Size(545, 33);
             tblStats.TabIndex = 0;
             // 
             // lblClients
@@ -148,9 +155,10 @@
             lblClients.AutoSize = true;
             lblClients.Dock = DockStyle.Fill;
             lblClients.ForeColor = Color.Navy;
-            lblClients.Location = new Point(3, 0);
+            lblClients.Location = new Point(2, 0);
+            lblClients.Margin = new Padding(2, 0, 2, 0);
             lblClients.Name = "lblClients";
-            lblClients.Size = new Size(183, 55);
+            lblClients.Size = new Size(128, 33);
             lblClients.TabIndex = 0;
             lblClients.Text = "Clients: 0";
             lblClients.TextAlign = ContentAlignment.MiddleCenter;
@@ -160,9 +168,10 @@
             lblRooms.AutoSize = true;
             lblRooms.Dock = DockStyle.Fill;
             lblRooms.ForeColor = Color.Navy;
-            lblRooms.Location = new Point(192, 0);
+            lblRooms.Location = new Point(134, 0);
+            lblRooms.Margin = new Padding(2, 0, 2, 0);
             lblRooms.Name = "lblRooms";
-            lblRooms.Size = new Size(195, 55);
+            lblRooms.Size = new Size(137, 33);
             lblRooms.TabIndex = 1;
             lblRooms.Text = "Room: 0";
             lblRooms.TextAlign = ContentAlignment.MiddleCenter;
@@ -172,9 +181,10 @@
             lblMessages.AutoSize = true;
             lblMessages.Dock = DockStyle.Fill;
             lblMessages.ForeColor = Color.Navy;
-            lblMessages.Location = new Point(393, 0);
+            lblMessages.Location = new Point(275, 0);
+            lblMessages.Margin = new Padding(2, 0, 2, 0);
             lblMessages.Name = "lblMessages";
-            lblMessages.Size = new Size(196, 55);
+            lblMessages.Size = new Size(137, 33);
             lblMessages.TabIndex = 2;
             lblMessages.Text = "Mesange: 0";
             lblMessages.TextAlign = ContentAlignment.MiddleCenter;
@@ -185,9 +195,10 @@
             lblUptime.AutoSize = true;
             lblUptime.Dock = DockStyle.Fill;
             lblUptime.ForeColor = Color.Navy;
-            lblUptime.Location = new Point(595, 0);
+            lblUptime.Location = new Point(416, 0);
+            lblUptime.Margin = new Padding(2, 0, 2, 0);
             lblUptime.Name = "lblUptime";
-            lblUptime.Size = new Size(180, 55);
+            lblUptime.Size = new Size(127, 33);
             lblUptime.TabIndex = 3;
             lblUptime.Text = "Uptime: 00:00";
             lblUptime.TextAlign = ContentAlignment.MiddleCenter;
@@ -198,9 +209,10 @@
             pnlClients.Controls.Add(flpClients);
             pnlClients.Controls.Add(lblClientCount);
             pnlClients.Dock = DockStyle.Right;
-            pnlClients.Location = new Point(558, 45);
+            pnlClients.Location = new Point(391, 27);
+            pnlClients.Margin = new Padding(2, 2, 2, 2);
             pnlClients.Name = "pnlClients";
-            pnlClients.Size = new Size(220, 412);
+            pnlClients.Size = new Size(154, 247);
             pnlClients.TabIndex = 3;
             // 
             // flpClients
@@ -210,9 +222,10 @@
             flpClients.Dock = DockStyle.Fill;
             flpClients.FlowDirection = FlowDirection.TopDown;
             flpClients.ForeColor = Color.White;
-            flpClients.Location = new Point(0, 25);
+            flpClients.Location = new Point(0, 15);
+            flpClients.Margin = new Padding(2, 2, 2, 2);
             flpClients.Name = "flpClients";
-            flpClients.Size = new Size(220, 387);
+            flpClients.Size = new Size(154, 232);
             flpClients.TabIndex = 1;
             // 
             // lblClientCount
@@ -221,22 +234,24 @@
             lblClientCount.Dock = DockStyle.Top;
             lblClientCount.ForeColor = Color.FromArgb(224, 224, 224);
             lblClientCount.Location = new Point(0, 0);
+            lblClientCount.Margin = new Padding(2, 0, 2, 0);
             lblClientCount.Name = "lblClientCount";
-            lblClientCount.Size = new Size(115, 25);
+            lblClientCount.Size = new Size(76, 15);
             lblClientCount.TabIndex = 0;
             lblClientCount.Text = "CLIENTS — 0";
             lblClientCount.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // ServerForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(778, 512);
+            ClientSize = new Size(545, 307);
             Controls.Add(pnlClients);
             Controls.Add(rtbLog);
             Controls.Add(tblToolbar);
             Controls.Add(tblStats);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "ServerForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Chat Server";

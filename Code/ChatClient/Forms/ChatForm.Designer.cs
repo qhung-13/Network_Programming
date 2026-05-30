@@ -60,8 +60,8 @@ namespace ChatClient.Forms
             // 
             splitMain.Panel2.Controls.Add(splitRight);
             splitMain.Panel2MinSize = 400;
-            splitMain.Size = new Size(773, 418);
-            splitMain.SplitterDistance = 209;
+            splitMain.Size = new Size(715, 418);
+            splitMain.SplitterDistance = 193;
             splitMain.TabIndex = 0;
             // 
             // lbRooms
@@ -71,9 +71,9 @@ namespace ChatClient.Forms
             lbRooms.DrawMode = DrawMode.OwnerDrawFixed;
             lbRooms.FormattingEnabled = true;
             lbRooms.ItemHeight = 40;
-            lbRooms.Location = new Point(0, 56);
+            lbRooms.Location = new Point(0, 50);
             lbRooms.Name = "lbRooms";
-            lbRooms.Size = new Size(209, 326);
+            lbRooms.Size = new Size(193, 332);
             lbRooms.TabIndex = 2;
             // 
             // btnCreateRoom
@@ -83,10 +83,11 @@ namespace ChatClient.Forms
             btnCreateRoom.FlatStyle = FlatStyle.Flat;
             btnCreateRoom.Location = new Point(0, 382);
             btnCreateRoom.Name = "btnCreateRoom";
-            btnCreateRoom.Size = new Size(209, 36);
+            btnCreateRoom.Size = new Size(193, 36);
             btnCreateRoom.TabIndex = 1;
-            btnCreateRoom.Text = "+ Tao phong moi\n";
+            btnCreateRoom.Text = "T?o Phòng M?i";
             btnCreateRoom.UseVisualStyleBackColor = true;
+            btnCreateRoom.Click += btnCreateRoom_Click;
             // 
             // pnlUser
             // 
@@ -96,25 +97,25 @@ namespace ChatClient.Forms
             pnlUser.Dock = DockStyle.Top;
             pnlUser.Location = new Point(0, 0);
             pnlUser.Name = "pnlUser";
-            pnlUser.Size = new Size(209, 56);
+            pnlUser.Size = new Size(193, 50);
             pnlUser.TabIndex = 0;
             pnlUser.Paint += pnlUser_Paint;
             // 
             // lblUsername
             // 
             lblUsername.AutoSize = true;
-            lblUsername.Location = new Point(58, 18);
+            lblUsername.Location = new Point(43, 18);
             lblUsername.Name = "lblUsername";
-            lblUsername.Size = new Size(109, 25);
+            lblUsername.Size = new Size(69, 15);
             lblUsername.TabIndex = 1;
-            lblUsername.Text = "Quoc Hung";
+            lblUsername.Text = "Qu?c Hùng";
             // 
             // lblAvatar
             // 
             lblAvatar.AutoSize = true;
             lblAvatar.Location = new Point(12, 18);
             lblAvatar.Name = "lblAvatar";
-            lblAvatar.Size = new Size(40, 25);
+            lblAvatar.Size = new Size(25, 15);
             lblAvatar.TabIndex = 0;
             lblAvatar.Text = "QH";
             lblAvatar.TextAlign = ContentAlignment.MiddleCenter;
@@ -139,8 +140,8 @@ namespace ChatClient.Forms
             splitRight.Panel2.Controls.Add(lblTHANHVIEN);
             splitRight.Panel2.Paint += splitContainer1_Panel2_Paint;
             splitRight.Panel2MinSize = 180;
-            splitRight.Size = new Size(560, 418);
-            splitRight.SplitterDistance = 356;
+            splitRight.Size = new Size(518, 418);
+            splitRight.SplitterDistance = 329;
             splitRight.TabIndex = 0;
             // 
             // rtbChat
@@ -152,7 +153,7 @@ namespace ChatClient.Forms
             rtbChat.Name = "rtbChat";
             rtbChat.ReadOnly = true;
             rtbChat.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtbChat.Size = new Size(356, 347);
+            rtbChat.Size = new Size(329, 347);
             rtbChat.TabIndex = 2;
             rtbChat.Text = "";
             rtbChat.TextChanged += rtbChat_TextChanged;
@@ -162,7 +163,7 @@ namespace ChatClient.Forms
             pnlEmoji.Dock = DockStyle.Bottom;
             pnlEmoji.Location = new Point(0, 347);
             pnlEmoji.Name = "pnlEmoji";
-            pnlEmoji.Size = new Size(356, 36);
+            pnlEmoji.Size = new Size(329, 36);
             pnlEmoji.TabIndex = 1;
             // 
             // pnlInput
@@ -172,7 +173,7 @@ namespace ChatClient.Forms
             pnlInput.Dock = DockStyle.Bottom;
             pnlInput.Location = new Point(0, 383);
             pnlInput.Name = "pnlInput";
-            pnlInput.Size = new Size(356, 35);
+            pnlInput.Size = new Size(329, 35);
             pnlInput.TabIndex = 0;
             pnlInput.Paint += pnlInput_Paint;
             // 
@@ -183,7 +184,7 @@ namespace ChatClient.Forms
             txtMessage.ForeColor = Color.Gray;
             txtMessage.Location = new Point(0, 0);
             txtMessage.Name = "txtMessage";
-            txtMessage.Size = new Size(276, 31);
+            txtMessage.Size = new Size(249, 23);
             txtMessage.TabIndex = 1;
             // 
             // btnSend
@@ -192,11 +193,11 @@ namespace ChatClient.Forms
             btnSend.FlatAppearance.BorderSize = 0;
             btnSend.FlatStyle = FlatStyle.Flat;
             btnSend.ForeColor = Color.Blue;
-            btnSend.Location = new Point(276, 0);
+            btnSend.Location = new Point(249, 0);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(80, 35);
             btnSend.TabIndex = 0;
-            btnSend.Text = "Gui";
+            btnSend.Text = "G?i";
             btnSend.UseVisualStyleBackColor = true;
             // 
             // lbUsers
@@ -204,9 +205,9 @@ namespace ChatClient.Forms
             lbUsers.BorderStyle = BorderStyle.None;
             lbUsers.Dock = DockStyle.Fill;
             lbUsers.FormattingEnabled = true;
-            lbUsers.Location = new Point(0, 25);
+            lbUsers.Location = new Point(0, 15);
             lbUsers.Name = "lbUsers";
-            lbUsers.Size = new Size(200, 359);
+            lbUsers.Size = new Size(185, 369);
             lbUsers.TabIndex = 2;
             lbUsers.DrawItem += lbUsers_DrawItem;
             // 
@@ -218,10 +219,11 @@ namespace ChatClient.Forms
             btnLeave.ForeColor = Color.White;
             btnLeave.Location = new Point(0, 384);
             btnLeave.Name = "btnLeave";
-            btnLeave.Size = new Size(200, 34);
+            btnLeave.Size = new Size(185, 34);
             btnLeave.TabIndex = 1;
-            btnLeave.Text = "Roi phong";
+            btnLeave.Text = "R?i Phòng";
             btnLeave.UseVisualStyleBackColor = false;
+            btnLeave.Click += btnLeave_Click;
             // 
             // lblTHANHVIEN
             // 
@@ -230,14 +232,14 @@ namespace ChatClient.Forms
             lblTHANHVIEN.ForeColor = Color.FromArgb(128, 128, 255);
             lblTHANHVIEN.Location = new Point(0, 0);
             lblTHANHVIEN.Name = "lblTHANHVIEN";
-            lblTHANHVIEN.Size = new Size(125, 25);
+            lblTHANHVIEN.Size = new Size(69, 15);
             lblTHANHVIEN.TabIndex = 0;
-            lblTHANHVIEN.Text = "THANH VIEN";
+            lblTHANHVIEN.Text = "Thành Viên";
             lblTHANHVIEN.Click += label1_Click;
             // 
             // ChatForm
             // 
-            ClientSize = new Size(773, 418);
+            ClientSize = new Size(715, 418);
             Controls.Add(splitMain);
             Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             Name = "ChatForm";

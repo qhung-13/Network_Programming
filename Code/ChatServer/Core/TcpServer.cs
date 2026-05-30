@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Concurrent;
 using ChatShared.Models;
+using ChatServer.Managers;
+using ChatShared.Protocol;
 using Message = ChatShared.Models.Message;
 
 namespace ChatServer.Core;
@@ -14,6 +16,9 @@ public class TcpServer
 
     // Lưu tất cả client đang kết nối: username -> ClientHandler
     public ConcurrentDictionary<string, ClientHandler> Clients { get; } = new();
+
+    public RoomManager RoomManager { get; } = new();
+    public UserManager UserManager { get; } = new();
 
     // Event để ServerForm hiển thị log
     public event Action<string>? OnLog;
@@ -76,6 +81,18 @@ public class TcpServer
     {
         var tasks = Clients.Values.Select(c => c.SendMessageAsync(message));
         await Task.WhenAll(tasks);
+    }
+
+    // Gửi danh sách phòng tới 1 client
+    public async Task SendRoomListAsync(ClientHandler client)
+    {
+        var rooms = RoomManager.GetAllRooms();
+        var msg = new Message
+        {
+            Type = MessageType.GetRooms,
+            Content = System.Text.Json.JsonSerializer.Serialize(rooms)
+        };
+        await client.SendMessageAsync(msg);
     }
 
     public void Log(string message)

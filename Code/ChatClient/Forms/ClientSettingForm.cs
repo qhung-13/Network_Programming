@@ -21,5 +21,35 @@ namespace ChatClient.Forms
         {
 
         }
+
+        private void tbDisplayName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblDisplayName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblServerAddress_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbServerAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblPort_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbPort_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

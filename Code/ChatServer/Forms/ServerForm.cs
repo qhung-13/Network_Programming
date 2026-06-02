@@ -55,5 +55,25 @@ namespace ChatServer.Forms
         {
 
         }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tblToolbar_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnSetting_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

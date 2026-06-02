@@ -29,6 +29,7 @@
             pnlClients = new Panel();
             flpClients = new FlowLayoutPanel();
             lblClientCount = new Label();
+            button1 = new Button();
             tblToolbar.SuspendLayout();
             tblStats.SuspendLayout();
             pnlClients.SuspendLayout();
@@ -37,11 +38,13 @@
             // tblToolbar
             // 
             tblToolbar.BackColor = Color.WhiteSmoke;
-            tblToolbar.ColumnCount = 4;
+            tblToolbar.ColumnCount = 5;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 146F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 261F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 285F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 122F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tblToolbar.Controls.Add(button1, 4, 0);
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
             tblToolbar.Controls.Add(lblStatus, 3, 0);
@@ -55,6 +58,7 @@
             tblToolbar.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tblToolbar.Size = new Size(622, 36);
             tblToolbar.TabIndex = 0;
+            tblToolbar.Paint += tblToolbar_Paint;
             // 
             // btnStart
             // 
@@ -66,10 +70,11 @@
             btnStart.Location = new Point(2, 2);
             btnStart.Margin = new Padding(2);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(90, 32);
+            btnStart.Size = new Size(89, 32);
             btnStart.TabIndex = 1;
             btnStart.Text = "▶ Start";
             btnStart.UseVisualStyleBackColor = false;
+            btnStart.Click += btnStart_Click;
             // 
             // btnStop
             // 
@@ -78,23 +83,24 @@
             btnStop.FlatAppearance.BorderColor = Color.Blue;
             btnStop.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnStop.ForeColor = Color.Blue;
-            btnStop.Location = new Point(105, 2);
+            btnStop.Location = new Point(95, 2);
             btnStop.Margin = new Padding(2);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(90, 32);
             btnStop.TabIndex = 1;
             btnStop.Text = "■ Stop";
             btnStop.UseVisualStyleBackColor = false;
+            btnStop.Click += btnStop_Click;
             // 
             // lblStatus
             // 
             lblStatus.AutoSize = true;
             lblStatus.Dock = DockStyle.Fill;
             lblStatus.ForeColor = Color.LimeGreen;
-            lblStatus.Location = new Point(362, 0);
+            lblStatus.Location = new Point(481, 0);
             lblStatus.Margin = new Padding(2, 0, 2, 0);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(258, 36);
+            lblStatus.Size = new Size(118, 36);
             lblStatus.TabIndex = 2;
             lblStatus.Text = "● Offline";
             lblStatus.TextAlign = ContentAlignment.MiddleRight;
@@ -105,7 +111,7 @@
             btnClearLog.FlatAppearance.BorderColor = Color.Black;
             btnClearLog.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
-            btnClearLog.Location = new Point(216, 2);
+            btnClearLog.Location = new Point(196, 2);
             btnClearLog.Margin = new Padding(2);
             btnClearLog.Name = "btnClearLog";
             btnClearLog.Size = new Size(125, 32);
@@ -137,6 +143,7 @@
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 51.53846F));
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 162F));
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 149F));
+            tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tblStats.Controls.Add(lblClients, 0, 0);
             tblStats.Controls.Add(lblRooms, 1, 0);
             tblStats.Controls.Add(lblMessages, 2, 0);
@@ -243,6 +250,22 @@
             lblClientCount.Text = "CLIENTS — 0";
             lblClientCount.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // button1
+            // 
+            button1.BackColor = SystemColors.Window;
+            button1.Dock = DockStyle.Left;
+            button1.FlatAppearance.BorderColor = Color.Blue;
+            button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.Blue;
+            button1.Location = new Point(603, 2);
+            button1.Margin = new Padding(2);
+            button1.Name = "button1";
+            button1.Size = new Size(17, 32);
+            button1.TabIndex = 4;
+            button1.Text = "■ Stop";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += btnSetting_Click_1;
+            // 
             // ServerForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -280,5 +303,6 @@
         private Label lblRooms;
         private Label lblMessages;
         private Label lblUptime;
+        private Button button1;
     }
 }

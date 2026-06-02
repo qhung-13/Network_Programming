@@ -18,8 +18,9 @@
             tblToolbar = new TableLayoutPanel();
             btnStart = new Button();
             btnStop = new Button();
-            lblStatus = new Label();
             btnClearLog = new Button();
+            btnSettings2 = new Button();
+            lblStatus = new Label();
             rtbLog = new RichTextBox();
             tblStats = new TableLayoutPanel();
             lblClients = new Label();
@@ -37,15 +38,17 @@
             // tblToolbar
             // 
             tblToolbar.BackColor = Color.WhiteSmoke;
-            tblToolbar.ColumnCount = 4;
+            tblToolbar.ColumnCount = 5;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 182F));
-            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 325F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 242F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 103F));
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
-            tblToolbar.Controls.Add(lblStatus, 3, 0);
             tblToolbar.Controls.Add(btnClearLog, 2, 0);
+            tblToolbar.Controls.Add(btnSettings2, 4, 0);
+            tblToolbar.Controls.Add(lblStatus, 3, 0);
             tblToolbar.Dock = DockStyle.Top;
             tblToolbar.Location = new Point(0, 0);
             tblToolbar.Name = "tblToolbar";
@@ -76,24 +79,12 @@
             btnStop.FlatAppearance.BorderColor = Color.Blue;
             btnStop.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnStop.ForeColor = Color.Blue;
-            btnStop.Location = new Point(132, 3);
+            btnStop.Location = new Point(123, 3);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(112, 39);
             btnStop.TabIndex = 1;
             btnStop.Text = "■ Stop";
             btnStop.UseVisualStyleBackColor = false;
-            // 
-            // lblStatus
-            // 
-            lblStatus.AutoSize = true;
-            lblStatus.Dock = DockStyle.Fill;
-            lblStatus.ForeColor = Color.LimeGreen;
-            lblStatus.Location = new Point(455, 0);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(320, 45);
-            lblStatus.TabIndex = 2;
-            lblStatus.Text = "● Offline";
-            lblStatus.TextAlign = ContentAlignment.MiddleRight;
             // 
             // btnClearLog
             // 
@@ -101,12 +92,37 @@
             btnClearLog.FlatAppearance.BorderColor = Color.Black;
             btnClearLog.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
-            btnClearLog.Location = new Point(273, 3);
+            btnClearLog.Location = new Point(253, 3);
             btnClearLog.Name = "btnClearLog";
             btnClearLog.Size = new Size(156, 39);
             btnClearLog.TabIndex = 3;
             btnClearLog.Text = "🗑 Delete Log";
             btnClearLog.UseVisualStyleBackColor = true;
+            // 
+            // btnSettings2
+            // 
+            btnSettings2.FlatStyle = FlatStyle.Flat;
+            btnSettings2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSettings2.ForeColor = Color.DimGray;
+            btnSettings2.Location = new Point(677, 3);
+            btnSettings2.Name = "btnSettings2";
+            btnSettings2.Size = new Size(96, 34);
+            btnSettings2.TabIndex = 4;
+            btnSettings2.Text = "Settings";
+            btnSettings2.UseVisualStyleBackColor = true;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Dock = DockStyle.Right;
+            lblStatus.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStatus.ForeColor = Color.LimeGreen;
+            lblStatus.Location = new Point(590, 0);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(81, 45);
+            lblStatus.TabIndex = 2;
+            lblStatus.Text = "● Offline";
+            lblStatus.TextAlign = ContentAlignment.MiddleRight;
             // 
             // rtbLog
             // 
@@ -118,7 +134,7 @@
             rtbLog.Name = "rtbLog";
             rtbLog.ReadOnly = true;
             rtbLog.ScrollBars = RichTextBoxScrollBars.Vertical;
-            rtbLog.Size = new Size(561, 412);
+            rtbLog.Size = new Size(530, 412);
             rtbLog.TabIndex = 2;
             rtbLog.Text = "";
             rtbLog.TextChanged += rtbLog_TextChanged;
@@ -200,9 +216,9 @@
             pnlClients.Controls.Add(flpClients);
             pnlClients.Controls.Add(lblClientCount);
             pnlClients.Dock = DockStyle.Right;
-            pnlClients.Location = new Point(558, 45);
+            pnlClients.Location = new Point(526, 45);
             pnlClients.Name = "pnlClients";
-            pnlClients.Size = new Size(220, 412);
+            pnlClients.Size = new Size(252, 412);
             pnlClients.TabIndex = 3;
             // 
             // flpClients
@@ -214,7 +230,7 @@
             flpClients.ForeColor = Color.White;
             flpClients.Location = new Point(0, 25);
             flpClients.Name = "flpClients";
-            flpClients.Size = new Size(220, 387);
+            flpClients.Size = new Size(252, 387);
             flpClients.TabIndex = 1;
             // 
             // lblClientCount
@@ -233,7 +249,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Black;
+            BackColor = Color.White;
             ClientSize = new Size(778, 512);
             Controls.Add(pnlClients);
             Controls.Add(rtbLog);
@@ -265,5 +281,6 @@
         private Label lblRooms;
         private Label lblMessages;
         private Label lblUptime;
+        private Button btnSettings2;
     }
 }

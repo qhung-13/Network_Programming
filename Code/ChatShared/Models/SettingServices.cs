@@ -1,15 +1,15 @@
 ﻿using System.IO;
 using System.Text.Json;
 
-public static class SettingsManager
+public static class SettingServices
 {
   
-    public static T LoadConfig<T>(string configPath) where T : new()
+    public static T Load<T>(string configPath) where T : new()
     {
         if (!File.Exists(configPath))
         {
             var defaultSettings = new T();
-            SaveConfig(defaultSettings, configPath); 
+            Save(defaultSettings, configPath); 
             return defaultSettings;
         }
 
@@ -18,7 +18,7 @@ public static class SettingsManager
     }
 
 
-    public static void SaveConfig<T>(T settings, string configPath)
+    public static void Save<T>(T settings, string configPath)
     {
         var options = new JsonSerializerOptions { WriteIndented = true };
         string json = JsonSerializer.Serialize(settings, options);

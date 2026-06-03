@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Services\ServerSettingService.cs">
+    <Compile Update="Forms\ServerSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

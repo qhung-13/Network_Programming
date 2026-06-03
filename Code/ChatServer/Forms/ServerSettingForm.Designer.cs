@@ -1,6 +1,6 @@
-﻿namespace ChatClient.Forms
+﻿namespace ChatServer.Forms
 {
-    partial class ClientSettingService
+    partial class ServerSettingForm
     {
         /// <summary>
         /// Required designer variable.
@@ -45,28 +45,27 @@
             lblDisplayName.AutoSize = true;
             lblDisplayName.Location = new Point(35, 60);
             lblDisplayName.Name = "lblDisplayName";
-            lblDisplayName.Size = new Size(102, 20);
+            lblDisplayName.Size = new Size(79, 20);
             lblDisplayName.TabIndex = 3;
-            lblDisplayName.Text = "Display Name";
-            lblDisplayName.Click += lblDisplayName_Click;
+            lblDisplayName.Text = "Max Client";
+            lblDisplayName.Click += lblMaxClient_Click;
             // 
             // textBox1
             // 
             textBox1.Location = new Point(35, 83);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(541, 27);
+            textBox1.Size = new Size(241, 27);
             textBox1.TabIndex = 7;
-            textBox1.TextChanged += tbDisplayName_TextChanged;
+            textBox1.TextChanged += tbMaxClient_TextChanged;
             // 
             // lblServerAddress
             // 
-            lblServerAddress.AutoSize = true;
             lblServerAddress.Location = new Point(35, 135);
             lblServerAddress.Name = "lblServerAddress";
             lblServerAddress.Size = new Size(133, 20);
             lblServerAddress.TabIndex = 8;
-            lblServerAddress.Text = "Server Address (IP)";
-            lblServerAddress.Click += lblServerAddress_Click;
+            lblServerAddress.Text = "Log Path";
+            lblServerAddress.Click += lblLogPath_Click;
             // 
             // textBox2
             // 
@@ -74,7 +73,7 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(541, 27);
             textBox2.TabIndex = 9;
-            textBox2.TextChanged += tbServerAddress_TextChanged;
+            textBox2.TextChanged += tbLogPath_TextChanged;
             // 
             // lblPort
             // 
@@ -123,6 +122,7 @@
             checkBox1.Size = new Size(41, 43);
             checkBox1.TabIndex = 15;
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // label1
             // 
@@ -130,10 +130,10 @@
             label1.Name = "label1";
             label1.Size = new Size(99, 25);
             label1.TabIndex = 14;
-            label1.Text = "Auto Connect";
-            label1.Click += lbAutoConnect_Click;
+            label1.Text = "Log";
+            label1.Click += lbLog_Click;
             // 
-            // ClientSettingForm
+            // ServerSettingForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -149,8 +149,9 @@
             Controls.Add(lblServerAddress);
             Controls.Add(textBox1);
             Controls.Add(lblDisplayName);
-            Name = "ClientSettingService";
-            Text = "ClientSettingService";
+            Name = "ServerSetting";
+            Text = "ServerSetting";
+            Load += ServerSettingForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -8,33 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ChatServer.Forms
+namespace ChatClient.Forms
 {
-    public partial class ServerSettingService : Form
+    public partial class ClientSettingForm : Form
     {
-        public ServerSettingService()
+        public ClientSettingForm()
         {
             InitializeComponent();
         }
 
 
 
-        private void tbMaxClient_TextChanged(object sender, EventArgs e)
+        private void tbDisplayName_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void lblMaxClient_Click(object sender, EventArgs e)
+        private void lblDisplayName_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void lblLogPath_Click(object sender, EventArgs e)
+        private void lblServerAddress_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void tbLogPath_TextChanged(object sender, EventArgs e)
+        private void tbServerAddress_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -59,17 +59,7 @@ namespace ChatServer.Forms
 
         }
 
-        private void lbLog_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ServerSettingForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void lbAutoConnect_Click(object sender, EventArgs e)
         {
 
         }

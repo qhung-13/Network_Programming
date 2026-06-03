@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             tblToolbar = new TableLayoutPanel();
+            button1 = new Button();
             btnStart = new Button();
             btnStop = new Button();
             lblStatus = new Label();
@@ -29,7 +30,6 @@
             pnlClients = new Panel();
             flpClients = new FlowLayoutPanel();
             lblClientCount = new Label();
-            button1 = new Button();
             tblToolbar.SuspendLayout();
             tblStats.SuspendLayout();
             pnlClients.SuspendLayout();
@@ -59,6 +59,22 @@
             tblToolbar.Size = new Size(622, 36);
             tblToolbar.TabIndex = 0;
             tblToolbar.Paint += tblToolbar_Paint;
+            // 
+            // button1
+            // 
+            button1.BackColor = SystemColors.Window;
+            button1.Dock = DockStyle.Left;
+            button1.FlatAppearance.BorderColor = Color.Blue;
+            button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.Blue;
+            button1.Location = new Point(603, 2);
+            button1.Margin = new Padding(2);
+            button1.Name = "button1";
+            button1.Size = new Size(17, 32);
+            button1.TabIndex = 4;
+            button1.Text = "■ Stop";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += btnSetting_Click_1;
             // 
             // btnStart
             // 
@@ -249,22 +265,6 @@
             lblClientCount.TabIndex = 0;
             lblClientCount.Text = "CLIENTS — 0";
             lblClientCount.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // button1
-            // 
-            button1.BackColor = SystemColors.Window;
-            button1.Dock = DockStyle.Left;
-            button1.FlatAppearance.BorderColor = Color.Blue;
-            button1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.Blue;
-            button1.Location = new Point(603, 2);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(17, 32);
-            button1.TabIndex = 4;
-            button1.Text = "■ Stop";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += btnSetting_Click_1;
             // 
             // ServerForm
             // 

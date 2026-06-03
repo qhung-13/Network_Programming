@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ChatServer.Forms
 {
-    public partial class ServerSettingForm : Form
+    public partial class ServerSettingService : Form
     {
-        public ServerSettingForm()
+        public ServerSettingService()
         {
             InitializeComponent();
         }
@@ -60,6 +60,16 @@ namespace ChatServer.Forms
         }
 
         private void lbLog_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ServerSettingForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
         }

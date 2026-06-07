@@ -70,6 +70,7 @@
             btnStart.TabIndex = 1;
             btnStart.Text = "▶ Start";
             btnStart.UseVisualStyleBackColor = false;
+            btnStart.Click += btnStart_Click;
             // 
             // btnStop
             // 
@@ -85,6 +86,7 @@
             btnStop.TabIndex = 1;
             btnStop.Text = "■ Stop";
             btnStop.UseVisualStyleBackColor = false;
+            btnStop.Click += btnStop_Click;
             // 
             // lblStatus
             // 
@@ -112,6 +114,7 @@
             btnClearLog.TabIndex = 3;
             btnClearLog.Text = "🗑 Delete Log";
             btnClearLog.UseVisualStyleBackColor = true;
+            btnClearLog.Click += btnClearLog_Click;
             // 
             // rtbLog
             // 

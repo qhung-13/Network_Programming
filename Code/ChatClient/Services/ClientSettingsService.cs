@@ -1,22 +1,36 @@
-﻿using ChatShared; 
+﻿using System.Text.Json;
 
-namespace ChatClient.Services
+namespace ChatClient.Services;
+
+public class ClientSettingsService
 {
-    public class ClientSettingsService
+    private readonly string _configFilePath = "client_settings.json";
+
+    public ClientSettings Load()
     {
-        // Giấu tên file ở đây để Tuyến và Hùng không cần quan tâm đến nó
-        private readonly string _configFilePath = "client_settings.json";
-
-        public ClientSettings Load()
+        try
         {
-            // Tận dụng SettingsManager dùng chung của team
-            return SettingServices.Load<ClientSettings>(_configFilePath);
-        }
+            if (!File.Exists(_configFilePath))
+                return new ClientSettings();
 
-        public void Save(ClientSettings config)
-        {
-            // Tận dụng SettingsManager dùng chung của team
-            SettingServices.Save(config, _configFilePath);
+            var json = File.ReadAllText(_configFilePath);
+            return JsonSerializer.Deserialize<ClientSettings>(json)
+                   ?? new ClientSettings();
         }
+        catch
+        {
+            return new ClientSettings();
+        }
+    }
+
+    public void Save(ClientSettings config)
+    {
+        try
+        {
+            var json = JsonSerializer.Serialize(config,
+                new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(_configFilePath, json);
+        }
+        catch { }
     }
 }

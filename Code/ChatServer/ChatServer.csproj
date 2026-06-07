@@ -4,6 +4,12 @@
     <ProjectReference Include="..\ChatShared\ChatShared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Forms\ServerSettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net9.0-windows</TargetFramework>

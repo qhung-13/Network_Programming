@@ -1,7 +1,5 @@
 using System.ComponentModel;
-using System.Configuration;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 using ChatClient.Core;
 using ChatClient.Services;
 
@@ -10,6 +8,8 @@ namespace ChatClient.Forms
     [DesignerCategory("Form")]
     public partial class LoginForm : Form
     {
+        private readonly ClientSettingsService _settingsService = new();
+
         private TcpClientService? _client;
 
         public LoginForm()
@@ -19,11 +19,10 @@ namespace ChatClient.Forms
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            var settings = SettingsService.Load();
+            var settings = _settingsService.Load();
             textBox1.Text = settings.Username;
             textBox2.Text = settings.ServerIP;
             textBox3.Text = settings.Port.ToString();
-
             btnConnect.Click += btnConnect_Click;
         }
 
@@ -55,10 +54,10 @@ namespace ChatClient.Forms
             if(connected)
             {
                 // Save setting
-                SettingsService.Save(new ClientSettings
+                _settingsService.Save(new ClientSettings
                 {
                     Username = username,
-                    ServerIp = ip,
+                    ServerIP = ip,
                     Port = port,
                 });
 

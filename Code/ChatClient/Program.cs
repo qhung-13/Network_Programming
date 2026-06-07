@@ -1,5 +1,7 @@
 using ChatClient.Forms;
 
+
+
 namespace ChatClient;
 
 static class Program

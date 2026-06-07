@@ -96,4 +96,16 @@ public class TcpClientService
         _cts.Cancel();
         _client?.Close();
     }
+
+    public async Task JoinRoomAsync(string username, string room)
+    {
+        if (_writer == null || !IsConnected) return;
+        var msg = new Message
+        {
+            Type = MessageType.Join,
+            Username = username,
+            Room = room
+        };
+        await _writer.WriteLineAsync(msg.ToJson());
+    }
 }

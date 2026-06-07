@@ -30,7 +30,8 @@ namespace ChatServer.Forms
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if(_isServerRunning)
+            MessageBox.Show("btnStart_Click called!");
+            if (_isServerRunning)
             {
                 AddLog("Server is already running.");
                 return;
@@ -42,7 +43,7 @@ namespace ChatServer.Forms
             //    return;
             //}
 
-            int port = 8000;
+            int port = 8080;
             _server = new TcpServer(port);
             _server.OnLog += AddLog;
             _server.OnClientChanged += UpdateClientList;
@@ -61,17 +62,24 @@ namespace ChatServer.Forms
 
             _ = Task.Run(async () =>
             {
-                await _server.StartAsync();
-                _isServerRunning = false;
-
-                BeginInvoke(() =>
+                try
                 {
-                    btnStart.Enabled = true;
-                    btnStop.Enabled = false;
-                    lblStatus.Text = "Ended !";
-                    lblStatus.ForeColor = Color.Red;
-                    StopUptimeTimer();
-                });
+                    await _server.StartAsync();
+                    _isServerRunning = false;
+
+                    BeginInvoke(() =>
+                    {
+                        btnStart.Enabled = true;
+                        btnStop.Enabled = false;
+                        lblStatus.Text = "Ended !";
+                        lblStatus.ForeColor = Color.Red;
+                        StopUptimeTimer();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    BeginInvoke(() => AddLog($"Error: {ex.Message}"));
+                }
             });
 
             AddLog($"Starting server on port {port}...");
@@ -117,7 +125,6 @@ namespace ChatServer.Forms
 
             rtbLog.AppendText(message + Environment.NewLine);
             rtbLog.ScrollToCaret();
-            UpdateStatus("Online", Color.LimeGreen);
         }
 
         private void UpdateClientList(string username, bool isConnected)

@@ -10,6 +10,7 @@ namespace ChatClient.Forms
     [DesignerCategory("Form")]
     public partial class ChatForm : Form
     {
+        private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem)>> _messageHistory = new();
         private readonly TcpClientService _client;
         private readonly string _username;
         private string _currentRoom = "general";
@@ -44,9 +45,13 @@ namespace ChatClient.Forms
             label2.Click += (s, e) => JoinRoom("gaming");
             panel8.Click += (s, e) => JoinRoom("study");
             lblstudy.Click += (s, e) => JoinRoom("study");
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.WrapContents = false;
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+
 
             // Gán sự kiện Settings
-            btnSettings.Click += (s, e) => new SettingsForm().ShowDialog();
+            //btnSettings.Click += (s, e) => new SettingsForm().ShowDialog();
 
             // Highlight phòng general mặc định
             HighlightRoom("general");
@@ -131,12 +136,29 @@ namespace ChatClient.Forms
             if (roomName == _currentRoom) return;
 
             _currentRoom = roomName;
-            label1.Text = $"# {roomName}";
+            label1.Text = $"{roomName}";
             HighlightRoom(roomName);
 
-            // Xóa tin nhắn cũ
             flowLayoutPanel1.Controls.Clear();
-            AddSystemMessage($"Bạn đã vào phòng #{roomName}");
+
+            if (_messageHistory.TryGetValue(roomName, out var history))
+            {
+                foreach (var (username, content, time, isSystem) in history)
+                {
+                    if (isSystem)
+                    {
+                        RenderSystemMessage(content);
+                    }
+                    else
+                    {
+                        RenderChatMessage(username, content, time);
+                    }
+                }
+            }
+            else
+            {
+                AddSystemMessage($"You had joined room #{roomName}");
+            }
 
             await _client.JoinRoomAsync(_username, roomName);
         }
@@ -161,6 +183,54 @@ namespace ChatClient.Forms
 
         // ===== HIỂN THỊ TIN NHẮN =====
         private void AddChatMessage(string username, string content, DateTime time)
+        {
+            if (!_messageHistory.ContainsKey(_currentRoom))
+                _messageHistory[_currentRoom] = new();
+            _messageHistory[_currentRoom].Add((username, content, time, false));
+
+            RenderChatMessage(username, content, time);
+        }
+
+        private void AddSystemMessage(string content)
+        {
+            if (!_messageHistory.ContainsKey(_currentRoom))
+                _messageHistory[_currentRoom] = new();
+            _messageHistory[_currentRoom].Add(("", content, DateTime.Now, true));
+
+            RenderSystemMessage(content);
+        }
+
+        private void UpdateOnlineList()
+        {
+            // Cập nhật số online trong header
+            // Server sẽ gửi danh sách qua GetRooms
+            // Tạm thời chỉ update label
+            lblSLOnline.Text = $"- {flowLayoutPanel2.Controls.Count} users online";
+        }
+
+        // ===== HELPER =====
+        private string GetInitials(string name)
+        {
+            var parts = name.Split(' ');
+            if (parts.Length >= 2)
+                return $"{parts[0][0]}{parts[^1][0]}".ToUpper();
+            return name.Length >= 2 ? name[..2].ToUpper() : name.ToUpper();
+        }
+
+        private Color GetAvatarColor(string username)
+        {
+            var colors = new[]
+            {
+                Color.FromArgb(83, 74, 183),
+                Color.FromArgb(15, 110, 86),
+                Color.FromArgb(186, 117, 23),
+                Color.FromArgb(153, 53, 86),
+                Color.FromArgb(56, 138, 221)
+            };
+            return colors[Math.Abs(username.GetHashCode()) % colors.Length];
+        }
+
+        private void RenderChatMessage(string username, string content, DateTime time)
         {
             var msgPanel = new Panel();
             msgPanel.Width = flowLayoutPanel1.ClientSize.Width - 20;
@@ -206,7 +276,7 @@ namespace ChatClient.Forms
             flowLayoutPanel1.ScrollControlIntoView(msgPanel);
         }
 
-        private void AddSystemMessage(string content)
+        private void RenderSystemMessage(string content)
         {
             var lbl = new Label();
             lbl.Text = content;
@@ -220,36 +290,6 @@ namespace ChatClient.Forms
 
             flowLayoutPanel1.Controls.Add(lbl);
             flowLayoutPanel1.ScrollControlIntoView(lbl);
-        }
-
-        private void UpdateOnlineList()
-        {
-            // Cập nhật số online trong header
-            // Server sẽ gửi danh sách qua GetRooms
-            // Tạm thời chỉ update label
-            lblSLOnline.Text = $"- {flowLayoutPanel2.Controls.Count} users online";
-        }
-
-        // ===== HELPER =====
-        private string GetInitials(string name)
-        {
-            var parts = name.Split(' ');
-            if (parts.Length >= 2)
-                return $"{parts[0][0]}{parts[^1][0]}".ToUpper();
-            return name.Length >= 2 ? name[..2].ToUpper() : name.ToUpper();
-        }
-
-        private Color GetAvatarColor(string username)
-        {
-            var colors = new[]
-            {
-                Color.FromArgb(83, 74, 183),
-                Color.FromArgb(15, 110, 86),
-                Color.FromArgb(186, 117, 23),
-                Color.FromArgb(153, 53, 86),
-                Color.FromArgb(56, 138, 221)
-            };
-            return colors[Math.Abs(username.GetHashCode()) % colors.Length];
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)

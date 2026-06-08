@@ -113,7 +113,7 @@ namespace ChatClient.Forms
             lblContact.Name = "lblContact";
             lblContact.Size = new Size(423, 25);
             lblContact.TabIndex = 5;
-            lblContact.Text = "Don’t have a server yet? Contact your administrator.";
+            lblContact.Text = "Donï¿½t have a server yet? Contact your administrator.";
             lblContact.Click += lblContact_Click;
             // 
             // textBox1

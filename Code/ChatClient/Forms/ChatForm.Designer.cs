@@ -95,7 +95,7 @@ namespace ChatClient.Forms
             lblstudy.Dock = DockStyle.Left;
             lblstudy.Location = new Point(0, 0);
             lblstudy.Name = "lblstudy";
-            lblstudy.Size = new Size(72, 25);
+            lblstudy.Size = new Size(57, 20);
             lblstudy.TabIndex = 0;
             lblstudy.Text = "# study";
             // 
@@ -114,7 +114,7 @@ namespace ChatClient.Forms
             label2.Dock = DockStyle.Left;
             label2.Location = new Point(0, 0);
             label2.Name = "label2";
-            label2.Size = new Size(89, 25);
+            label2.Size = new Size(73, 20);
             label2.TabIndex = 0;
             label2.Text = "# gaming";
             // 
@@ -133,7 +133,7 @@ namespace ChatClient.Forms
             lblrandom.Dock = DockStyle.Left;
             lblrandom.Location = new Point(0, 0);
             lblrandom.Name = "lblrandom";
-            lblrandom.Size = new Size(91, 25);
+            lblrandom.Size = new Size(74, 20);
             lblrandom.TabIndex = 0;
             lblrandom.Text = "# random";
             // 
@@ -143,7 +143,7 @@ namespace ChatClient.Forms
             lblChatRoom.Dock = DockStyle.Top;
             lblChatRoom.Location = new Point(0, 0);
             lblChatRoom.Name = "lblChatRoom";
-            lblChatRoom.Size = new Size(106, 25);
+            lblChatRoom.Size = new Size(87, 20);
             lblChatRoom.TabIndex = 1;
             lblChatRoom.Text = "Chat Room";
             lblChatRoom.Click += lblChatRoom_Click;
@@ -164,7 +164,7 @@ namespace ChatClient.Forms
             lblgeneral.Dock = DockStyle.Left;
             lblgeneral.Location = new Point(0, 0);
             lblgeneral.Name = "lblgeneral";
-            lblgeneral.Size = new Size(86, 25);
+            lblgeneral.Size = new Size(72, 20);
             lblgeneral.TabIndex = 0;
             lblgeneral.Text = "# general";
             // 
@@ -196,9 +196,9 @@ namespace ChatClient.Forms
             // 
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            flowLayoutPanel2.Location = new Point(0, 25);
+            flowLayoutPanel2.Location = new Point(0, 20);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(244, 138);
+            flowLayoutPanel2.Size = new Size(244, 143);
             flowLayoutPanel2.TabIndex = 1;
             // 
             // lblOnline
@@ -207,7 +207,7 @@ namespace ChatClient.Forms
             lblOnline.Dock = DockStyle.Top;
             lblOnline.Location = new Point(0, 0);
             lblOnline.Name = "lblOnline";
-            lblOnline.Size = new Size(68, 25);
+            lblOnline.Size = new Size(54, 20);
             lblOnline.TabIndex = 0;
             lblOnline.Text = "Online";
             // 
@@ -231,7 +231,7 @@ namespace ChatClient.Forms
             lblChamXanh.ForeColor = Color.Lime;
             lblChamXanh.Location = new Point(214, 20);
             lblChamXanh.Name = "lblChamXanh";
-            lblChamXanh.Size = new Size(17, 11);
+            lblChamXanh.Size = new Size(16, 10);
             lblChamXanh.TabIndex = 2;
             lblChamXanh.Text = "\U0001f7e2";
             // 
@@ -240,7 +240,7 @@ namespace ChatClient.Forms
             lblNameOnline.AutoSize = true;
             lblNameOnline.Location = new Point(58, 9);
             lblNameOnline.Name = "lblNameOnline";
-            lblNameOnline.Size = new Size(109, 25);
+            lblNameOnline.Size = new Size(87, 20);
             lblNameOnline.TabIndex = 1;
             lblNameOnline.Text = "Quoc Hung";
             lblNameOnline.Click += lblNameOnline_Click;
@@ -251,7 +251,7 @@ namespace ChatClient.Forms
             lblQH.BackColor = Color.DodgerBlue;
             lblQH.Location = new Point(12, 9);
             lblQH.Name = "lblQH";
-            lblQH.Size = new Size(40, 25);
+            lblQH.Size = new Size(31, 20);
             lblQH.TabIndex = 0;
             lblQH.Text = "QH";
             // 
@@ -281,7 +281,7 @@ namespace ChatClient.Forms
             // 
             textBox1.Location = new Point(18, 7);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(431, 31);
+            textBox1.Size = new Size(431, 27);
             textBox1.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -323,7 +323,7 @@ namespace ChatClient.Forms
             lblSLOnline.ForeColor = Color.DimGray;
             lblSLOnline.Location = new Point(108, 10);
             lblSLOnline.Name = "lblSLOnline";
-            lblSLOnline.Size = new Size(133, 25);
+            lblSLOnline.Size = new Size(109, 20);
             lblSLOnline.TabIndex = 1;
             lblSLOnline.Text = "- 4 users online";
             // 
@@ -334,7 +334,7 @@ namespace ChatClient.Forms
             label1.ForeColor = Color.Gray;
             label1.Location = new Point(28, 9);
             label1.Name = "label1";
-            label1.Size = new Size(86, 25);
+            label1.Size = new Size(72, 20);
             label1.TabIndex = 0;
             label1.Text = "# general";
             // 

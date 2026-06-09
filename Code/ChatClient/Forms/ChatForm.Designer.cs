@@ -39,7 +39,7 @@ namespace ChatClient.Forms
             textBox1 = new TextBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
             panel1 = new Panel();
-            btnSettings = new Button();
+            btnSettings1 = new Button();
             lblSLOnline = new Label();
             label1 = new Label();
             pnlLeft.SuspendLayout();
@@ -295,7 +295,7 @@ namespace ChatClient.Forms
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.FixedSingle;
-            panel1.Controls.Add(btnSettings);
+            panel1.Controls.Add(btnSettings1);
             panel1.Controls.Add(lblSLOnline);
             panel1.Controls.Add(label1);
             panel1.Dock = DockStyle.Top;
@@ -304,17 +304,17 @@ namespace ChatClient.Forms
             panel1.Size = new Size(596, 42);
             panel1.TabIndex = 3;
             // 
-            // btnSettings
+            // btnSettings1
             // 
-            btnSettings.BackColor = Color.Transparent;
-            btnSettings.FlatStyle = FlatStyle.Flat;
-            btnSettings.ForeColor = Color.DimGray;
-            btnSettings.Location = new Point(495, 3);
-            btnSettings.Name = "btnSettings";
-            btnSettings.Size = new Size(98, 34);
-            btnSettings.TabIndex = 2;
-            btnSettings.Text = "Settings";
-            btnSettings.UseVisualStyleBackColor = false;
+            btnSettings1.BackColor = Color.Transparent;
+            btnSettings1.FlatStyle = FlatStyle.Flat;
+            btnSettings1.ForeColor = Color.DimGray;
+            btnSettings1.Location = new Point(495, 3);
+            btnSettings1.Name = "btnSettings1";
+            btnSettings1.Size = new Size(98, 34);
+            btnSettings1.TabIndex = 2;
+            btnSettings1.Text = "Settings";
+            btnSettings1.UseVisualStyleBackColor = false;
             // 
             // lblSLOnline
             // 
@@ -398,6 +398,6 @@ namespace ChatClient.Forms
         private Label lblstudy;
         private Label label1;
         private Label lblSLOnline;
-        private Button btnSettings;
+        private Button btnSettings1;
     }
 }

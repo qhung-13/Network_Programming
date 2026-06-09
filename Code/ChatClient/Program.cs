@@ -1,5 +1,7 @@
 using ChatClient.Forms;
 
+
+
 namespace ChatClient;
 
 static class Program
@@ -14,7 +16,6 @@ static class Program
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
         Application.Run(new LoginForm());
-        Application.Run(new ChatForm());
-        Application.Run(new CreateNewRoom());
+        //Application.Run(new ChatForm());
     }
 }

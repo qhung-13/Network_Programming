@@ -258,6 +258,7 @@ namespace ChatClient.Forms
 
             // Nội dung
             var lblContent = new Label();
+            lblContent.Text = ChatShared.EmojiHelper.Parse(content);
             lblContent.Text = content;
             lblContent.Location = new Point(52, 28);
             lblContent.AutoSize = true;
@@ -279,7 +280,7 @@ namespace ChatClient.Forms
         private void RenderSystemMessage(string content)
         {
             var lbl = new Label();
-            lbl.Text = content;
+            lbl.Text = "[HỆ THỐNG] " + content;
             lbl.AutoSize = false;
             lbl.Width = flowLayoutPanel1.ClientSize.Width - 20;
             lbl.Height = 24;

@@ -1,5 +1,5 @@
 ﻿namespace ChatClient.Services;
-
+//ok
 public class ClientSettings
 {
     public string Username { get; set; } = "";

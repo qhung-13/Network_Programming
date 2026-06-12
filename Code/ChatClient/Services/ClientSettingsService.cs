@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 
 namespace ChatClient.Services;
-
+//ok
 public class ClientSettingsService
 {
     private readonly string _configFilePath = "client_settings.json";

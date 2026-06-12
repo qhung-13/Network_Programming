@@ -16,5 +16,6 @@ static class Program
         Application.Run(new LoginForm());
         Application.Run(new ChatForm());
         Application.Run(new CreateNewRoom());
+        Application.Run(new SettingsForm());
     }
 }

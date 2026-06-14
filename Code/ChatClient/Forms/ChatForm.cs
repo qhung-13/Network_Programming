@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using ChatClient.Core;
 using ChatClient.Services;
+using ChatShared;
 using ChatShared.Models;
 using ChatShared.Protocol;
 using Message = ChatShared.Models.Message;
@@ -14,6 +15,9 @@ namespace ChatClient.Forms
         private readonly TcpClientService _client;
         private readonly string _username;
         private string _currentRoom = "general";
+        private string? _replyToUsername = null;
+        private string? _replyToContent = null;
+        private Panel? _replyPreviewPanel = null;
 
         public ChatForm(TcpClientService client, string username)
         {
@@ -71,7 +75,8 @@ namespace ChatClient.Forms
             {
                 case MessageType.Chat:
                     if (msg.Room == _currentRoom)
-                        AddChatMessage(msg.Username, msg.Content, msg.Time);
+                        AddChatMessage(msg.Username, msg.Content, msg.Time,
+            msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded);
                     break;
 
                 case MessageType.Join:
@@ -126,8 +131,23 @@ namespace ChatClient.Forms
             string content = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(content)) return;
 
+            content = EmojiHelper.Parse(content);
+
             textBox1.Clear();
-            await _client.SendMessageAsync(_username, _currentRoom, content);
+
+            var msg = new Message
+            {
+                Type = MessageType.Chat,
+                Username = _username,
+                Room = _currentRoom,
+                Content = content,
+                Time = DateTime.Now,
+                ReplyToUsername = _replyToUsername,
+                ReplyToContent = _replyToContent,
+            };
+
+            await _client.SendMessageDirectAsync(msg);
+            CancelReply();
         }
 
         // ===== CHUYỂN PHÒNG =====
@@ -182,13 +202,13 @@ namespace ChatClient.Forms
         }
 
         // ===== HIỂN THỊ TIN NHẮN =====
-        private void AddChatMessage(string username, string content, DateTime time)
+        private void AddChatMessage(string username, string content, DateTime time, string? replyToUsername = null, string? replyToContent = null, bool isForwarded = false)
         {
             if (!_messageHistory.ContainsKey(_currentRoom))
                 _messageHistory[_currentRoom] = new();
             _messageHistory[_currentRoom].Add((username, content, time, false));
 
-            RenderChatMessage(username, content, time);
+            RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
         }
 
         private void AddSystemMessage(string content)
@@ -230,13 +250,16 @@ namespace ChatClient.Forms
             return colors[Math.Abs(username.GetHashCode()) % colors.Length];
         }
 
-        private void RenderChatMessage(string username, string content, DateTime time)
+        private void RenderChatMessage(string username, string content, DateTime time, string? replyToUsername = null, string? replyToContent = null, bool isForwarded = false)
         {
             var msgPanel = new Panel();
             msgPanel.Width = flowLayoutPanel1.ClientSize.Width - 20;
             msgPanel.Height = 60;
             msgPanel.Margin = new Padding(5, 5, 5, 0);
             msgPanel.BackColor = Color.White;
+            msgPanel.Padding = new Padding(8);
+
+            int yOffset = 8;
 
             // Avatar
             var avatar = new Label();
@@ -250,36 +273,95 @@ namespace ChatClient.Forms
 
             // Tên + thời gian
             var lblMeta = new Label();
-            lblMeta.Text = $"{username}  {time:HH:mm}";
-            lblMeta.Location = new Point(52, 8);
+            lblMeta.Text = isForwarded ? $"{username} đã chuyển tiếp {time:HH:mm}" : $"{username} {time:HH:mm}";
+            lblMeta.Location = new Point(52, yOffset);
             lblMeta.AutoSize = true;
             lblMeta.Font = new Font("Segoe UI", 9f, FontStyle.Bold);
-            lblMeta.ForeColor = Color.Black;
+            lblMeta.ForeColor = isForwarded ? Color.FromArgb(83, 74, 183) : Color.Black;
+
+            yOffset += 28;
+
+            if(!string.IsNullOrEmpty(replyToUsername))
+            {
+                var replyBar = new Panel();
+                replyBar.Location = new Point(48, yOffset);
+                replyBar.Width = msgPanel.Width - 70;
+                replyBar.Height = 28;
+                replyBar.BackColor = Color.FromArgb(235, 235, 245);
+
+                var replyLine = new Panel();
+                replyLine.Width = 3;
+                replyLine.Dock = DockStyle.Left;
+                replyLine.BackColor = Color.FromArgb(83, 74, 183);
+
+                var replyText = new Label();
+                replyText.Text = $"{replyToUsername}: {(replyToContent?.Length > 40 ? replyToContent[..40] + "..." : replyToContent)}";
+                replyText.Dock = DockStyle.Fill;
+                replyText.Font = new Font("Segoe UI", 8f, FontStyle.Italic);
+                replyText.ForeColor = Color.FromArgb(83, 74, 183);
+                replyText.TextAlign = ContentAlignment.MiddleLeft;
+                replyText.Padding = new Padding(6, 0, 0, 0);
+
+                replyBar.Controls.Add(replyText);
+                replyBar.Controls.Add(replyLine);
+                msgPanel.Controls.Add(replyBar);
+
+                yOffset += 32;
+            }
 
             // Nội dung
             var lblContent = new Label();
+            lblContent.Text = ChatShared.EmojiHelper.Parse(content);
             lblContent.Text = content;
-            lblContent.Location = new Point(52, 28);
+            lblContent.Location = new Point(52, yOffset);
             lblContent.AutoSize = true;
             lblContent.Font = new Font("Segoe UI", 9f);
             lblContent.ForeColor = Color.DimGray;
-            lblContent.MaximumSize = new Size(msgPanel.Width - 60, 0);
+            lblContent.MaximumSize = new Size(msgPanel.Width - 120, 0);
+            msgPanel.Controls.Add(lblContent);
 
-            msgPanel.Controls.AddRange(new Control[] { avatar, lblMeta, lblContent });
+            yOffset += lblContent.Height + 8;
 
-            // Điều chỉnh height theo nội dung
-            msgPanel.Height = Math.Max(60, lblContent.Bottom + 10);
+            var btnReply = new Button();
+            btnReply.Text = "Reply";
+            btnReply.Location = new Point(48, yOffset);
+            btnReply.Size = new Size(65, 22);
+            btnReply.FlatStyle = FlatStyle.Flat;
+            btnReply.FlatAppearance.BorderSize = 1;
+            btnReply.FlatAppearance.BorderColor = Color.LightGray;
+            btnReply.Font = new Font("Segoe UI", 8f);
+            btnReply.ForeColor = Color.Gray;
+            btnReply.BackColor = Color.White;
+            btnReply.Cursor = Cursors.Hand;
+            btnReply.Click += (s, e) => ShowReplyPreview(username, content);
+
+            var btnForward = new Button();
+            btnForward.Text = "Forward";
+            btnForward.Location = new Point(120, yOffset);
+            btnForward.Size = new Size(75, 22);
+            btnForward.FlatStyle = FlatStyle.Flat;
+            btnForward.FlatAppearance.BorderSize = 1;
+            btnForward.FlatAppearance.BorderColor = Color.LightGray;
+            btnForward.Font = new Font("Segoe UI", 8f);
+            btnForward.ForeColor = Color.Gray;
+            btnForward.BackColor = Color.White;
+            btnForward.Cursor = Cursors.Hand;
+            btnForward.Click += (s, e) => ForwardMessage(username, content);
+
+            msgPanel.Controls.AddRange(new Control[] { avatar, lblMeta, btnReply, btnForward });
+            msgPanel.Height = yOffset + 30;
 
             flowLayoutPanel1.Controls.Add(msgPanel);
+            flowLayoutPanel1.ScrollControlIntoView(msgPanel);
 
-            // Scroll xuống dưới
+            flowLayoutPanel1.Controls.Add(msgPanel);
             flowLayoutPanel1.ScrollControlIntoView(msgPanel);
         }
 
         private void RenderSystemMessage(string content)
         {
             var lbl = new Label();
-            lbl.Text = content;
+            lbl.Text = "[HỆ THỐNG] " + content;
             lbl.AutoSize = false;
             lbl.Width = flowLayoutPanel1.ClientSize.Width - 20;
             lbl.Height = 24;
@@ -288,8 +370,90 @@ namespace ChatClient.Forms
             lbl.Font = new Font("Segoe UI", 8f, FontStyle.Italic);
             lbl.Margin = new Padding(5, 3, 5, 0);
 
-            flowLayoutPanel1.Controls.Add(lbl);
-            flowLayoutPanel1.ScrollControlIntoView(lbl);
+            //flowLayoutPanel1.Controls.Add(lbl);
+            //flowLayoutPanel1.ScrollControlIntoView(lbl);
+        }
+
+        private void ShowReplyPreview(string username, string content)
+        {
+            _replyToUsername = username;
+            _replyToContent = content;
+
+            if(_replyPreviewPanel != null)
+            {
+                panel12.Controls.Remove(_replyPreviewPanel);
+                _replyPreviewPanel.Dispose();
+            }
+
+            // Create panel review
+            _replyPreviewPanel = new Panel();
+            _replyPreviewPanel.Height = 36;
+            _replyPreviewPanel.Dock = DockStyle.Top;
+            _replyPreviewPanel.BackColor = Color.FromArgb(235, 235, 235);
+            _replyPreviewPanel.Padding = new Padding(10, 0, 10, 0);
+
+            var lblReply = new Label();
+            lblReply.Text = $"Đang trả lời {username}: {(content.Length > 40 ? content[..40] + "..." : content)}";
+            lblReply.Dock = DockStyle.Fill;
+            lblReply.Font = new Font("Segoe UI", 9f, FontStyle.Italic);
+            lblReply.ForeColor = Color.FromArgb(83, 74, 183);
+            lblReply.TextAlign = ContentAlignment.MiddleLeft;
+
+            var btnCancel = new Button();
+            btnCancel.Text = "X";
+            btnCancel.Dock = DockStyle.Right;
+            btnCancel.Width = 30;
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.FlatAppearance.BorderSize = 0;
+            btnCancel.ForeColor = Color.Gray;
+            btnCancel.Click += (s, e) => CancelReply();
+
+            _replyPreviewPanel.Controls.Add(lblReply);
+            _replyPreviewPanel.Controls.Add(btnCancel);
+
+            //textBox1.Top += 36;
+            //btnSend.Top += 36;
+
+            //panel12.Controls.Add(_replyPreviewPanel);
+            //_replyPreviewPanel.SendToBack();
+
+            //panel12.Height += 36;
+            //panel12.Top -= 36;
+
+            this.Controls.Add(_replyPreviewPanel);
+            _replyPreviewPanel.BringToFront();
+            panel12.BringToFront();
+        }
+
+        private void CancelReply()
+        {
+            _replyToUsername = null;
+            _replyToContent = null;
+
+            if(_replyPreviewPanel != null)
+            {
+                panel12.Controls.Remove(_replyPreviewPanel);
+                _replyPreviewPanel.Dispose();
+                _replyPreviewPanel = null;
+                //panel12.Height -= 36;
+            }
+        }
+
+        private async void ForwardMessage(string originalUsername, string content)
+        {
+            var msg = new Message
+            {
+                Type = MessageType.Chat,
+                Username = _username,
+                Room = _currentRoom,
+                Content = content,
+                Time = DateTime.Now,
+                IsForwarded = true,
+                ReplyToUsername = originalUsername,
+                ReplyToContent = content
+            };
+
+            await _client.SendMessageDirectAsync(msg);
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)

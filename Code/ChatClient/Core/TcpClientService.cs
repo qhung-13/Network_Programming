@@ -23,6 +23,8 @@ public class TcpClientService
     {
         try
         {
+            Disconnect();
+
             _client = new TcpClient();
             await _client.ConnectAsync(ip, port);
 
@@ -57,22 +59,43 @@ public class TcpClientService
         try
         {
             string? line;
-            while ((line = await _reader!.ReadLineAsync(ct)) != null)
+            while (_reader != null && !ct.IsCancellationRequested && (line = await _reader.ReadLineAsync(ct)) != null)
             {
                 var msg = Message.FromJson(line);
                 if (msg != null)
+                {
                     OnMessageReceived?.Invoke(msg);
+                }
             }
+            //while ((line = await _reader!.ReadLineAsync(ct)) != null)
+            //{
+            //    var msg = Message.FromJson(line);
+            //    if (msg != null)
+            //        OnMessageReceived?.Invoke(msg);
+            //}
         }
-        catch (OperationCanceledException) { }
+        catch (Exception ex) when (ex is OperationCanceledException || ex is IOException || ex is ObjectDisposedException)
+        {
+
+        } 
         catch (Exception ex)
         {
-            OnError?.Invoke($"Mất kết nối: {ex.Message}");
+            OnError?.Invoke($"Lỗi đọc dữ liệu: {ex.Message}");
         }
         finally
         {
+            Disconnect();
             OnDisconnected?.Invoke();
         }
+        //catch (OperationCanceledException) { }
+        //catch (Exception ex)
+        //{
+        //    OnError?.Invoke($"Mất kết nối: {ex.Message}");
+        //}
+        //finally
+        //{
+        //    OnDisconnected?.Invoke();
+        //}
     }
 
     public async Task SendMessageAsync(string username, string room, string content)
@@ -88,13 +111,7 @@ public class TcpClientService
             Time = DateTime.Now
         };
 
-        await _writer.WriteLineAsync(msg.ToJson());
-    }
-
-    public void Disconnect()
-    {
-        _cts.Cancel();
-        _client?.Close();
+        await SendMessageDirectAsync(msg);
     }
 
     public async Task JoinRoomAsync(string username, string room)
@@ -107,5 +124,39 @@ public class TcpClientService
             Room = room
         };
         await _writer.WriteLineAsync(msg.ToJson());
+    }
+
+    public async Task SendMessageDirectAsync(Message message)
+    {
+        if(_writer == null || !IsConnected)
+        {
+            return;
+        }
+
+        try
+        {
+            await _writer.WriteLineAsync(message.ToJson());
+        } 
+        catch (Exception ex)
+        {
+            OnError?.Invoke($"Lỗi khi gửi tin nhắn: {ex.Message}");
+            Disconnect();
+        }
+    }
+
+    public void Disconnect()
+    {
+        if (_cts != null && !_cts.IsCancellationRequested)
+        {
+            _cts.Cancel();
+        }
+
+        _writer?.Close();
+        _reader?.Close();
+        _client?.Close();
+
+        _writer = null;
+        _reader = null;
+        _client = null;
     }
 }

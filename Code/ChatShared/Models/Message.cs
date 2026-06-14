@@ -15,6 +15,10 @@ public class Message
 
     public DateTime Time { get; set; } = DateTime.Now;
 
+    public string? ReplyToUsername { get; set; }
+    public string? ReplyToContent { get; set; }
+    public bool IsForwarded { get; set; } = false;
+
     public Message()
     {
 

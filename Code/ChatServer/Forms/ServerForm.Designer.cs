@@ -18,8 +18,9 @@
             tblToolbar = new TableLayoutPanel();
             btnStart = new Button();
             btnStop = new Button();
-            lblStatus = new Label();
             btnClearLog = new Button();
+            btnSettings2 = new Button();
+            lblStatus = new Label();
             rtbLog = new RichTextBox();
             tblStats = new TableLayoutPanel();
             lblClients = new Label();
@@ -37,15 +38,16 @@
             // tblToolbar
             // 
             tblToolbar.BackColor = Color.WhiteSmoke;
-            tblToolbar.ColumnCount = 4;
+            tblToolbar.ColumnCount = 5;
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 47.9591827F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 146F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 261F));
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
-            tblToolbar.Controls.Add(lblStatus, 3, 0);
             tblToolbar.Controls.Add(btnClearLog, 2, 0);
+            tblToolbar.Controls.Add(btnSettings2, 4, 0);
+            tblToolbar.Controls.Add(lblStatus, 3, 0);
             tblToolbar.Dock = DockStyle.Top;
             tblToolbar.Location = new Point(0, 0);
             tblToolbar.Margin = new Padding(2);
@@ -115,6 +117,31 @@
             btnClearLog.Text = "🗑 Delete Log";
             btnClearLog.UseVisualStyleBackColor = true;
             btnClearLog.Click += btnClearLog_Click;
+            // 
+            // btnSettings2
+            // 
+            btnSettings2.FlatStyle = FlatStyle.Flat;
+            btnSettings2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSettings2.ForeColor = Color.DimGray;
+            btnSettings2.Location = new Point(677, 3);
+            btnSettings2.Name = "btnSettings2";
+            btnSettings2.Size = new Size(96, 34);
+            btnSettings2.TabIndex = 4;
+            btnSettings2.Text = "Settings";
+            btnSettings2.UseVisualStyleBackColor = true;
+            // 
+            // lblStatus
+            // 
+            lblStatus.AutoSize = true;
+            lblStatus.Dock = DockStyle.Right;
+            lblStatus.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStatus.ForeColor = Color.LimeGreen;
+            lblStatus.Location = new Point(590, 0);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(81, 45);
+            lblStatus.TabIndex = 2;
+            lblStatus.Text = "● Offline";
+            lblStatus.TextAlign = ContentAlignment.MiddleRight;
             // 
             // rtbLog
             // 
@@ -283,5 +310,6 @@
         private Label lblRooms;
         private Label lblMessages;
         private Label lblUptime;
+        private Button btnSettings2;
     }
 }

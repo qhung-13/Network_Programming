@@ -1,23 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\ChatShared\ChatShared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Forms\ServerSettingForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-  </ItemGroup>
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
-	<UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-	<FileEncoding>UTF-8</FileEncoding>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ChatShared\ChatShared.csproj" />
+  </ItemGroup>
 
 </Project>

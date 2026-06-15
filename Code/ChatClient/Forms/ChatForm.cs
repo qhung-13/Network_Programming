@@ -11,7 +11,7 @@ namespace ChatClient.Forms
     [DesignerCategory("Form")]
     public partial class ChatForm : Form
     {
-        private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem)>> _messageHistory = new();
+        private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem, string? replyToUsername, string? replyToContent, bool isForwarded)>> _messageHistory = new();
         private readonly TcpClientService _client;
         private readonly string _username;
         private string _currentRoom = "general";
@@ -74,6 +74,11 @@ namespace ChatClient.Forms
             switch (msg.Type)
             {
                 case MessageType.Chat:
+                    if (!_messageHistory.ContainsKey(msg.Room))
+                    {
+                        _messageHistory[msg.Room] = new();
+                        _messageHistory[msg.Room].Add((msg.Username, msg.Content, msg.Time, false, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded));
+                    }
                     if (msg.Room == _currentRoom)
                         AddChatMessage(msg.Username, msg.Content, msg.Time,
             msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded);
@@ -163,16 +168,12 @@ namespace ChatClient.Forms
 
             if (_messageHistory.TryGetValue(roomName, out var history))
             {
-                foreach (var (username, content, time, isSystem) in history)
+                foreach (var (username, content, time, isSystem, replyToUsername, replyToContent, isForwarded) in history)
                 {
                     if (isSystem)
-                    {
                         RenderSystemMessage(content);
-                    }
                     else
-                    {
-                        RenderChatMessage(username, content, time);
-                    }
+                        RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
                 }
             }
             else
@@ -206,7 +207,7 @@ namespace ChatClient.Forms
         {
             if (!_messageHistory.ContainsKey(_currentRoom))
                 _messageHistory[_currentRoom] = new();
-            _messageHistory[_currentRoom].Add((username, content, time, false));
+            _messageHistory[_currentRoom].Add((username, content, time, false, replyToUsername, replyToContent, isForwarded));
 
             RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
         }
@@ -215,7 +216,7 @@ namespace ChatClient.Forms
         {
             if (!_messageHistory.ContainsKey(_currentRoom))
                 _messageHistory[_currentRoom] = new();
-            _messageHistory[_currentRoom].Add(("", content, DateTime.Now, true));
+            _messageHistory[_currentRoom].Add(("", content, DateTime.Now, true, null, null, false));
 
             RenderSystemMessage(content);
         }
@@ -441,19 +442,69 @@ namespace ChatClient.Forms
 
         private async void ForwardMessage(string originalUsername, string content)
         {
-            var msg = new Message
-            {
-                Type = MessageType.Chat,
-                Username = _username,
-                Room = _currentRoom,
-                Content = content,
-                Time = DateTime.Now,
-                IsForwarded = true,
-                ReplyToUsername = originalUsername,
-                ReplyToContent = content
-            };
+            var rooms = new[] { "general", "random", "gaming", "study" }.Where(r => r != _currentRoom).ToArray();
 
-            await _client.SendMessageDirectAsync(msg);
+            using var dialog = new Form();
+            dialog.Text = "Chuyển tiếp đến phòng";
+            dialog.Size = new Size(280, 200);
+            dialog.StartPosition = FormStartPosition.CenterParent;
+            dialog.FormBorderStyle = FormBorderStyle.FixedDialog;
+            dialog.MaximizeBox = false;
+            dialog.MinimizeBox = false;
+
+            var lbl = new Label();
+            lbl.Text = "Chọn phòng muốn chuyển tiếp:";
+            lbl.Location = new Point(15, 15);
+            lbl.AutoSize = true;
+
+            var listBox = new ListBox();
+            listBox.Items.AddRange(rooms);
+            listBox.Location = new Point(15, 40);
+            listBox.Size = new Size(240, 80);
+            listBox.SelectedIndex = 0;
+
+            var btnOk = new Button();
+            btnOk.Text = "Chuyển tiếp";
+            btnOk.Location = new Point(15, 130);
+            btnOk.Size = new Size(110, 30);
+            btnOk.BackColor = Color.FromArgb(83, 74, 183);
+            btnOk.ForeColor = Color.White;
+            btnOk.FlatStyle = FlatStyle.Flat;
+            btnOk.DialogResult = DialogResult.OK;
+
+            var btnCancel = new Button();
+            btnCancel.Text = "Hủy";
+            btnCancel.Location = new Point(135, 130);
+            btnCancel.Size = new Size(80, 30);
+            btnCancel.DialogResult = DialogResult.Cancel;
+
+            dialog.Controls.AddRange(new Control[] { lbl, listBox, btnOk, btnCancel });
+            dialog.AcceptButton = btnOk;
+
+            if (dialog.ShowDialog() == DialogResult.OK && listBox.SelectedItem != null)
+            {
+                string targetRoom = listBox.SelectedItem.ToString()!;
+
+                var msg = new Message
+                {
+                    Type = MessageType.Chat,
+                    Username = _username,
+                    Room = targetRoom,  // ← Gửi tới phòng khác
+                    Content = content,
+                    Time = DateTime.Now,
+                    IsForwarded = true,
+                    ReplyToUsername = originalUsername,
+                    ReplyToContent = content
+                };
+
+                await _client.SendMessageDirectAsync(msg);
+
+                if (!_messageHistory.ContainsKey(targetRoom))
+                    _messageHistory[targetRoom] = new();
+                _messageHistory[targetRoom].Add((_username, content, DateTime.Now, false, originalUsername, content, true));
+
+                AddSystemMessage($"Đã chuyển tiếp tin nhắn tới #{targetRoom}");
+            }
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)

@@ -95,6 +95,19 @@ public class TcpServer
         await client.SendMessageAsync(msg);
     }
 
+    public async Task BroadcastRoomListAsync()
+    {
+        var rooms = RoomManager.GetAllRooms();
+
+        var msg = new Message
+        {
+            Type = MessageType.GetRooms,
+            Content = System.Text.Json.JsonSerializer.Serialize(rooms)
+        };
+
+        await BroadcastToAllAsync(msg);
+    }
+
     public void Log(string message)
     {
         var log = $"[{DateTime.Now:HH:mm:ss}] {message}";

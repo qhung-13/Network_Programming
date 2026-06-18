@@ -15,56 +15,87 @@ namespace ChatClient.Forms
         public SettingsForm()
         {
             InitializeComponent();
+
+
+
+          
+
+            foreach (Control c in pnlContent.Controls)
+            {
+                if (c is Panel p)
+                {
+                    p.Dock = DockStyle.Fill;
+                    //p.Dock = DockStyle.None;
+                    //p.Location = new Point(0, 0);
+                    //p.Size = pnlContent.Size;
+                    p.Visible = false;
+                }
+            }
+
+            ShowPanel(pnlAccount, btnAccount);
         }
 
-        private void txtTenHienThi_TextChanged(object sender, EventArgs e)
+
+
+        // Hàm xử lý chuyển panel
+        private void ShowPanel(Panel targetPanel, Button activeButton)
         {
+            // Ẩn tất cả panel
+            pnlAccount.Visible = false;
+            pnlConnection.Visible = false;
+            pnlNotifications.Visible = false;
+            pnlAppearance.Visible = false;
+            pnlLogStorage.Visible = false;
 
+            // Reset màu tất cả button
+            btnAccount.BackColor = Color.Transparent;
+            btnConnection.BackColor = Color.Transparent;
+            btnNotifications.BackColor = Color.Transparent;
+            btnAppearance.BackColor = Color.Transparent;
+            btnLogStorage.BackColor = Color.Transparent;
+
+            btnAccount.ForeColor = Color.FromArgb(168, 200, 232);
+            btnConnection.ForeColor = Color.FromArgb(168, 200, 232);
+            btnNotifications.ForeColor = Color.FromArgb(168, 200, 232);
+            btnAppearance.ForeColor = Color.FromArgb(168, 200, 232);
+            btnLogStorage.ForeColor = Color.FromArgb(168, 200, 232);
+
+            // Hiện panel được chọn
+            targetPanel.Visible = true;
+            targetPanel.BringToFront();
+
+            // Highlight button được chọn
+            activeButton.BackColor = Color.FromArgb(14, 42, 69);
+            activeButton.ForeColor = Color.FromArgb(77, 184, 255);
         }
 
-        private void btnConnect_Click(object sender, EventArgs e)
+        
+
+        private void btnAccount_Click(object sender, EventArgs e)
         {
-
+            ShowPanel(pnlAccount, btnAccount);
         }
 
-        private void lblStatus_Click(object sender, EventArgs e)
+        private void btnConnection_Click(object sender, EventArgs e)
         {
-
+            ShowPanel(pnlConnection, btnConnection);
         }
 
-        private void lblStatus1_Click(object sender, EventArgs e)
+        private void btnNotifications_Click(object sender, EventArgs e)
         {
-
+            ShowPanel(pnlNotifications, btnNotifications);
         }
 
-        private void lblNotify1_Click(object sender, EventArgs e)
+        private void btnAppearance_Click(object sender, EventArgs e)
         {
-
+            ShowPanel(pnlAppearance, btnAppearance);
         }
 
-        private void lblNotify_Click(object sender, EventArgs e)
+        private void btnLogStorage_Click(object sender, EventArgs e)
         {
-
+            ShowPanel(pnlLogStorage, btnLogStorage);
         }
 
-        private void lblThongBaoTitle_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pnlTaiKhoan_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void lblNotify4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblServerConnection_Click(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }

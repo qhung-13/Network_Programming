@@ -43,6 +43,7 @@
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 52.0408173F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 146F));
             tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 261F));
+            tblToolbar.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tblToolbar.Controls.Add(btnStart, 0, 0);
             tblToolbar.Controls.Add(btnStop, 1, 0);
             tblToolbar.Controls.Add(btnClearLog, 2, 0);
@@ -68,7 +69,7 @@
             btnStart.Location = new Point(2, 2);
             btnStart.Margin = new Padding(2);
             btnStart.Name = "btnStart";
-            btnStart.Size = new Size(90, 32);
+            btnStart.Size = new Size(89, 32);
             btnStart.TabIndex = 1;
             btnStart.Text = "▶ Start";
             btnStart.UseVisualStyleBackColor = false;
@@ -81,7 +82,7 @@
             btnStop.FlatAppearance.BorderColor = Color.Blue;
             btnStop.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnStop.ForeColor = Color.Blue;
-            btnStop.Location = new Point(105, 2);
+            btnStop.Location = new Point(95, 2);
             btnStop.Margin = new Padding(2);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(90, 32);
@@ -90,26 +91,13 @@
             btnStop.UseVisualStyleBackColor = false;
             btnStop.Click += btnStop_Click;
             // 
-            // lblStatus
-            // 
-            lblStatus.AutoSize = true;
-            lblStatus.Dock = DockStyle.Fill;
-            lblStatus.ForeColor = Color.LimeGreen;
-            lblStatus.Location = new Point(362, 0);
-            lblStatus.Margin = new Padding(2, 0, 2, 0);
-            lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(258, 36);
-            lblStatus.TabIndex = 2;
-            lblStatus.Text = "● Offline";
-            lblStatus.TextAlign = ContentAlignment.MiddleRight;
-            // 
             // btnClearLog
             // 
             btnClearLog.Dock = DockStyle.Left;
             btnClearLog.FlatAppearance.BorderColor = Color.Black;
             btnClearLog.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnClearLog.ForeColor = Color.FromArgb(64, 64, 64);
-            btnClearLog.Location = new Point(216, 2);
+            btnClearLog.Location = new Point(196, 2);
             btnClearLog.Margin = new Padding(2);
             btnClearLog.Name = "btnClearLog";
             btnClearLog.Size = new Size(125, 32);
@@ -123,9 +111,9 @@
             btnSettings2.FlatStyle = FlatStyle.Flat;
             btnSettings2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSettings2.ForeColor = Color.DimGray;
-            btnSettings2.Location = new Point(677, 3);
+            btnSettings2.Location = new Point(604, 3);
             btnSettings2.Name = "btnSettings2";
-            btnSettings2.Size = new Size(96, 34);
+            btnSettings2.Size = new Size(15, 30);
             btnSettings2.TabIndex = 4;
             btnSettings2.Text = "Settings";
             btnSettings2.UseVisualStyleBackColor = true;
@@ -136,9 +124,10 @@
             lblStatus.Dock = DockStyle.Right;
             lblStatus.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblStatus.ForeColor = Color.LimeGreen;
-            lblStatus.Location = new Point(590, 0);
+            lblStatus.Location = new Point(532, 0);
+            lblStatus.Margin = new Padding(2, 0, 2, 0);
             lblStatus.Name = "lblStatus";
-            lblStatus.Size = new Size(81, 45);
+            lblStatus.Size = new Size(67, 36);
             lblStatus.TabIndex = 2;
             lblStatus.Text = "● Offline";
             lblStatus.TextAlign = ContentAlignment.MiddleRight;

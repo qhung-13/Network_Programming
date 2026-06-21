@@ -7,6 +7,7 @@ using ChatShared.Protocol;
 using Message = ChatShared.Models.Message;
 using System.Text.Json;
 using System.Linq.Expressions;
+using System.Security.Policy;
 
 namespace ChatClient.Forms
 {
@@ -15,12 +16,15 @@ namespace ChatClient.Forms
     {
         private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem, string? replyToUsername, string? replyToContent, bool isForwarded)>> _messageHistory = new();
         private readonly TcpClientService _client;
-        private readonly string _username;
+        private string _username;
         private string _currentRoom = "general";
         private string? _replyToUsername = null;
         private string? _replyToContent = null;
         private Panel? _replyPreviewPanel = null;
         private readonly Dictionary<string, Panel> _roomPanels = new();
+        private readonly ClientSettingsService _settingsService = new();
+        private DateTime _sessionStartTime;
+        private readonly HashSet<string> _joinedRooms = new();
 
         public ChatForm(TcpClientService client, string username)
         {
@@ -31,6 +35,9 @@ namespace ChatClient.Forms
 
         private void ChatForm_Load(object sender, EventArgs e)
         {
+            _sessionStartTime = DateTime.Now;
+            _joinedRooms.Add(_currentRoom);
+
             // Hiển thị tên user
             lblNameOnline.Text = _username;
             lblQH.Text = GetInitials(_username);
@@ -59,7 +66,17 @@ namespace ChatClient.Forms
             _ = _client.RequestRoomListAsync();
 
 
-           //btnSettings.Click += (s, e) => new SettingsForm().ShowDialog();
+            btnSettings1.Click += (s, e) =>
+            {
+                var settingsForm = new SettingsForm();
+                settingsForm.OnUsernameChanged += (newUsername) =>
+                {
+                    _username = newUsername;
+                    lblNameOnline.Text = newUsername;
+                    lblQH.Text = GetInitials(newUsername);
+                };
+                settingsForm.ShowDialog(this);
+            };
 
             // Highlight phòng general mặc định
             HighlightRoom("general");
@@ -113,6 +130,16 @@ namespace ChatClient.Forms
                     catch
                     {
                         AddSystemMessage("Không thể tải danh sách phòng");
+                    }
+                    break;
+                case MessageType.RoomUsers:
+                    if(msg.Room == _currentRoom)
+                    {
+                        var users = JsonSerializer.Deserialize<List<string>>(msg.Content ?? "[]");
+                        if (users != null)
+                        {
+                            UpdateRoomUsers(users);
+                        }
                     }
                     break;
             }
@@ -169,12 +196,23 @@ namespace ChatClient.Forms
 
             await _client.SendMessageDirectAsync(msg);
             CancelReply();
+
+            var settings = _settingsService.Load();
+            settings.MessagesSent++;
+            _settingsService.Save(settings);
         }
 
         // ===== CHUYỂN PHÒNG =====
         private async void JoinRoom(string roomName)
         {
             if (roomName == _currentRoom) return;
+
+            if(_joinedRooms.Add(roomName))
+            {
+                var settings = _settingsService.Load();
+                settings.RoomsJoined = _joinedRooms.Count;
+                _settingsService.Save(settings);
+            }
 
             _currentRoom = roomName;
             label1.Text = "# " + roomName;
@@ -593,10 +631,64 @@ namespace ChatClient.Forms
             panel3.Invalidate();
         }
 
+        private void UpdateRoomUsers(List<string> users)
+        {
+            lblSLOnline.Text = $"- {users.Count} users online";
+
+            flowLayoutPanel2.Controls.Clear();
+
+            foreach (var username in users)
+            {
+                var userPanel = new Panel();
+                userPanel.Width = flowLayoutPanel2.ClientSize.Width - 10;
+                userPanel.Height = 30;
+                userPanel.Margin = new Padding(3, 2, 3, 0);
+
+                var avatar = new Label();
+                avatar.Text = GetInitials(username);
+                avatar.Size = new Size(22, 22);
+                avatar.Location = new Point(4, 4);
+                avatar.TextAlign = ContentAlignment.MiddleCenter;
+                avatar.BackColor = GetAvatarColor(username);
+                avatar.ForeColor = Color.White;
+                avatar.Font = new Font("Segoe UI", 7f, FontStyle.Bold);
+
+                var dot = new Label();
+                dot.Text = "●";
+                dot.ForeColor = Color.LimeGreen;
+                dot.Font = new Font("Segoe UI", 7f);
+                dot.AutoSize = true;
+                dot.Location = new Point(28, 8);
+
+                var lblName = new Label();
+                lblName.Text = username;
+                lblName.Location = new Point(42, 7);
+                lblName.AutoSize = true;
+                lblName.Font = new Font("Segoe UI", 9f);
+                lblName.ForeColor = Color.White;
+
+                userPanel.Controls.AddRange(new Control[] { avatar, dot, lblName });
+                flowLayoutPanel2.Controls.Add(userPanel);
+            }
+        }
+
         private string NormalizeRoomName(string roomName)
         {
             return roomName.Trim().TrimStart('#').ToLower();
         }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            var settings = _settingsService.Load();
+            var sessionSeconds = (long)(DateTime.Now - _sessionStartTime).TotalSeconds;
+            settings.TotalOnlineSeconds += sessionSeconds;
+            _settingsService.Save(settings);
+
+            _client.OnMessageReceived -= OnMessageReceived;
+            _client.OnDisconnected -= OnDisconnected;
+            _client.Disconnect();
+            base.OnFormClosed(e);
+        } 
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -742,14 +834,6 @@ namespace ChatClient.Forms
         private void lblChatRoom_Click(object sender, EventArgs e)
         {
 
-        }
-
-        protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            _client.OnMessageReceived -= OnMessageReceived;
-            _client.OnDisconnected -= OnDisconnected;
-            _client.Disconnect();
-            base.OnFormClosed(e);
         }
     }
 }

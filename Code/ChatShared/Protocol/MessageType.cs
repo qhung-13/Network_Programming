@@ -7,5 +7,6 @@ public enum MessageType
     Leave,
     Error,
     CreateRoom,
-    GetRooms
+    GetRooms,
+    RoomUsers
 }

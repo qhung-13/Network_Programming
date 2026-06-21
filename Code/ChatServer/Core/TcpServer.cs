@@ -108,6 +108,22 @@ public class TcpServer
         await BroadcastToAllAsync(msg);
     }
 
+    public async Task BroadcastRoomUsersAsync(string roomName)
+    {
+        var users = UserManager.GetUsersInRoom(roomName)
+            .Select(u => u.Username)
+            .ToList();
+
+        var msg = new Message
+        {
+            Type = MessageType.RoomUsers,
+            Room = roomName,
+            Content = System.Text.Json.JsonSerializer.Serialize(users)
+        };
+
+        await BroadcastToRoomAsync(msg, roomName);
+    }
+
     public void Log(string message)
     {
         var log = $"[{DateTime.Now:HH:mm:ss}] {message}";

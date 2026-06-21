@@ -63,6 +63,8 @@ public class ClientHandler
                 Content = $"{User.Username} đã tham gia phòng"
             }, User.CurrentRoom);
 
+            await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
+
             // Vòng lặp đọc message liên tục
             string? line;
             while ((line = await _reader.ReadLineAsync(ct)) != null)
@@ -106,6 +108,9 @@ public class ClientHandler
                         }, msg.Room);
 
                         _server.Log($"CHANGE ROOM — {User.Username}: #{oldRoom} → #{msg.Room}");
+
+                        await _server.BroadcastRoomUsersAsync(oldRoom);
+                        await _server.BroadcastRoomUsersAsync(msg.Room);
                         break;
 
                     case MessageType.CreateRoom:
@@ -180,6 +185,8 @@ public class ClientHandler
                 Room = User.CurrentRoom,
                 Content = $"{User.Username} đã rời phòng"
             }, User.CurrentRoom);
+
+            await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
 
             _tcpClient.Close();
         }

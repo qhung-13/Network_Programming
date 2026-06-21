@@ -1,6 +1,7 @@
 using ChatShared.Models;
 using ChatShared.Protocol;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using Message = ChatShared.Models.Message;
 
 namespace ChatServer.Core;
@@ -62,6 +63,8 @@ public class ClientHandler
                 Content = $"{User.Username} đã tham gia phòng"
             }, User.CurrentRoom);
 
+            await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
+
             // Vòng lặp đọc message liên tục
             string? line;
             while ((line = await _reader.ReadLineAsync(ct)) != null)
@@ -105,12 +108,56 @@ public class ClientHandler
                         }, msg.Room);
 
                         _server.Log($"CHANGE ROOM — {User.Username}: #{oldRoom} → #{msg.Room}");
+
+                        await _server.BroadcastRoomUsersAsync(oldRoom);
+                        await _server.BroadcastRoomUsersAsync(msg.Room);
                         break;
 
                     case MessageType.CreateRoom:
-                        if (_server.RoomManager.CreateRoom(msg.Content))
-                            _server.Log($"CREATE ROOM — {User.Username} tạo #{msg.Content}"); // ← Thêm dấu ;
+                        try
+                        {
+                            var room = System.Text.Json.JsonSerializer.Deserialize<Room>(msg.Content ?? "");
+
+                            if(room == null || string.IsNullOrWhiteSpace(room.RoomName))
+                            {
+                                await SendMessageAsync(new Message
+                                {
+                                    Type = MessageType.Error,
+                                    Content = "Thông tin phòng không hợp lệ."
+                                });
+                                break;
+                            }
+
+                            room.RoomName = room.RoomName.Trim().TrimStart('#').ToLower();
+
+                            bool created = _server.RoomManager.CreateRoom(room);
+
+                            if(!created)
+                            {
+                                await SendMessageAsync(new Message
+                                {
+                                    Type = MessageType.Error,
+                                    Content = $"Phòng #{room.RoomName} đã tồn tại."
+                                });
+                                break;
+                            }
+
+                            _server.Log($"CREATED ROOM - {User.Username} tạo #{room.RoomName}");
+
+                            await _server.BroadcastRoomListAsync();
+                        }
+                        catch
+                        {
+                            await SendMessageAsync(new Message
+                            {
+                                Type = MessageType.Error,
+                                Content = "Server không thể tạo phòng."
+                            });
+                        }
                         break;
+                        //if (_server.RoomManager.CreateRoom(msg.Content))
+                        //    _server.Log($"CREATE ROOM — {User.Username} tạo #{msg.Content}"); // ← Thêm dấu ;
+                        //break;
 
                     case MessageType.GetRooms:
                         await _server.SendRoomListAsync(this);
@@ -138,6 +185,8 @@ public class ClientHandler
                 Room = User.CurrentRoom,
                 Content = $"{User.Username} đã rời phòng"
             }, User.CurrentRoom);
+
+            await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
 
             _tcpClient.Close();
         }

@@ -34,13 +34,48 @@ namespace ChatClient.Forms
 
             if(string.IsNullOrEmpty(username))
             {
-                MessageBox.Show("Please fill all name", "Thieu thong tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập tên hiển thị!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if(!int.TryParse(portText, out int port))
+            if (username.Length < 2 || username.Length > 20)
+            {
+                MessageBox.Show("Tên hiển thị phải từ 2 đến 20 ký tự!", "Tên không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox1.Focus();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(ip))
+            {
+                MessageBox.Show("Vui lòng nhập địa chỉ IP server!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox2.Focus();
+                return;
+            }
+
+            if (!System.Net.IPAddress.TryParse(ip, out _))
+            {
+                MessageBox.Show("Địa chỉ IP không hợp lệ!\nVí dụ đúng: 192.168.1.100 hoặc 127.0.0.1", "IP không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox2.Focus();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(portText))
+            {
+                MessageBox.Show("Vui lòng nhập port!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox3.Focus();
+                return;
+            }
+
+            if (!int.TryParse(portText, out int port))
             {
                 MessageBox.Show("Port invalid", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (port < 1024 || port > 65535)
+            {
+                MessageBox.Show("Port phải từ 1024 đến 65535!\nPort thường dùng: 8080, 8888, 9000", "Port không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox3.Focus();
                 return;
             }
 
@@ -69,7 +104,7 @@ namespace ChatClient.Forms
             } 
             else
             {
-                MessageBox.Show("Cannot connect to server!\n Checking IP and Port", "Error connected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Không thể kết nối tới {ip}:{port}\nKiểm tra lại IP, port và đảm bảo server đang chạy!", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btnConnect.Enabled = true;
                 btnConnect.Text = "Connect";
             }

@@ -1,5 +1,5 @@
 ﻿namespace ChatClient.Services;
-//ok
+
 public class ClientSettings
 {
     public string Username { get; set; } = "";
@@ -9,4 +9,8 @@ public class ClientSettings
     public bool AutoReconnect { get; set; } = true;
     public bool EnableNotifications { get; set; } = true;
     public bool EnableSound { get; set; } = false;
+
+    public int MessagesSent { get; set; } = 0;
+    public int RoomsJoined { get; set; } = 0;
+    public long TotalOnlineSeconds { get; set; } = 0;
 }

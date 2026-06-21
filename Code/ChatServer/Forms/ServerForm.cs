@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ChatServer.Core;
+using ChatServer.Services;
 
 
 namespace ChatServer.Forms
@@ -109,24 +110,6 @@ namespace ChatServer.Forms
             rtbLog.Clear();
         }
 
-        private void AddLog(string message)
-        {
-            if(InvokeRequired)
-            {
-                BeginInvoke(new Action(() => AddLog(message)));
-                return;
-            }
-
-            if (message.Contains("MSG"))
-            {
-                _messageCount++;
-                lblMessages.Text = $"Messages: {_messageCount}";
-            }
-
-            rtbLog.AppendText(message + Environment.NewLine);
-            rtbLog.ScrollToCaret();
-        }
-
         private void UpdateClientList(string username, bool isConnected)
         {
             if (InvokeRequired)
@@ -221,6 +204,27 @@ namespace ChatServer.Forms
             item.Dispose();
 
             _clientItems.Remove(username);
+        }
+
+        private void AddLog(string message)
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => AddLog(message)));
+                return;
+            }
+
+            if (message.Contains("MSG"))
+            {
+                _messageCount++;
+                lblMessages.Text = $"Messages: {_messageCount}";
+            }
+
+            rtbLog.AppendText(message + Environment.NewLine);
+            rtbLog.ScrollToCaret();
+
+            // Ghi ra file
+            Logger.Log(message);
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

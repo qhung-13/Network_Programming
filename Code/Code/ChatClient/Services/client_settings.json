@@ -1,0 +1,9 @@
+{
+  "Username": "Quoc Hung",
+  "ServerIP": "127.0.0.1",
+  "Port": 8080,
+  "LastRoom": "general",
+  "AutoReconnect": true,
+  "EnableNotifications": true,
+  "EnableSound": false
+}

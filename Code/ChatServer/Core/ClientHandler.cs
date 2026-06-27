@@ -42,25 +42,28 @@ public class ClientHandler
 
             // Lưu thông tin user
             User.Username = joinMsg.Username;
+            User.DisplayName = string.IsNullOrWhiteSpace(joinMsg.DisplayName) ? joinMsg.Username : joinMsg.DisplayName.Trim();
             User.CurrentRoom = joinMsg.Room;
             User.IsOnline = true;
 
             // Đăng ký client vào danh sách server
             _server.Clients[User.Username] = this;
             _server.UserManager.AddUser(User); // ← Thêm vào UserManager
-            _server.Log($"JOIN — {User.Username} → #{User.CurrentRoom}");
-            _server.NotifyClientChanged(User.Username, true);
+            _server.Log($"JOIN — {User.DisplayName} → #{User.CurrentRoom}");
+            _server.NotifyClientChanged(User.DisplayName, true);
 
             // Gửi danh sách phòng cho client mới vào
-            await _server.SendRoomListAsync(this); // ← Thêm dấu ; ở đây
+            await _server.SendRoomListAsync(this);
+            await _server.SendRoomHistoryAsync(this, User.CurrentRoom);
 
             // Thông báo cho cả phòng có người mới vào
             await _server.BroadcastToRoomAsync(new Message
             {
                 Type = MessageType.Join,
                 Username = User.Username,
+                DisplayName = User.DisplayName,
                 Room = User.CurrentRoom,
-                Content = $"{User.Username} đã tham gia phòng"
+                Content = $"{User.DisplayName} đã tham gia phòng"
             }, User.CurrentRoom);
 
             await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
@@ -75,7 +78,12 @@ public class ClientHandler
                 switch (msg.Type)
                 {
                     case MessageType.Chat:
-                        _server.Log($"MSG — {User.Username} → #{msg.Room}: \"{msg.Content}\"");
+                        msg.Room = msg.Room.Trim().TrimStart('#').ToLower();
+                        msg.Username = User.Username;
+                        msg.DisplayName = User.DisplayName;
+                        msg.Time = DateTime.Now;
+                        _server.RoomManager.AddMessage(msg);
+                        _server.Log($"MSG — {User.DisplayName} → #{msg.Room}: \"{msg.Content}\"");
                         await _server.BroadcastToRoomAsync(msg, msg.Room);
                         break;
 
@@ -90,24 +98,32 @@ public class ClientHandler
                         {
                             Type = MessageType.Leave,
                             Username = User.Username,
+                            DisplayName = User.DisplayName,
                             Room = oldRoom,
-                            Content = $"{User.Username} đã rời phòng"
+                            Content = $"{User.DisplayName} đã rời phòng"
                         }, oldRoom);
 
                         // Cập nhật phòng mới — UserManager và User
                         _server.UserManager.ChangeRoom(User.Username, msg.Room); // ← Sửa chữ U hoa
                         User.CurrentRoom = msg.Room;
 
+                        msg.Room = msg.Room.Trim().TrimStart('#').ToLower();
+                        _server.UserManager.ChangeRoom(User.Username, msg.Room);
+                        User.CurrentRoom = msg.Room;
+
+                        await _server.SendRoomHistoryAsync(this, User.CurrentRoom);
+
                         // Thông báo join phòng mới
                         await _server.BroadcastToRoomAsync(new Message
                         {
                             Type = MessageType.Join,
                             Username = User.Username,
+                            DisplayName = User.DisplayName,
                             Room = msg.Room,
-                            Content = $"{User.Username} đã tham gia phòng" // ← Đổi sang tiếng Việt
+                            Content = $"{User.DisplayName} đã tham gia phòng" 
                         }, msg.Room);
 
-                        _server.Log($"CHANGE ROOM — {User.Username}: #{oldRoom} → #{msg.Room}");
+                        _server.Log($"CHANGE ROOM — {User.DisplayName}: #{oldRoom} → #{msg.Room}");
 
                         await _server.BroadcastRoomUsersAsync(oldRoom);
                         await _server.BroadcastRoomUsersAsync(msg.Room);
@@ -118,7 +134,17 @@ public class ClientHandler
                         {
                             var room = System.Text.Json.JsonSerializer.Deserialize<Room>(msg.Content ?? "");
 
-                            if(room == null || string.IsNullOrWhiteSpace(room.RoomName))
+                            if (room.Maxmembers < 0 || room.Maxmembers > 100)
+                            {
+                                await SendMessageAsync(new Message
+                                {
+                                    Type = MessageType.Error,
+                                    Content = "Giới hạn thành viên phải từ 1 đến 100, hoặc 0 nếu không giới hạn."
+                                });
+                                break;
+                            }
+
+                            if (room == null || string.IsNullOrWhiteSpace(room.RoomName))
                             {
                                 await SendMessageAsync(new Message
                                 {
@@ -162,6 +188,43 @@ public class ClientHandler
                     case MessageType.GetRooms:
                         await _server.SendRoomListAsync(this);
                         break;
+
+                    case MessageType.GetRoomHistory:
+                        await _server.SendRoomHistoryAsync(this, msg.Room);
+                        break;
+                    case MessageType.UpdateDisplayName:
+                        {
+                            string oldDisplayName = User.DisplayName;
+                            string newDisplayName = !string.IsNullOrWhiteSpace(msg.DisplayName) ? msg.DisplayName.Trim() : msg.Content.Trim();
+
+                            if (string.IsNullOrWhiteSpace(newDisplayName))
+                            {
+                                await SendMessageAsync(new Message
+                                {
+                                    Type = MessageType.Error,
+                                    Content = "Tên hiện thị không hợp lệ."
+                                });
+                                break;
+                            }
+
+                            User.DisplayName = newDisplayName;
+                            _server.UserManager.UpdateDisplayName(User.Username, newDisplayName);
+
+                            _server.Log($"UPDATE DISPLAY NAME - {oldDisplayName} -> {newDisplayName}");
+
+                            await _server.BroadcastToRoomAsync(new Message
+                            {
+                                Type = MessageType.Join,
+                                Username = User.Username,
+                                DisplayName = User.DisplayName,
+                                Room = User.CurrentRoom,
+                                Content = $"{oldDisplayName} đã đổi tên thành {newDisplayName}"
+                            }, User.CurrentRoom);
+
+                            await _server.BroadcastRoomUsersAsync(User.CurrentRoom);
+
+                            break;
+                        }
                 }
             }
         }

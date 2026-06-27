@@ -93,9 +93,14 @@ namespace ChatClient.Forms
             // Tab Notifications
             chkNewMessageNotif.Checked = _currentSettings.EnableNotifications;
             chkNotifSound.Checked = _currentSettings.EnableSound;
-            chkRoomJoinLeaveNotif.Checked = true;
+            chkMentionNotif.Checked = _currentSettings.EnableMentionNotifications;
+            chkRoomJoinLeaveNotif.Checked = _currentSettings.EnableRoomJoinLeaveNotifications;
+            chkNewRoomNotif.Checked = _currentSettings.EnableNewRoomNotifications;
+            chkDisconnectNotif.Checked = _currentSettings.EnableDisconnectNotifications;
 
-            // Tab Account checkbox
+            // Tab Account checkbox nếu có
+            chkNotifyMsg.Checked = _currentSettings.EnableNotifications;
+            chkSound.Checked = _currentSettings.EnableSound;
             chkAutoReconnect.Checked = _currentSettings.AutoReconnect;
 
             lblMessagesSentValue.Text = _currentSettings.MessagesSent.ToString();
@@ -160,8 +165,14 @@ namespace ChatClient.Forms
             if (int.TryParse(txtPort.Text.Trim(), out int port))
                 _currentSettings.Port = port;
 
-            _currentSettings.EnableNotifications = chkNewMessageNotif.Checked;
-            _currentSettings.EnableSound = chkNotifSound.Checked;
+            _currentSettings.EnableNotifications = chkNewMessageNotif.Checked || chkNotifyMsg.Checked;
+            _currentSettings.EnableSound = chkNotifSound.Checked || chkSound.Checked;
+
+            _currentSettings.EnableMentionNotifications = chkMentionNotif.Checked;
+            _currentSettings.EnableRoomJoinLeaveNotifications = chkRoomJoinLeaveNotif.Checked;
+            _currentSettings.EnableNewRoomNotifications = chkNewRoomNotif.Checked;
+            _currentSettings.EnableDisconnectNotifications = chkDisconnectNotif.Checked;
+
             _currentSettings.AutoReconnect = chkAutoReconnect.Checked;
 
             _settingsService.Save(_currentSettings);
@@ -184,27 +195,30 @@ namespace ChatClient.Forms
 
             if (!File.Exists(sourceLogPath))
             {
-                MessageBox.Show("Chưa có file log nào để xuất!", "Không tìm thấy log",
+                MessageBox.Show("Chưa có file log client nào để xuất!", "Không tìm thấy log",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             using var saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Log Files (*.log)|*.log|Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-            saveDialog.FileName = $"chatlog_{DateTime.Now:yyyyMMdd_HHmmss}.log";
-            saveDialog.Title = "Xuất file log";
+            saveDialog.FileName = $"clientlog_{DateTime.Now:yyyyMMdd_HHmmss}.log";
+            saveDialog.Title = "Xuất file log client";
 
             if (saveDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     File.Copy(sourceLogPath, saveDialog.FileName, overwrite: true);
-                    MessageBox.Show($"Đã xuất log thành công!\n{saveDialog.FileName}", "Thành công",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    MessageBox.Show($"Đã xuất log client thành công!\n{saveDialog.FileName}",
+                        "Thành công",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Lỗi khi xuất log: {ex.Message}", "Lỗi",
+                    MessageBox.Show($"Lỗi khi xuất log client: {ex.Message}", "Lỗi",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -219,9 +233,9 @@ namespace ChatClient.Forms
                 "Xác nhận xóa",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes && File.Exists(logPath))
+            if (result == DialogResult.Yes)
             {
-                File.WriteAllText(logPath, "");
+                ClientLogger.Clear();
                 rtbLogPreview.Clear();
                 lblLogSizeValue.Text = "0 KB";
                 MessageBox.Show("Đã xóa log!", "Thành công",
@@ -231,19 +245,7 @@ namespace ChatClient.Forms
 
         private string GetCurrentLogPath()
         {
-            var currentDir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-
-            while (currentDir != null)
-            {
-                string chatSharedPath = Path.Combine(currentDir.FullName, "ChatShared");
-                if (Directory.Exists(chatSharedPath))
-                {
-                    return Path.Combine(chatSharedPath, "Log", "server.log");
-                }
-                currentDir = currentDir.Parent;
-            }
-
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log", "server.log");
+            return ClientLogger.GetLogPath();
         }
 
         private void btnAccount_Click(object sender, EventArgs e)

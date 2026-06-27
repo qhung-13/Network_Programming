@@ -142,6 +142,18 @@ namespace ChatClient.Forms
             string oldUsername = _currentSettings.Username;
             string newUsername = txtDisplayName.Text.Trim();
 
+            if(string.IsNullOrWhiteSpace(newUsername))
+            {
+                MessageBox.Show("Tên hiển thị không được để trống!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (newUsername.Length < 2 || newUsername.Length > 20)
+            {
+                MessageBox.Show("Tên hiển thị phải từ 2 đến 20 ký tự!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             _currentSettings.Username = newUsername;
             _currentSettings.ServerIP = txtServerIP.Text.Trim();
 

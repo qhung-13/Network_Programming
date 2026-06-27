@@ -16,7 +16,8 @@ namespace ChatClient.Forms
     {
         private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem, string? replyToUsername, string? replyToContent, bool isForwarded)>> _messageHistory = new();
         private readonly TcpClientService _client;
-        private string _username;
+        private readonly string _userId;
+        private string _displayName;
         private string _currentRoom = "general";
         private string? _replyToUsername = null;
         private string? _replyToContent = null;
@@ -26,25 +27,29 @@ namespace ChatClient.Forms
         private DateTime _sessionStartTime;
         private readonly HashSet<string> _joinedRooms = new();
 
-        public ChatForm(TcpClientService client, string username)
+        public ChatForm(TcpClientService client, string userId, string displayName)
         {
             InitializeComponent();
             _client = client;
-            _username = username;
+            _userId = userId;
+            _displayName = displayName;
         }
 
-        private void ChatForm_Load(object sender, EventArgs e)
+        private async void ChatForm_Load(object sender, EventArgs e)
         {
             _sessionStartTime = DateTime.Now;
             _joinedRooms.Add(_currentRoom);
 
             // Hiển thị tên user
-            lblNameOnline.Text = _username;
-            lblQH.Text = GetInitials(_username);
+            lblNameOnline.Text = _displayName;
+            lblQH.Text = GetInitials(_displayName);
 
             // Gán sự kiện nhận message
             _client.OnMessageReceived += OnMessageReceived;
             _client.OnDisconnected += OnDisconnected;
+
+            await _client.RequestRoomListAsync();
+            await _client.RequestRoomHistoryAsync(_currentRoom);
 
             // Gán sự kiện gửi message
             btnSend.Click += btnSend_Click;
@@ -63,19 +68,32 @@ namespace ChatClient.Forms
             flowLayoutPanel1.WrapContents = false;
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
             panel3.AutoScroll = true;
-            _ = _client.RequestRoomListAsync();
+            //_ = _client.RequestRoomListAsync();
 
 
-            btnSettings1.Click += (s, e) =>
+            btnSettings1.Click += async (s, e) =>
             {
-                var settingsForm = new SettingsForm();
-                settingsForm.OnUsernameChanged += (newUsername) =>
+                using var settingsForm = new SettingsForm();
+
+                var result = settingsForm.ShowDialog(this);
+
+                if (result == DialogResult.OK)
                 {
-                    _username = newUsername;
-                    lblNameOnline.Text = newUsername;
-                    lblQH.Text = GetInitials(newUsername);
-                };
-                settingsForm.ShowDialog(this);
+                    var settings = _settingsService.Load();
+                    string newDisplayName = settings.Username.Trim();
+
+                    if (string.IsNullOrWhiteSpace(newDisplayName))
+                        return;
+
+                    _displayName = newDisplayName;
+
+                    lblNameOnline.Text = newDisplayName;
+                    lblQH.Text = GetInitials(newDisplayName);
+
+                    await _client.UpdateDisplayNameAsync(_userId, newDisplayName);
+
+                    await _client.RequestRoomHistoryAsync(_currentRoom);
+                }
             };
 
             // Highlight phòng general mặc định
@@ -94,16 +112,47 @@ namespace ChatClient.Forms
 
             switch (msg.Type)
             {
+                //case MessageType.Chat:
+                //    if (!_messageHistory.ContainsKey(msg.Room))
+                //    {
+                //        _messageHistory[msg.Room] = new();
+                //        _messageHistory[msg.Room].Add((msg.Username, msg.Content, msg.Time, false, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded));
+                //    }
+                //    if (msg.Room == _currentRoom)
+                //        AddChatMessage(msg.Username, msg.Content, msg.Time, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded);
+                //    break;
                 case MessageType.Chat:
-                    if (!_messageHistory.ContainsKey(msg.Room))
                     {
-                        _messageHistory[msg.Room] = new();
-                        _messageHistory[msg.Room].Add((msg.Username, msg.Content, msg.Time, false, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded));
+                        var roomName = NormalizeRoomName(msg.Room);
+                        var senderName = string.IsNullOrWhiteSpace(msg.DisplayName) ? msg.Username : msg.DisplayName;
+
+                        if (!_messageHistory.ContainsKey(roomName))
+                            _messageHistory[roomName] = new();
+
+                        _messageHistory[roomName].Add((
+                            senderName,
+                            msg.Content,
+                            msg.Time,
+                            false,
+                            msg.ReplyToUsername,
+                            msg.ReplyToContent,
+                            msg.IsForwarded
+                        ));
+
+                        if (roomName == _currentRoom)
+                        {
+                            RenderChatMessage(
+                                senderName,
+                                msg.Content,
+                                msg.Time,
+                                msg.ReplyToUsername,
+                                msg.ReplyToContent,
+                                msg.IsForwarded
+                            );
+                        }
+
+                        break;
                     }
-                    if (msg.Room == _currentRoom)
-                        AddChatMessage(msg.Username, msg.Content, msg.Time,
-            msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded);
-                    break;
 
                 case MessageType.Join:
                     if (msg.Room == _currentRoom)
@@ -133,15 +182,47 @@ namespace ChatClient.Forms
                     }
                     break;
                 case MessageType.RoomUsers:
-                    if(msg.Room == _currentRoom)
                     {
-                        var users = JsonSerializer.Deserialize<List<string>>(msg.Content ?? "[]");
-                        if (users != null)
+                        var roomName = NormalizeRoomName(msg.Room);
+
+                        if (roomName == _currentRoom)
                         {
-                            UpdateRoomUsers(users);
+                            var users = JsonSerializer.Deserialize<List<User>>(msg.Content ?? "[]");
+                            if (users != null)
+                            {
+                                UpdateRoomUsers(users);
+                            }
                         }
+                        break;
                     }
-                    break;
+                case MessageType.RoomHistory:
+                    {
+                        try
+                        {
+                            var roomName = NormalizeRoomName(msg.Room);
+                            var messages = JsonSerializer.Deserialize<List<Message>>(msg.Content ?? "[]") ?? new List<Message>();
+
+                            _messageHistory[roomName] = messages.Select(m => (
+                                username: string.IsNullOrWhiteSpace(m.DisplayName) ? m.Username : m.DisplayName,
+                                content: m.Content,
+                                time: m.Time,
+                                isSytem: false,
+                                replyToUsername: m.ReplyToUsername,
+                                replyToContent: m.ReplyToContent,
+                                isForwarded: m.IsForwarded
+                            )).ToList();
+
+                            if (roomName == _currentRoom)
+                            {
+                                RenderRoomHistory(roomName);
+                            }
+                        }
+                        catch
+                        {
+                            AddSystemMessage("Không thể tải lịch sử tin nhắn");
+                        }
+                        break;
+                    }
             }
         }
 
@@ -186,7 +267,8 @@ namespace ChatClient.Forms
             var msg = new Message
             {
                 Type = MessageType.Chat,
-                Username = _username,
+                Username = _userId,
+                DisplayName = _displayName,
                 Room = _currentRoom,
                 Content = content,
                 Time = DateTime.Now,
@@ -203,11 +285,48 @@ namespace ChatClient.Forms
         }
 
         // ===== CHUYỂN PHÒNG =====
+        //private async void JoinRoom(string roomName)
+        //{
+        //    if (roomName == _currentRoom) return;
+
+        //    if(_joinedRooms.Add(roomName))
+        //    {
+        //        var settings = _settingsService.Load();
+        //        settings.RoomsJoined = _joinedRooms.Count;
+        //        _settingsService.Save(settings);
+        //    }
+
+        //    _currentRoom = roomName;
+        //    label1.Text = "# " + roomName;
+        //    HighlightRoom(roomName);
+
+        //    flowLayoutPanel1.Controls.Clear();
+
+        //    if (_messageHistory.TryGetValue(roomName, out var history))
+        //    {
+        //        foreach (var (username, content, time, isSystem, replyToUsername, replyToContent, isForwarded) in history)
+        //        {
+        //            if (isSystem)
+        //                RenderSystemMessage(content);
+        //            else
+        //                RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        AddSystemMessage($"You had joined room #{roomName}");
+        //    }
+
+        //    await _client.JoinRoomAsync(_username, roomName);
+        //}
+
         private async void JoinRoom(string roomName)
         {
+            roomName = NormalizeRoomName(roomName);
+
             if (roomName == _currentRoom) return;
 
-            if(_joinedRooms.Add(roomName))
+            if (_joinedRooms.Add(roomName))
             {
                 var settings = _settingsService.Load();
                 settings.RoomsJoined = _joinedRooms.Count;
@@ -219,23 +338,9 @@ namespace ChatClient.Forms
             HighlightRoom(roomName);
 
             flowLayoutPanel1.Controls.Clear();
+            RenderSystemMessage($"Đang tải lịch sử phòng #{roomName}...");
 
-            if (_messageHistory.TryGetValue(roomName, out var history))
-            {
-                foreach (var (username, content, time, isSystem, replyToUsername, replyToContent, isForwarded) in history)
-                {
-                    if (isSystem)
-                        RenderSystemMessage(content);
-                    else
-                        RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
-                }
-            }
-            else
-            {
-                AddSystemMessage($"You had joined room #{roomName}");
-            }
-
-            await _client.JoinRoomAsync(_username, roomName);
+            await _client.JoinRoomAsync(_userId, roomName);
         }
 
         private void HighlightRoom(string roomName)
@@ -418,9 +523,6 @@ namespace ChatClient.Forms
 
             flowLayoutPanel1.Controls.Add(msgPanel);
             flowLayoutPanel1.ScrollControlIntoView(msgPanel);
-
-            flowLayoutPanel1.Controls.Add(msgPanel);
-            flowLayoutPanel1.ScrollControlIntoView(msgPanel);
         }
 
         private void RenderSystemMessage(string content)
@@ -435,8 +537,8 @@ namespace ChatClient.Forms
             lbl.Font = new Font("Segoe UI", 8f, FontStyle.Italic);
             lbl.Margin = new Padding(5, 3, 5, 0);
 
-            //flowLayoutPanel1.Controls.Add(lbl);
-            //flowLayoutPanel1.ScrollControlIntoView(lbl);
+            flowLayoutPanel1.Controls.Add(lbl);
+            flowLayoutPanel1.ScrollControlIntoView(lbl);
         }
 
         private void ShowReplyPreview(string username, string content)
@@ -506,7 +608,14 @@ namespace ChatClient.Forms
 
         private async void ForwardMessage(string originalUsername, string content)
         {
-            var rooms = new[] { "general", "random", "gaming", "study" }.Where(r => r != _currentRoom).ToArray();
+            var rooms = _roomPanels.Keys.Where(r => NormalizeRoomName(r) != _currentRoom).OrderBy(r => r).ToArray();
+
+            if (rooms.Length == 0)
+            {
+                MessageBox.Show("Không có phòng khác để chuyển tiếp.", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             using var dialog = new Form();
             dialog.Text = "Chuyển tiếp đến phòng";
@@ -552,8 +661,9 @@ namespace ChatClient.Forms
                 var msg = new Message
                 {
                     Type = MessageType.Chat,
-                    Username = _username,
-                    Room = targetRoom,  // ← Gửi tới phòng khác
+                    Username = _userId,
+                    DisplayName = _displayName,
+                    Room = targetRoom,  
                     Content = content,
                     Time = DateTime.Now,
                     IsForwarded = true,
@@ -565,7 +675,7 @@ namespace ChatClient.Forms
 
                 if (!_messageHistory.ContainsKey(targetRoom))
                     _messageHistory[targetRoom] = new();
-                _messageHistory[targetRoom].Add((_username, content, DateTime.Now, false, originalUsername, content, true));
+                _messageHistory[targetRoom].Add((_displayName, content, DateTime.Now, false, originalUsername, content, true));
 
                 AddSystemMessage($"Đã chuyển tiếp tin nhắn tới #{targetRoom}");
             }
@@ -631,25 +741,27 @@ namespace ChatClient.Forms
             panel3.Invalidate();
         }
 
-        private void UpdateRoomUsers(List<string> users)
+        private void UpdateRoomUsers(List<User> users)
         {
             lblSLOnline.Text = $"- {users.Count} users online";
 
             flowLayoutPanel2.Controls.Clear();
 
-            foreach (var username in users)
+            foreach (var user in users)
             {
+                string displayName = string.IsNullOrWhiteSpace(user.DisplayName) ? user.Username : user.DisplayName;
+
                 var userPanel = new Panel();
                 userPanel.Width = flowLayoutPanel2.ClientSize.Width - 10;
                 userPanel.Height = 30;
                 userPanel.Margin = new Padding(3, 2, 3, 0);
 
                 var avatar = new Label();
-                avatar.Text = GetInitials(username);
+                avatar.Text = GetInitials(displayName);
                 avatar.Size = new Size(22, 22);
                 avatar.Location = new Point(4, 4);
                 avatar.TextAlign = ContentAlignment.MiddleCenter;
-                avatar.BackColor = GetAvatarColor(username);
+                avatar.BackColor = GetAvatarColor(user.Username);
                 avatar.ForeColor = Color.White;
                 avatar.Font = new Font("Segoe UI", 7f, FontStyle.Bold);
 
@@ -661,7 +773,7 @@ namespace ChatClient.Forms
                 dot.Location = new Point(28, 8);
 
                 var lblName = new Label();
-                lblName.Text = username;
+                lblName.Text = displayName;
                 lblName.Location = new Point(42, 7);
                 lblName.AutoSize = true;
                 lblName.Font = new Font("Segoe UI", 9f);
@@ -688,7 +800,28 @@ namespace ChatClient.Forms
             _client.OnDisconnected -= OnDisconnected;
             _client.Disconnect();
             base.OnFormClosed(e);
-        } 
+        }
+
+        private void RenderRoomHistory(string roomName)
+        {
+            roomName = NormalizeRoomName(roomName);
+
+            flowLayoutPanel1.Controls.Clear();
+
+            if (!_messageHistory.TryGetValue(roomName, out var history) || history.Count == 0)
+            {
+                RenderSystemMessage($"Phòng #{roomName} chưa có tin nhắn.");
+                return;
+            }
+
+            foreach (var (username, content, time, isSystem, replyToUsername, replyToContent, isForwarded) in history)
+            {
+                if (isSystem)
+                    RenderSystemMessage(content);
+                else
+                    RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
+            }
+        }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -823,7 +956,7 @@ namespace ChatClient.Forms
                     CreatedAt = DateTime.Now
                 };
 
-                await _client.CreateRoomAsync(_username, room);
+                await _client.CreateRoomAsync(_userId, room);
 
                 await _client.RequestRoomListAsync();
 

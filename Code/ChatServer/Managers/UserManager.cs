@@ -26,4 +26,16 @@ public class UserManager
         user.CurrentRoom = newRoom;
         return true;
     }
+
+    public bool UpdateDisplayName (string username, string newDisplayName)
+    {
+        var user = GetUser(username);
+        if(user == null)
+        {
+            return false;
+        }
+
+        user.DisplayName = newDisplayName.Trim();
+        return true;
+    }
 }

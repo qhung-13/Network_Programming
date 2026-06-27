@@ -6,15 +6,11 @@ namespace ChatShared.Models;
 public class Message
 {
     public MessageType Type { get; set; }
-
     public string Username { get; set; } = "";
-
+    public string DisplayName { get; set; } = "";
     public string Room { get; set; } = "";
-
     public string Content { get; set; } = "";
-
     public DateTime Time { get; set; } = DateTime.Now;
-
     public string? ReplyToUsername { get; set; }
     public string? ReplyToContent { get; set; }
     public bool IsForwarded { get; set; } = false;

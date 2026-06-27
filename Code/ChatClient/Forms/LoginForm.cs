@@ -28,17 +28,17 @@ namespace ChatClient.Forms
 
         private async void btnConnect_Click (object sender, EventArgs e)
         {
-            string username = textBox1.Text.Trim();
+            string displayname = textBox1.Text.Trim();
             string ip = textBox2.Text.Trim();
             string portText = textBox3.Text.Trim();
 
-            if(string.IsNullOrEmpty(username))
+            if(string.IsNullOrEmpty(displayname))
             {
                 MessageBox.Show("Vui lòng nhập tên hiển thị!", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (username.Length < 2 || username.Length > 20)
+            if (displayname.Length < 2 || displayname.Length > 20)
             {
                 MessageBox.Show("Tên hiển thị phải từ 2 đến 20 ký tự!", "Tên không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox1.Focus();
@@ -83,21 +83,22 @@ namespace ChatClient.Forms
             btnConnect.Text = "Connecting...";
 
             // Connect TCP
+            string userId = Guid.NewGuid().ToString("N");
             _client = new TcpClientService();
-            bool connected = await _client.ConnectAsync(ip, port, username, "general");
+            bool connected = await _client.ConnectAsync(ip, port, userId, displayname, "general");
 
             if(connected)
             {
                 // Save setting
                 _settingsService.Save(new ClientSettings
                 {
-                    Username = username,
+                    Username = displayname,
                     ServerIP = ip,
                     Port = port,
                 });
 
                 // Open ChatForm, hidden LoginForm
-                var chatForm = new ChatForm(_client, username);
+                var chatForm = new ChatForm(_client, userId, displayname);
                 chatForm.FormClosed += (s, args) => this.Close();
                 this.Hide();
                 chatForm.Show();

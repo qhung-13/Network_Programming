@@ -5,6 +5,9 @@ using ChatShared;
 using ChatShared.Models;
 using ChatShared.Protocol;
 using Message = ChatShared.Models.Message;
+using System.Text.Json;
+using System.Linq.Expressions;
+using System.Security.Policy;
 
 namespace ChatClient.Forms
 {
@@ -13,11 +16,15 @@ namespace ChatClient.Forms
     {
         private readonly Dictionary<string, List<(string username, string content, DateTime time, bool isSystem, string? replyToUsername, string? replyToContent, bool isForwarded)>> _messageHistory = new();
         private readonly TcpClientService _client;
-        private readonly string _username;
+        private string _username;
         private string _currentRoom = "general";
         private string? _replyToUsername = null;
         private string? _replyToContent = null;
         private Panel? _replyPreviewPanel = null;
+        private readonly Dictionary<string, Panel> _roomPanels = new();
+        private readonly ClientSettingsService _settingsService = new();
+        private DateTime _sessionStartTime;
+        private readonly HashSet<string> _joinedRooms = new();
 
         public ChatForm(TcpClientService client, string username)
         {
@@ -28,6 +35,9 @@ namespace ChatClient.Forms
 
         private void ChatForm_Load(object sender, EventArgs e)
         {
+            _sessionStartTime = DateTime.Now;
+            _joinedRooms.Add(_currentRoom);
+
             // Hiển thị tên user
             lblNameOnline.Text = _username;
             lblQH.Text = GetInitials(_username);
@@ -52,10 +62,21 @@ namespace ChatClient.Forms
             flowLayoutPanel1.AutoScroll = true;
             flowLayoutPanel1.WrapContents = false;
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            panel3.AutoScroll = true;
+            _ = _client.RequestRoomListAsync();
 
 
-            // Gán sự kiện Settings
-            //btnSettings.Click += (s, e) => new SettingsForm().ShowDialog();
+            btnSettings1.Click += (s, e) =>
+            {
+                var settingsForm = new SettingsForm();
+                settingsForm.OnUsernameChanged += (newUsername) =>
+                {
+                    _username = newUsername;
+                    lblNameOnline.Text = newUsername;
+                    lblQH.Text = GetInitials(newUsername);
+                };
+                settingsForm.ShowDialog(this);
+            };
 
             // Highlight phòng general mặc định
             HighlightRoom("general");
@@ -97,7 +118,29 @@ namespace ChatClient.Forms
                     break;
 
                 case MessageType.GetRooms:
-                    // Cập nhật danh sách phòng nếu cần
+                    try
+                    {
+                        var rooms = JsonSerializer.Deserialize<List<Room>>(msg.Content ?? "");
+
+                        if(rooms != null)
+                        {
+                            RenderRoomList(rooms);
+                        }
+                    }
+                    catch
+                    {
+                        AddSystemMessage("Không thể tải danh sách phòng");
+                    }
+                    break;
+                case MessageType.RoomUsers:
+                    if(msg.Room == _currentRoom)
+                    {
+                        var users = JsonSerializer.Deserialize<List<string>>(msg.Content ?? "[]");
+                        if (users != null)
+                        {
+                            UpdateRoomUsers(users);
+                        }
+                    }
                     break;
             }
         }
@@ -153,6 +196,10 @@ namespace ChatClient.Forms
 
             await _client.SendMessageDirectAsync(msg);
             CancelReply();
+
+            var settings = _settingsService.Load();
+            settings.MessagesSent++;
+            _settingsService.Save(settings);
         }
 
         // ===== CHUYỂN PHÒNG =====
@@ -160,8 +207,15 @@ namespace ChatClient.Forms
         {
             if (roomName == _currentRoom) return;
 
+            if(_joinedRooms.Add(roomName))
+            {
+                var settings = _settingsService.Load();
+                settings.RoomsJoined = _joinedRooms.Count;
+                _settingsService.Save(settings);
+            }
+
             _currentRoom = roomName;
-            label1.Text = $"{roomName}";
+            label1.Text = "# " + roomName;
             HighlightRoom(roomName);
 
             flowLayoutPanel1.Controls.Clear();
@@ -186,20 +240,30 @@ namespace ChatClient.Forms
 
         private void HighlightRoom(string roomName)
         {
-            // Reset màu tất cả phòng
-            panel5.BackColor = Color.Transparent;
-            panel6.BackColor = Color.Transparent;
-            panel7.BackColor = Color.Transparent;
-            panel8.BackColor = Color.Transparent;
-
-            // Highlight phòng đang chọn
-            switch (roomName)
+            roomName = NormalizeRoomName(roomName);
+            foreach(var panel in _roomPanels.Values)
             {
-                case "general": panel5.BackColor = Color.DodgerBlue; break;
-                case "random": panel6.BackColor = Color.DodgerBlue; break;
-                case "gaming": panel7.BackColor = Color.DodgerBlue; break;
-                case "study": panel8.BackColor = Color.DodgerBlue; break;
+                panel.BackColor = Color.Transparent;
             }
+
+            if(_roomPanels.TryGetValue(roomName, out var selectedPanel))
+            {
+                selectedPanel.BackColor = Color.DodgerBlue;
+            }
+            //// Reset màu tất cả phòng
+            //panel5.BackColor = Color.Transparent;
+            //panel6.BackColor = Color.Transparent;
+            //panel7.BackColor = Color.Transparent;
+            //panel8.BackColor = Color.Transparent;
+
+            //// Highlight phòng đang chọn
+            //switch (roomName)
+            //{
+            //    case "general": panel5.BackColor = Color.DodgerBlue; break;
+            //    case "random": panel6.BackColor = Color.DodgerBlue; break;
+            //    case "gaming": panel7.BackColor = Color.DodgerBlue; break;
+            //    case "study": panel8.BackColor = Color.DodgerBlue; break;
+            //}
         }
 
         // ===== HIỂN THỊ TIN NHẮN =====
@@ -507,6 +571,125 @@ namespace ChatClient.Forms
             }
         }
 
+        private void RenderRoomList(List<Room> rooms)
+        {
+            panel3.SuspendLayout();
+
+            panel3.Controls.Clear();
+            _roomPanels.Clear();
+
+            panel3.AutoScroll = true;
+
+            lblChatRoom.Dock = DockStyle.None;
+            lblChatRoom.Location = new Point(0, 0);
+            lblChatRoom.Height = 24;
+            lblChatRoom.Width = panel3.Width;
+            lblChatRoom.ForeColor = Color.White;
+            panel3.Controls.Add(lblChatRoom);
+
+            int y = 30;
+
+            foreach (var room in rooms)
+            {
+                string roomName = NormalizeRoomName(room.RoomName);
+
+                var roomPanel = new Panel
+                {
+                    Size = new Size(panel3.ClientSize.Width - 20, 29),
+                    Location = new Point(6, y),
+                    BackColor = roomName == _currentRoom ? Color.DodgerBlue : Color.Transparent,
+                    Cursor = Cursors.Hand,
+                    Tag = roomName
+                };
+
+                var lblRoom = new Label
+                {
+                    Text = "# " + roomName,
+                    AutoSize = false,
+                    Dock = DockStyle.Fill,
+                    ForeColor = Color.White,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Cursor = Cursors.Hand,
+                    Padding = new Padding(4, 0, 0, 0)
+                };
+
+                roomPanel.Controls.Add(lblRoom);
+
+                roomPanel.Click += (s, e) => JoinRoom(roomName);
+                lblRoom.Click += (s, e) => JoinRoom(roomName);
+
+                panel3.Controls.Add(roomPanel);
+                _roomPanels[roomName] = roomPanel;
+
+                y += 35;
+            }
+
+            panel3.AutoScrollMinSize = new Size(0, y + 10);
+
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
+            panel3.Invalidate();
+        }
+
+        private void UpdateRoomUsers(List<string> users)
+        {
+            lblSLOnline.Text = $"- {users.Count} users online";
+
+            flowLayoutPanel2.Controls.Clear();
+
+            foreach (var username in users)
+            {
+                var userPanel = new Panel();
+                userPanel.Width = flowLayoutPanel2.ClientSize.Width - 10;
+                userPanel.Height = 30;
+                userPanel.Margin = new Padding(3, 2, 3, 0);
+
+                var avatar = new Label();
+                avatar.Text = GetInitials(username);
+                avatar.Size = new Size(22, 22);
+                avatar.Location = new Point(4, 4);
+                avatar.TextAlign = ContentAlignment.MiddleCenter;
+                avatar.BackColor = GetAvatarColor(username);
+                avatar.ForeColor = Color.White;
+                avatar.Font = new Font("Segoe UI", 7f, FontStyle.Bold);
+
+                var dot = new Label();
+                dot.Text = "●";
+                dot.ForeColor = Color.LimeGreen;
+                dot.Font = new Font("Segoe UI", 7f);
+                dot.AutoSize = true;
+                dot.Location = new Point(28, 8);
+
+                var lblName = new Label();
+                lblName.Text = username;
+                lblName.Location = new Point(42, 7);
+                lblName.AutoSize = true;
+                lblName.Font = new Font("Segoe UI", 9f);
+                lblName.ForeColor = Color.White;
+
+                userPanel.Controls.AddRange(new Control[] { avatar, dot, lblName });
+                flowLayoutPanel2.Controls.Add(userPanel);
+            }
+        }
+
+        private string NormalizeRoomName(string roomName)
+        {
+            return roomName.Trim().TrimStart('#').ToLower();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            var settings = _settingsService.Load();
+            var sessionSeconds = (long)(DateTime.Now - _sessionStartTime).TotalSeconds;
+            settings.TotalOnlineSeconds += sessionSeconds;
+            _settingsService.Save(settings);
+
+            _client.OnMessageReceived -= OnMessageReceived;
+            _client.OnDisconnected -= OnDisconnected;
+            _client.Disconnect();
+            base.OnFormClosed(e);
+        } 
+
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
 
@@ -625,22 +808,32 @@ namespace ChatClient.Forms
 
         }
 
-        private void btnCreateNewRoom_Click_1(object sender, EventArgs e)
+        private async void btnCreateNewRoom_Click_1(object sender, EventArgs e)
         {
+            using var form = new CreateNewRoom();
 
+            if(form.ShowDialog(this) == DialogResult.OK)
+            {
+                var room = new Room
+                {
+                    RoomName = form._roomName,
+                    Description = form._roomDescription,
+                    Maxmembers = form._memberLimit,
+                    CurrentMembers = 0,
+                    CreatedAt = DateTime.Now
+                };
+
+                await _client.CreateRoomAsync(_username, room);
+
+                await _client.RequestRoomListAsync();
+
+                AddSystemMessage($"Đã tạo phòng #{room.RoomName}");
+            }
         }
 
         private void lblChatRoom_Click(object sender, EventArgs e)
         {
 
-        }
-
-        protected override void OnFormClosed(FormClosedEventArgs e)
-        {
-            _client.OnMessageReceived -= OnMessageReceived;
-            _client.OnDisconnected -= OnDisconnected;
-            _client.Disconnect();
-            base.OnFormClosed(e);
         }
     }
 }

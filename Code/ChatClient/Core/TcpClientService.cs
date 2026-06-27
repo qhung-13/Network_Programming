@@ -2,6 +2,7 @@ using System.Net.Sockets;
 using ChatShared.Models;
 using Message = ChatShared.Models.Message;
 using ChatShared.Protocol;
+using System.Text.Json;
 
 namespace ChatClient.Core;
 
@@ -144,6 +145,40 @@ public class TcpClientService
         }
     }
 
+    public async Task CreateRoomAsync(string username, Room room)
+    {
+        if(_writer == null || !IsConnected)
+        {
+            return;
+        }
+
+        var msg = new Message
+        {
+            Type = MessageType.CreateRoom,
+            Username = username,
+            Room = room.RoomName,
+            Content = JsonSerializer.Serialize(room),
+            Time = DateTime.Now
+        };
+
+        await SendMessageDirectAsync(msg);
+    }
+
+    public async Task RequestRoomListAsync()
+    {
+        if(_writer == null || !IsConnected)
+        {
+            return;
+        }
+
+        var msg = new Message
+        {
+            Type = MessageType.GetRooms
+        };
+
+        await SendMessageDirectAsync(msg);
+    }
+
     public void Disconnect()
     {
         if (_cts != null && !_cts.IsCancellationRequested)
@@ -159,4 +194,5 @@ public class TcpClientService
         _reader = null;
         _client = null;
     }
+
 }

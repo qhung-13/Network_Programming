@@ -8,6 +8,7 @@ using Message = ChatShared.Models.Message;
 using System.Text.Json;
 using System.Linq.Expressions;
 using System.Security.Policy;
+using System.Media;
 
 namespace ChatClient.Forms
 {
@@ -26,6 +27,7 @@ namespace ChatClient.Forms
         private readonly ClientSettingsService _settingsService = new();
         private DateTime _sessionStartTime;
         private readonly HashSet<string> _joinedRooms = new();
+        private NotifyIcon? _notifyIcon;
 
         public ChatForm(TcpClientService client, string userId, string displayName)
         {
@@ -33,6 +35,16 @@ namespace ChatClient.Forms
             _client = client;
             _userId = userId;
             _displayName = displayName;
+        }
+
+        private void SetupNotification()
+        {
+            _notifyIcon = new NotifyIcon
+            {
+                Icon = SystemIcons.Application,
+                Visible = true,
+                Text = "ChatApp",
+            };
         }
 
         private async void ChatForm_Load(object sender, EventArgs e)
@@ -43,6 +55,7 @@ namespace ChatClient.Forms
             // Hiển thị tên user
             lblNameOnline.Text = _displayName;
             lblQH.Text = GetInitials(_displayName);
+            SetupNotification();
 
             // Gán sự kiện nhận message
             _client.OnMessageReceived += OnMessageReceived;
@@ -100,6 +113,7 @@ namespace ChatClient.Forms
             HighlightRoom("general");
 
             AddSystemMessage("Đã kết nối thành công!");
+            ClientLogger.Log($"CONNECTED - DisplayName={_displayName}, Room={_currentRoom}");
         }
 
         private void OnMessageReceived(Message msg)
@@ -112,19 +126,13 @@ namespace ChatClient.Forms
 
             switch (msg.Type)
             {
-                //case MessageType.Chat:
-                //    if (!_messageHistory.ContainsKey(msg.Room))
-                //    {
-                //        _messageHistory[msg.Room] = new();
-                //        _messageHistory[msg.Room].Add((msg.Username, msg.Content, msg.Time, false, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded));
-                //    }
-                //    if (msg.Room == _currentRoom)
-                //        AddChatMessage(msg.Username, msg.Content, msg.Time, msg.ReplyToUsername, msg.ReplyToContent, msg.IsForwarded);
-                //    break;
                 case MessageType.Chat:
                     {
                         var roomName = NormalizeRoomName(msg.Room);
                         var senderName = string.IsNullOrWhiteSpace(msg.DisplayName) ? msg.Username : msg.DisplayName;
+                        ShowNewMessageNotification(msg, senderName, roomName);
+
+                        ClientLogger.Log($"RECEIVE - Room=#{roomName}, User={senderName}, Content=\"{msg.Content}\"");
 
                         if (!_messageHistory.ContainsKey(roomName))
                             _messageHistory[roomName] = new();
@@ -234,6 +242,7 @@ namespace ChatClient.Forms
                 return;
             }
 
+            ClientLogger.Log("DISCONNECTED - Lost connection to server");
             MessageBox.Show("Mất kết nối với server!", "Ngắt kết nối",
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             this.Close();
@@ -277,48 +286,13 @@ namespace ChatClient.Forms
             };
 
             await _client.SendMessageDirectAsync(msg);
+            ClientLogger.Log($"SEND - Room=#{_currentRoom}, User={_displayName}, Content=\"{content}\"");
             CancelReply();
 
             var settings = _settingsService.Load();
             settings.MessagesSent++;
             _settingsService.Save(settings);
         }
-
-        // ===== CHUYỂN PHÒNG =====
-        //private async void JoinRoom(string roomName)
-        //{
-        //    if (roomName == _currentRoom) return;
-
-        //    if(_joinedRooms.Add(roomName))
-        //    {
-        //        var settings = _settingsService.Load();
-        //        settings.RoomsJoined = _joinedRooms.Count;
-        //        _settingsService.Save(settings);
-        //    }
-
-        //    _currentRoom = roomName;
-        //    label1.Text = "# " + roomName;
-        //    HighlightRoom(roomName);
-
-        //    flowLayoutPanel1.Controls.Clear();
-
-        //    if (_messageHistory.TryGetValue(roomName, out var history))
-        //    {
-        //        foreach (var (username, content, time, isSystem, replyToUsername, replyToContent, isForwarded) in history)
-        //        {
-        //            if (isSystem)
-        //                RenderSystemMessage(content);
-        //            else
-        //                RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        AddSystemMessage($"You had joined room #{roomName}");
-        //    }
-
-        //    await _client.JoinRoomAsync(_username, roomName);
-        //}
 
         private async void JoinRoom(string roomName)
         {
@@ -355,20 +329,6 @@ namespace ChatClient.Forms
             {
                 selectedPanel.BackColor = Color.DodgerBlue;
             }
-            //// Reset màu tất cả phòng
-            //panel5.BackColor = Color.Transparent;
-            //panel6.BackColor = Color.Transparent;
-            //panel7.BackColor = Color.Transparent;
-            //panel8.BackColor = Color.Transparent;
-
-            //// Highlight phòng đang chọn
-            //switch (roomName)
-            //{
-            //    case "general": panel5.BackColor = Color.DodgerBlue; break;
-            //    case "random": panel6.BackColor = Color.DodgerBlue; break;
-            //    case "gaming": panel7.BackColor = Color.DodgerBlue; break;
-            //    case "study": panel8.BackColor = Color.DodgerBlue; break;
-            //}
         }
 
         // ===== HIỂN THỊ TIN NHẮN =====
@@ -578,15 +538,6 @@ namespace ChatClient.Forms
             _replyPreviewPanel.Controls.Add(lblReply);
             _replyPreviewPanel.Controls.Add(btnCancel);
 
-            //textBox1.Top += 36;
-            //btnSend.Top += 36;
-
-            //panel12.Controls.Add(_replyPreviewPanel);
-            //_replyPreviewPanel.SendToBack();
-
-            //panel12.Height += 36;
-            //panel12.Top -= 36;
-
             this.Controls.Add(_replyPreviewPanel);
             _replyPreviewPanel.BringToFront();
             panel12.BringToFront();
@@ -672,6 +623,7 @@ namespace ChatClient.Forms
                 };
 
                 await _client.SendMessageDirectAsync(msg);
+                ClientLogger.Log($"FORWARD - From={originalUsername}, ToRoom=#{targetRoom}, Content=\"{content}\"");
 
                 if (!_messageHistory.ContainsKey(targetRoom))
                     _messageHistory[targetRoom] = new();
@@ -799,6 +751,12 @@ namespace ChatClient.Forms
             _client.OnMessageReceived -= OnMessageReceived;
             _client.OnDisconnected -= OnDisconnected;
             _client.Disconnect();
+            if(_notifyIcon != null)
+            {
+                _notifyIcon.Visible = false;
+                _notifyIcon.Dispose();
+                _notifyIcon = null;
+            }
             base.OnFormClosed(e);
         }
 
@@ -820,6 +778,40 @@ namespace ChatClient.Forms
                     RenderSystemMessage(content);
                 else
                     RenderChatMessage(username, content, time, replyToUsername, replyToContent, isForwarded);
+            }
+        }
+
+        private void ShowNewMessageNotification(Message msg, string senderName, string roomName)
+        {
+            // Không thông báo tin nhắn do chính mình gửi
+            if (msg.Username == _userId)
+                return;
+
+            var settings = _settingsService.Load();
+
+            if (settings.EnableSound)
+            {
+                try
+                {
+                    SystemSounds.Asterisk.Play();
+                }
+                catch
+                {
+
+                }
+            }
+
+            if (settings.EnableNotifications && _notifyIcon != null)
+            {
+                string content = msg.Content;
+
+                if (content.Length > 80)
+                    content = content[..80] + "...";
+
+                _notifyIcon.BalloonTipTitle = $"Tin nhắn mới từ {senderName}";
+                _notifyIcon.BalloonTipText = $"#{roomName}: {content}";
+                _notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                _notifyIcon.ShowBalloonTip(3000);
             }
         }
 
@@ -961,6 +953,7 @@ namespace ChatClient.Forms
                 await _client.RequestRoomListAsync();
 
                 AddSystemMessage($"Đã tạo phòng #{room.RoomName}");
+                ClientLogger.Log($"CREATE ROOM - #{room.RoomName}, Description=\"{room.Description}\", MaxMembers={room.Maxmembers}");
             }
         }
 

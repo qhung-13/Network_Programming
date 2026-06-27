@@ -20,7 +20,7 @@ public class TcpClientService
     public event Action<string>? OnError;
     public event Action? OnDisconnected;
 
-    public async Task<bool> ConnectAsync(string ip, int port, string username, string room)
+    public async Task<bool> ConnectAsync(string ip, int port, string username, string displayname, string room)
     {
         try
         {
@@ -38,6 +38,7 @@ public class TcpClientService
             {
                 Type = MessageType.Join,
                 Username = username,
+                DisplayName = displayname,
                 Room = room
             };
             await _writer.WriteLineAsync(joinMsg.ToJson());
@@ -176,6 +177,38 @@ public class TcpClientService
             Type = MessageType.GetRooms
         };
 
+        await SendMessageDirectAsync(msg);
+    }
+
+    public async Task RequestRoomHistoryAsync(string room)
+    {
+        if (_writer == null || !IsConnected)
+            return;
+
+        var msg = new Message
+        {
+            Type = MessageType.GetRoomHistory,
+            Room = room.Trim().TrimStart('#').ToLower()
+        };
+
+        await SendMessageDirectAsync(msg);
+    }
+
+    public async Task UpdateDisplayNameAsync(string username, string newDisplayName)
+    {
+        if(_writer == null || !IsConnected)
+        {
+            return;
+        }
+
+        var msg = new Message
+        {
+            Type = MessageType.UpdateDisplayName,
+            Username = username,
+            DisplayName = newDisplayName,
+            Content = newDisplayName,
+            Time = DateTime.Now,
+        };
         await SendMessageDirectAsync(msg);
     }
 

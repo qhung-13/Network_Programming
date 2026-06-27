@@ -8,5 +8,8 @@ public enum MessageType
     Error,
     CreateRoom,
     GetRooms,
-    RoomUsers
+    RoomUsers,
+    RoomHistory,
+    GetRoomHistory,
+    UpdateDisplayName,
 }

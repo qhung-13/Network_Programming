@@ -21,6 +21,7 @@ namespace ChatClient.Forms
         public CreateNewRoom()
         {
             InitializeComponent();
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.SelectedIndex = 0;
 
             btnClose.Click += (s, e) => Close();
@@ -50,15 +51,18 @@ namespace ChatClient.Forms
             string rawName = textBox1.Text.Trim();
             rawName = rawName.TrimStart('#').ToLower();
 
-            if(string.IsNullOrWhiteSpace(rawName))
+            if (string.IsNullOrWhiteSpace(rawName))
             {
-                MessageBox.Show("Vui lòng nhật tên phòng.", "Thiếu thông tin", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Vui lòng nhập tên phòng.", "Thiếu thông tin",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if(!Regex.IsMatch(rawName, "^[a-z0-9-]+$"))
+            if (!Regex.IsMatch(rawName, "^[a-z0-9-]+$"))
             {
-                MessageBox.Show("Tên phòng chỉ được chứa chữ thường, số và dấu gạch ngang", "Tên phòng không hợp lệ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Tên phòng chỉ được chứa chữ thường, số và dấu gạch ngang.",
+                    "Tên phòng không hợp lệ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -66,13 +70,27 @@ namespace ChatClient.Forms
             _roomDescription = txtDesc.Text.Trim();
             _roomColor = _selectedColorPanel?.BackColor ?? Color.DodgerBlue;
 
-            if(comboBox1.SelectedIndex <= 0)
+            string memberLimitText = comboBox1.Text.Trim();
+
+            if (memberLimitText == "Unlimited Members")
             {
                 _memberLimit = 0;
-            } 
+            }
+            else if (!int.TryParse(memberLimitText, out int memberLimit))
+            {
+                MessageBox.Show("Giới hạn thành viên phải là số.", "Giới hạn không hợp lệ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            else if (memberLimit <= 0)
+            {
+                MessageBox.Show("Giới hạn thành viên phải lớn hơn 0.", "Giới hạn không hợp lệ",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             else
             {
-                _memberLimit = int.Parse(comboBox1.SelectedItem!.ToString()!);
+                _memberLimit = memberLimit;
             }
 
             DialogResult = DialogResult.OK;

@@ -108,10 +108,35 @@ public class TcpServer
         await BroadcastToAllAsync(msg);
     }
 
+    //public async Task BroadcastRoomUsersAsync(string roomName)
+    //{
+    //    var users = UserManager.GetUsersInRoom(roomName)
+    //        .Select(u => u.Username)
+    //        .ToList();
+
+    //    var msg = new Message
+    //    {
+    //        Type = MessageType.RoomUsers,
+    //        Room = roomName,
+    //        Content = System.Text.Json.JsonSerializer.Serialize(users)
+    //    };
+
+    //    await BroadcastToRoomAsync(msg, roomName);
+    //}
+
     public async Task BroadcastRoomUsersAsync(string roomName)
     {
+        roomName = roomName.Trim().TrimStart('#').ToLower();
+
         var users = UserManager.GetUsersInRoom(roomName)
-            .Select(u => u.Username)
+            .Select(u => new User
+            {
+                Username = u.Username,
+                DisplayName = u.DisplayName,
+                CurrentRoom = u.CurrentRoom,
+                IsOnline = u.IsOnline,
+                JoinedAt = u.JoinedAt
+            })
             .ToList();
 
         var msg = new Message
@@ -122,6 +147,22 @@ public class TcpServer
         };
 
         await BroadcastToRoomAsync(msg, roomName);
+    }
+
+    public async Task SendRoomHistoryAsync(ClientHandler client, string roomName)
+    {
+        roomName = roomName.Trim().TrimStart('#').ToLower();
+
+        var history = RoomManager.GetMessages(roomName);
+
+        var msg = new Message
+        {
+            Type = MessageType.RoomHistory,
+            Room = roomName,
+            Content = System.Text.Json.JsonSerializer.Serialize(history)
+        };
+
+        await client.SendMessageAsync(msg);
     }
 
     public void Log(string message)

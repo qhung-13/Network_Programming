@@ -1,4 +1,4 @@
-namespace ChatClient.Forms
+﻿namespace ChatClient.Forms
 {
     partial class ChatForm
     {

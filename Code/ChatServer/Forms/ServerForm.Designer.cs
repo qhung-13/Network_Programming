@@ -172,6 +172,70 @@
             pnlLogContainer.Size = new Size(640, 406);
             pnlLogContainer.TabIndex = 0;
             // 
+            // btnSettings2
+            // 
+            btnSettings2.BackColor = Color.FromArgb(230, 243, 255);
+            btnSettings2.Dock = DockStyle.Fill;
+            btnSettings2.FlatAppearance.BorderSize = 0;
+            btnSettings2.FlatStyle = FlatStyle.Flat;
+            btnSettings2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSettings2.ForeColor = Color.FromArgb(0, 92, 191);
+            btnSettings2.Location = new Point(769, 13);
+            btnSettings2.Name = "btnSettings2";
+            btnSettings2.Size = new Size(114, 34);
+            btnSettings2.TabIndex = 4;
+            btnSettings2.Text = "⚙ Settings";
+            btnSettings2.UseVisualStyleBackColor = false;
+            // 
+            // pnlMain
+            // 
+            pnlMain.BackColor = Color.White;
+            pnlMain.Controls.Add(pnlLogContainer);
+            pnlMain.Controls.Add(pnlClients);
+            pnlMain.Controls.Add(tblStats);
+            pnlMain.Dock = DockStyle.Fill;
+            pnlMain.Location = new Point(0, 60);
+            pnlMain.Name = "pnlMain";
+            pnlMain.Padding = new Padding(16);
+            pnlMain.Size = new Size(900, 500);
+            pnlMain.TabIndex = 1;
+            // 
+            // pnlLogContainer
+            // 
+            pnlLogContainer.BackColor = Color.White;
+            pnlLogContainer.BorderStyle = BorderStyle.FixedSingle;
+            pnlLogContainer.Controls.Add(rtbLog);
+            pnlLogContainer.Controls.Add(pnlLogHeader);
+            pnlLogContainer.Dock = DockStyle.Fill;
+            pnlLogContainer.Location = new Point(16, 16);
+            pnlLogContainer.Name = "pnlLogContainer";
+            pnlLogContainer.Size = new Size(638, 416);
+            pnlLogContainer.TabIndex = 2;
+            // 
+            // pnlLogHeader
+            // 
+            pnlLogHeader.BackColor = Color.FromArgb(245, 250, 255);
+            pnlLogHeader.Controls.Add(lblLogTitle);
+            pnlLogHeader.Dock = DockStyle.Top;
+            pnlLogHeader.Location = new Point(0, 0);
+            pnlLogHeader.Name = "pnlLogHeader";
+            pnlLogHeader.Padding = new Padding(14, 0, 14, 0);
+            pnlLogHeader.Size = new Size(636, 42);
+            pnlLogHeader.TabIndex = 1;
+            // 
+            // lblLogTitle
+            // 
+            lblLogTitle.AutoSize = true;
+            lblLogTitle.Dock = DockStyle.Left;
+            lblLogTitle.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblLogTitle.ForeColor = Color.FromArgb(0, 65, 130);
+            lblLogTitle.Location = new Point(14, 0);
+            lblLogTitle.Name = "lblLogTitle";
+            lblLogTitle.Size = new Size(84, 28);
+            lblLogTitle.TabIndex = 0;
+            lblLogTitle.Text = "Server Log";
+            lblLogTitle.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // rtbLog
             // 
             rtbLog.BackColor = Color.White;
@@ -250,7 +314,7 @@
             // 
             // tblStats
             // 
-            tblStats.BackColor = Color.WhiteSmoke;
+            tblStats.BackColor = Color.White;
             tblStats.ColumnCount = 4;
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tblStats.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
@@ -263,6 +327,7 @@
             tblStats.Dock = DockStyle.Bottom;
             tblStats.Location = new Point(0, 494);
             tblStats.Name = "tblStats";
+            tblStats.Padding = new Padding(0, 12, 0, 0);
             tblStats.RowCount = 1;
             tblStats.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tblStats.Size = new Size(900, 56);

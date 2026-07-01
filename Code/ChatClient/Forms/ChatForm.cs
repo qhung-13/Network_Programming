@@ -172,19 +172,10 @@ namespace ChatClient.Forms
                             joinedRoom == _pendingJoinRoom &&
                             msg.Username == _userId)
                         {
-                            _currentRoom = joinedRoom;
-                            _pendingJoinRoom = null;
-                            _previousRoomBeforeJoin = null;
-
-                            if (_joinedRooms.Add(joinedRoom))
-                            {
-                                var settings = _settingsService.Load();
-                                settings.RoomsJoined = _joinedRooms.Count;
-                                _settingsService.Save(settings);
-                            }
+                            ConfirmRoomSwitch(joinedRoom);
                         }
 
-                        if (joinedRoom == _currentRoom)
+                        if (joinedRoom == _currentRoom && !string.IsNullOrWhiteSpace(msg.Content))
                         {
                             AddSystemMessage(msg.Content);
                         }
@@ -194,10 +185,17 @@ namespace ChatClient.Forms
                     }
 
                 case MessageType.Leave:
-                    if (msg.Room == _currentRoom)
-                        AddSystemMessage(msg.Content);
-                    UpdateOnlineList();
-                    break;
+                    {
+                        string leftRoom = NormalizeRoomName(msg.Room);
+
+                        if (leftRoom == _currentRoom && !string.IsNullOrWhiteSpace(msg.Content))
+                        {
+                            AddSystemMessage(msg.Content);
+                        }
+
+                        UpdateOnlineList();
+                        break;
+                    }
 
                 case MessageType.GetRooms:
                     try
@@ -232,18 +230,26 @@ namespace ChatClient.Forms
                     {
                         try
                         {
-                            var roomName = NormalizeRoomName(msg.Room);
-                            var messages = JsonSerializer.Deserialize<List<Message>>(msg.Content ?? "[]") ?? new List<Message>();
+                            string roomName = NormalizeRoomName(msg.Room);
+
+                            var messages = JsonSerializer.Deserialize<List<Message>>(msg.Content ?? "[]")
+                                ?? new List<Message>();
 
                             _messageHistory[roomName] = messages.Select(m => (
                                 username: string.IsNullOrWhiteSpace(m.DisplayName) ? m.Username : m.DisplayName,
                                 content: m.Content,
                                 time: m.Time,
-                                isSytem: false,
+                                isSystem: false,
                                 replyToUsername: m.ReplyToUsername,
                                 replyToContent: m.ReplyToContent,
                                 isForwarded: m.IsForwarded
                             )).ToList();
+
+                            if (!string.IsNullOrWhiteSpace(_pendingJoinRoom) &&
+                                roomName == _pendingJoinRoom)
+                            {
+                                ConfirmRoomSwitch(roomName);
+                            }
 
                             if (roomName == _currentRoom)
                             {
@@ -254,6 +260,7 @@ namespace ChatClient.Forms
                         {
                             AddSystemMessage("Không thể tải lịch sử tin nhắn");
                         }
+
                         break;
                     }
                 case MessageType.Error:
@@ -320,6 +327,25 @@ namespace ChatClient.Forms
             var settings = _settingsService.Load();
             settings.MessagesSent++;
             _settingsService.Save(settings);
+        }
+
+        private void ConfirmRoomSwitch(string roomName)
+        {
+            roomName = NormalizeRoomName(roomName);
+
+            _currentRoom = roomName;
+            label1.Text = "# " + roomName;
+            HighlightRoom(roomName);
+
+            if (_joinedRooms.Add(roomName))
+            {
+                var settings = _settingsService.Load();
+                settings.RoomsJoined = _joinedRooms.Count;
+                _settingsService.Save(settings);
+            }
+
+            _pendingJoinRoom = null;
+            _previousRoomBeforeJoin = null;
         }
 
         private async void JoinRoom(string roomName)

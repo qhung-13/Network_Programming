@@ -28,6 +28,8 @@ namespace ChatClient.Forms
         private DateTime _sessionStartTime;
         private readonly HashSet<string> _joinedRooms = new();
         private NotifyIcon? _notifyIcon;
+        private string? _pendingJoinRoom = null;
+        private string? _previousRoomBeforeJoin = null;
 
         public ChatForm(TcpClientService client, string userId, string displayName)
         {
@@ -163,10 +165,33 @@ namespace ChatClient.Forms
                     }
 
                 case MessageType.Join:
-                    if (msg.Room == _currentRoom)
-                        AddSystemMessage(msg.Content);
-                    UpdateOnlineList();
-                    break;
+                    {
+                        string joinedRoom = NormalizeRoomName(msg.Room);
+
+                        if (!string.IsNullOrWhiteSpace(_pendingJoinRoom) &&
+                            joinedRoom == _pendingJoinRoom &&
+                            msg.Username == _userId)
+                        {
+                            _currentRoom = joinedRoom;
+                            _pendingJoinRoom = null;
+                            _previousRoomBeforeJoin = null;
+
+                            if (_joinedRooms.Add(joinedRoom))
+                            {
+                                var settings = _settingsService.Load();
+                                settings.RoomsJoined = _joinedRooms.Count;
+                                _settingsService.Save(settings);
+                            }
+                        }
+
+                        if (joinedRoom == _currentRoom)
+                        {
+                            AddSystemMessage(msg.Content);
+                        }
+
+                        UpdateOnlineList();
+                        break;
+                    }
 
                 case MessageType.Leave:
                     if (msg.Room == _currentRoom)
@@ -231,6 +256,9 @@ namespace ChatClient.Forms
                         }
                         break;
                     }
+                case MessageType.Error:
+                    HandleServerError(msg);
+                    break;
             }
         }
 
@@ -298,21 +326,19 @@ namespace ChatClient.Forms
         {
             roomName = NormalizeRoomName(roomName);
 
-            if (roomName == _currentRoom) return;
-
-            if (_joinedRooms.Add(roomName))
+            if (roomName == _currentRoom)
             {
-                var settings = _settingsService.Load();
-                settings.RoomsJoined = _joinedRooms.Count;
-                _settingsService.Save(settings);
+                return;
             }
 
-            _currentRoom = roomName;
+            _previousRoomBeforeJoin = _currentRoom;
+            _pendingJoinRoom = roomName;
+
             label1.Text = "# " + roomName;
             HighlightRoom(roomName);
 
             flowLayoutPanel1.Controls.Clear();
-            RenderSystemMessage($"Đang tải lịch sử phòng #{roomName}...");
+            RenderSystemMessage($"Đang vào phòng #{roomName}...");
 
             await _client.JoinRoomAsync(_userId, roomName);
         }
@@ -943,7 +969,7 @@ namespace ChatClient.Forms
                 {
                     RoomName = form._roomName,
                     Description = form._roomDescription,
-                    Maxmembers = form._memberLimit,
+                    MaxMembers = form._memberLimit,
                     CurrentMembers = 0,
                     CreatedAt = DateTime.Now
                 };
@@ -953,8 +979,45 @@ namespace ChatClient.Forms
                 await _client.RequestRoomListAsync();
 
                 AddSystemMessage($"Đã tạo phòng #{room.RoomName}");
-                ClientLogger.Log($"CREATE ROOM - #{room.RoomName}, Description=\"{room.Description}\", MaxMembers={room.Maxmembers}");
+                ClientLogger.Log($"CREATE ROOM - #{room.RoomName}, Description=\"{room.Description}\", MaxMembers={room.MaxMembers}");
             }
+        }
+
+        private void HandleServerError(Message msg)
+        {
+            string errorRoom = NormalizeRoomName(msg.Room);
+            string errorContent = string.IsNullOrWhiteSpace(msg.Content)
+                ? "Có lỗi xảy ra từ server."
+                : msg.Content;
+
+            if (!string.IsNullOrWhiteSpace(_pendingJoinRoom) &&
+                errorRoom == _pendingJoinRoom)
+            {
+                string fallbackRoom = string.IsNullOrWhiteSpace(_previousRoomBeforeJoin)
+                    ? "general"
+                    : _previousRoomBeforeJoin;
+
+                _currentRoom = fallbackRoom;
+                label1.Text = "# " + fallbackRoom;
+                HighlightRoom(fallbackRoom);
+
+                flowLayoutPanel1.Controls.Clear();
+                RenderRoomHistory(fallbackRoom);
+
+                _pendingJoinRoom = null;
+                _previousRoomBeforeJoin = null;
+            }
+
+            AddSystemMessage(errorContent);
+
+            MessageBox.Show(
+                errorContent,
+                "Không thể vào phòng",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
+
+            ClientLogger.Log($"SERVER ERROR - {errorContent}");
         }
 
         private void lblChatRoom_Click(object sender, EventArgs e)

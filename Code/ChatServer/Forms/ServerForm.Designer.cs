@@ -189,16 +189,16 @@
             // 
             // pnlMain
             // 
-            pnlMain.BackColor = Color.White;
-            pnlMain.Controls.Add(pnlLogContainer);
-            pnlMain.Controls.Add(pnlClients);
-            pnlMain.Controls.Add(tblStats);
-            pnlMain.Dock = DockStyle.Fill;
-            pnlMain.Location = new Point(0, 60);
-            pnlMain.Name = "pnlMain";
-            pnlMain.Padding = new Padding(16);
-            pnlMain.Size = new Size(900, 500);
-            pnlMain.TabIndex = 1;
+            //pnlMain.BackColor = Color.White;
+            //pnlMain.Controls.Add(pnlLogContainer);
+            //pnlMain.Controls.Add(pnlClients);
+            //pnlMain.Controls.Add(tblStats);
+            //pnlMain.Dock = DockStyle.Fill;
+            //pnlMain.Location = new Point(0, 60);
+            //pnlMain.Name = "pnlMain";
+            //pnlMain.Padding = new Padding(16);
+            //pnlMain.Size = new Size(900, 500);
+            //pnlMain.TabIndex = 1;
             // 
             // pnlLogContainer
             // 

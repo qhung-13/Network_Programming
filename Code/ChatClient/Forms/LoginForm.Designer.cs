@@ -18,16 +18,21 @@ namespace ChatClient.Forms
             pnlLeft = new Panel();
             lblKetnoi = new Label();
             lblChatApp = new Label();
-            lblStartChatting = new Label();
-            lblDisplayName = new Label();
-            lblServerAddress = new Label();
-            lblPort = new Label();
+            pnlRight = new Panel();
+            pnlFormCard = new Panel();
+            lblSubtitle = new Label();
             lblContact = new Label();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
             btnConnect = new Button();
+            textBox3 = new TextBox();
+            textBox2 = new TextBox();
+            textBox1 = new TextBox();
+            lblPort = new Label();
+            lblServerAddress = new Label();
+            lblDisplayName = new Label();
+            lblStartChatting = new Label();
             pnlLeft.SuspendLayout();
+            pnlRight.SuspendLayout();
+            pnlFormCard.SuspendLayout();
             SuspendLayout();
             // 
             // pnlLeft
@@ -38,143 +43,204 @@ namespace ChatClient.Forms
             pnlLeft.Dock = DockStyle.Left;
             pnlLeft.Location = new Point(0, 0);
             pnlLeft.Name = "pnlLeft";
-            pnlLeft.Size = new Size(230, 445);
+            pnlLeft.Padding = new Padding(24);
+            pnlLeft.Size = new Size(270, 480);
             pnlLeft.TabIndex = 0;
             // 
             // lblKetnoi
             // 
-            lblKetnoi.Anchor = AnchorStyles.None;
-            lblKetnoi.Font = new Font("Segoe UI Light", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblKetnoi.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblKetnoi.ForeColor = Color.White;
-            lblKetnoi.Location = new Point(12, 218);
+            lblKetnoi.Location = new Point(28, 239);
             lblKetnoi.Name = "lblKetnoi";
-            lblKetnoi.Size = new Size(200, 57);
+            lblKetnoi.Size = new Size(214, 70);
             lblKetnoi.TabIndex = 2;
-            lblKetnoi.Text = "Chat and Connect with Everyone";
+            lblKetnoi.Text = "Chat and connect with everyone";
             lblKetnoi.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // lblChatApp
             // 
-            lblChatApp.Anchor = AnchorStyles.None;
-            lblChatApp.AutoSize = true;
-            lblChatApp.Font = new Font("Segoe UI Symbol", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblChatApp.Font = new Font("Segoe UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblChatApp.ForeColor = Color.White;
-            lblChatApp.Location = new Point(28, 170);
+            lblChatApp.Location = new Point(24, 174);
             lblChatApp.Name = "lblChatApp";
-            lblChatApp.Size = new Size(164, 48);
+            lblChatApp.Size = new Size(222, 58);
             lblChatApp.TabIndex = 1;
             lblChatApp.Text = "ChatApp";
+            lblChatApp.TextAlign = ContentAlignment.MiddleCenter;
             lblChatApp.Click += lblChatApp_Click;
             // 
-            // lblStartChatting
+            // pnlRight
             // 
-            lblStartChatting.AutoSize = true;
-            lblStartChatting.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblStartChatting.ForeColor = Color.Blue;
-            lblStartChatting.Location = new Point(285, 23);
-            lblStartChatting.Name = "lblStartChatting";
-            lblStartChatting.Size = new Size(202, 38);
-            lblStartChatting.TabIndex = 1;
-            lblStartChatting.Text = "Start Chatting";
-            lblStartChatting.Click += lblStartChatting_Click;
+            pnlRight.BackColor = Color.White;
+            pnlRight.Controls.Add(pnlFormCard);
+            pnlRight.Dock = DockStyle.Fill;
+            pnlRight.Location = new Point(270, 0);
+            pnlRight.Name = "pnlRight";
+            pnlRight.Padding = new Padding(44, 36, 44, 36);
+            pnlRight.Size = new Size(610, 480);
+            pnlRight.TabIndex = 1;
             // 
-            // lblDisplayName
+            // pnlFormCard
             // 
-            lblDisplayName.AutoSize = true;
-            lblDisplayName.Location = new Point(285, 85);
-            lblDisplayName.Name = "lblDisplayName";
-            lblDisplayName.Size = new Size(122, 25);
-            lblDisplayName.TabIndex = 2;
-            lblDisplayName.Text = "Display Name";
+            pnlFormCard.Anchor = AnchorStyles.None;
+            pnlFormCard.BackColor = Color.White;
+            pnlFormCard.Controls.Add(lblSubtitle);
+            pnlFormCard.Controls.Add(lblContact);
+            pnlFormCard.Controls.Add(btnConnect);
+            pnlFormCard.Controls.Add(textBox3);
+            pnlFormCard.Controls.Add(textBox2);
+            pnlFormCard.Controls.Add(textBox1);
+            pnlFormCard.Controls.Add(lblPort);
+            pnlFormCard.Controls.Add(lblServerAddress);
+            pnlFormCard.Controls.Add(lblDisplayName);
+            pnlFormCard.Controls.Add(lblStartChatting);
+            pnlFormCard.Location = new Point(54, 34);
+            pnlFormCard.Name = "pnlFormCard";
+            pnlFormCard.Size = new Size(500, 412);
+            pnlFormCard.TabIndex = 0;
             // 
-            // lblServerAddress
+            // lblSubtitle
             // 
-            lblServerAddress.AutoSize = true;
-            lblServerAddress.Location = new Point(285, 156);
-            lblServerAddress.Name = "lblServerAddress";
-            lblServerAddress.Size = new Size(161, 25);
-            lblServerAddress.TabIndex = 3;
-            lblServerAddress.Text = "Server Address (IP)";
+            lblSubtitle.AutoSize = true;
+            lblSubtitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSubtitle.ForeColor = Color.DimGray;
+            lblSubtitle.Location = new Point(34, 52);
+            lblSubtitle.Name = "lblSubtitle";
+            lblSubtitle.Size = new Size(279, 20);
+            lblSubtitle.TabIndex = 10;
+            lblSubtitle.Text = "Enter your information to join the chat";
+            // 
+            // lblContact
+            // 
+            lblContact.Font = new Font("Segoe UI", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblContact.ForeColor = Color.DimGray;
+            lblContact.Location = new Point(34, 369);
+            lblContact.Name = "lblContact";
+            lblContact.Size = new Size(432, 25);
+            lblContact.TabIndex = 5;
+            lblContact.Text = "Don't have a server yet? Contact your administrator.";
+            lblContact.TextAlign = ContentAlignment.MiddleCenter;
+            lblContact.Click += lblContact_Click;
+            // 
+            // btnConnect
+            // 
+            btnConnect.BackColor = Color.Blue;
+            btnConnect.Cursor = Cursors.Hand;
+            btnConnect.FlatAppearance.BorderSize = 0;
+            btnConnect.FlatStyle = FlatStyle.Flat;
+            btnConnect.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnConnect.ForeColor = Color.White;
+            btnConnect.Location = new Point(34, 311);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(432, 44);
+            btnConnect.TabIndex = 9;
+            btnConnect.Text = "Connect";
+            btnConnect.UseVisualStyleBackColor = false;
+            // 
+            // textBox3
+            // 
+            textBox3.BorderStyle = BorderStyle.FixedSingle;
+            textBox3.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox3.Location = new Point(34, 264);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(432, 30);
+            textBox3.TabIndex = 8;
+            // 
+            // textBox2
+            // 
+            textBox2.BorderStyle = BorderStyle.FixedSingle;
+            textBox2.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox2.Location = new Point(34, 185);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(432, 30);
+            textBox2.TabIndex = 7;
+            textBox2.TextChanged += textBox2_TextChanged;
+            // 
+            // textBox1
+            // 
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            textBox1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox1.Location = new Point(34, 106);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(432, 30);
+            textBox1.TabIndex = 6;
             // 
             // lblPort
             // 
             lblPort.AutoSize = true;
-            lblPort.Location = new Point(285, 234);
+            lblPort.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPort.ForeColor = Color.Gray;
+            lblPort.Location = new Point(34, 239);
             lblPort.Name = "lblPort";
-            lblPort.Size = new Size(44, 25);
+            lblPort.Size = new Size(37, 20);
             lblPort.TabIndex = 4;
             lblPort.Text = "Port";
             lblPort.Click += lblPort_Click;
             // 
-            // lblContact
+            // lblServerAddress
             // 
-            lblContact.AutoSize = true;
-            lblContact.Location = new Point(323, 386);
-            lblContact.Name = "lblContact";
-            lblContact.Size = new Size(423, 25);
-            lblContact.TabIndex = 5;
-            lblContact.Text = "Don�t have a server yet? Contact your administrator.";
-            lblContact.Click += lblContact_Click;
+            lblServerAddress.AutoSize = true;
+            lblServerAddress.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblServerAddress.ForeColor = Color.Gray;
+            lblServerAddress.Location = new Point(34, 160);
+            lblServerAddress.Name = "lblServerAddress";
+            lblServerAddress.Size = new Size(139, 20);
+            lblServerAddress.TabIndex = 3;
+            lblServerAddress.Text = "Server Address (IP)";
             // 
-            // textBox1
+            // lblDisplayName
             // 
-            textBox1.Location = new Point(285, 113);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(501, 31);
-            textBox1.TabIndex = 6;
+            lblDisplayName.AutoSize = true;
+            lblDisplayName.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblDisplayName.ForeColor = Color.Gray;
+            lblDisplayName.Location = new Point(34, 81);
+            lblDisplayName.Name = "lblDisplayName";
+            lblDisplayName.Size = new Size(107, 20);
+            lblDisplayName.TabIndex = 2;
+            lblDisplayName.Text = "Display Name";
             // 
-            // textBox2
+            // lblStartChatting
             // 
-            textBox2.Location = new Point(285, 187);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(501, 31);
-            textBox2.TabIndex = 7;
-            textBox2.TextChanged += textBox2_TextChanged;
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(285, 262);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(501, 31);
-            textBox3.TabIndex = 8;
-            // 
-            // btnConnect
-            // 
-            btnConnect.FlatStyle = FlatStyle.Flat;
-            btnConnect.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnConnect.ForeColor = Color.Blue;
-            btnConnect.Location = new Point(464, 336);
-            btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(140, 36);
-            btnConnect.TabIndex = 9;
-            btnConnect.Text = "Connect";
-            btnConnect.UseVisualStyleBackColor = true;
+            lblStartChatting.AutoSize = true;
+            lblStartChatting.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblStartChatting.ForeColor = Color.Blue;
+            lblStartChatting.Location = new Point(30, 10);
+            lblStartChatting.Name = "lblStartChatting";
+            lblStartChatting.Size = new Size(210, 41);
+            lblStartChatting.TabIndex = 1;
+            lblStartChatting.Text = "Start Chatting";
+            lblStartChatting.Click += lblStartChatting_Click;
             // 
             // LoginForm
             // 
-            ClientSize = new Size(842, 445);
-            Controls.Add(btnConnect);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(lblContact);
-            Controls.Add(lblPort);
-            Controls.Add(lblServerAddress);
-            Controls.Add(lblDisplayName);
-            Controls.Add(lblStartChatting);
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            ClientSize = new Size(880, 480);
+            Controls.Add(pnlRight);
             Controls.Add(pnlLeft);
+            Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             MinimizeBox = false;
             Name = "LoginForm";
             StartPosition = FormStartPosition.CenterScreen;
+            Text = "ChatApp - Login";
             Load += LoginForm_Load;
             pnlLeft.ResumeLayout(false);
-            pnlLeft.PerformLayout();
+            pnlRight.ResumeLayout(false);
+            pnlFormCard.ResumeLayout(false);
+            pnlFormCard.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
+
         private Panel pnlLeft;
         private Label lblChatApp;
         private Label lblKetnoi;
+        private Panel pnlRight;
+        private Panel pnlFormCard;
+        private Label lblSubtitle;
         private Label lblStartChatting;
         private Label lblDisplayName;
         private Label lblServerAddress;

@@ -189,16 +189,20 @@
             // 
             // pnlMain
             // 
-            pnlMain.BackColor = Color.White;
-            pnlMain.Controls.Add(pnlLogContainer);
-            pnlMain.Controls.Add(pnlClients);
-            pnlMain.Controls.Add(tblStats);
-            pnlMain.Dock = DockStyle.Fill;
-            pnlMain.Location = new Point(0, 60);
-            pnlMain.Name = "pnlMain";
-            pnlMain.Padding = new Padding(16);
-            pnlMain.Size = new Size(900, 500);
-            pnlMain.TabIndex = 1;
+            tblMain.BackColor = Color.White;
+            tblMain.ColumnCount = 2;
+            tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblMain.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 230F));
+            tblMain.Controls.Add(pnlLogContainer, 0, 0);
+            tblMain.Controls.Add(pnlClients, 1, 0);
+            tblMain.Dock = DockStyle.Fill;
+            tblMain.Location = new Point(0, 58);
+            tblMain.Name = "tblMain";
+            tblMain.Padding = new Padding(12);
+            tblMain.RowCount = 1;
+            tblMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tblMain.Size = new Size(900, 436);
+            tblMain.TabIndex = 1;
             // 
             // pnlLogContainer
             // 
